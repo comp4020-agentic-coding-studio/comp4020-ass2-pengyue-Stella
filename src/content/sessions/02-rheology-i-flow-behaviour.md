@@ -30,9 +30,9 @@ do we describe that threshold quantitatively rather than just naming it?
 
 Second module of **Stage 1, Measuring Edible Matter**. Module 1 established
 that texture properties are measurable; this module gives the first real
-governing equations — the flow models that the Virtual Rheometer instrument
-(`/labs/virtual-rheometer/`) implements, and that Module 10 revisits when
-fitting models to noisy data.
+governing equations — the flow models that the
+[Virtual Rheometer](/labs/virtual-rheometer/) instrument implements, and
+that Module 10 revisits when fitting models to noisy data.
 
 ## The models
 

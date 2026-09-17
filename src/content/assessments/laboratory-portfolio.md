@@ -33,9 +33,10 @@ related:
 > Rheometer, read a stability margin from the Crispness Phase Diagram, and
 > analyse two supplied datasets using methods from earlier modules.
 
-The two instrument tasks ask you to use `/labs/virtual-rheometer/` and
-`/labs/crispness-phase-diagram/` directly and report what you found, not to
-describe the instruments in the abstract. The two dataset tasks give you
+The two instrument tasks ask you to use the
+[Virtual Rheometer](/labs/virtual-rheometer/) and the
+`/labs/crispness-phase-diagram/` instrument directly and report what you
+found, not to describe the instruments in the abstract. The two dataset tasks give you
 tabulated data (one mechanical, one thermal or moisture-related) with no
 instrument attached, so you practise the same fitting and interpretation
 discipline — Module 10's residual-plot habit in particular — without a

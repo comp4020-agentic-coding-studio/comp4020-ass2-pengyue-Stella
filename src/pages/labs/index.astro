@@ -1,0 +1,43 @@
+---
+import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { withBase } from "astro-theme-university/url";
+import { siteConfig } from "../../site-config";
+---
+
+<ContentLayout
+  title="Labs"
+  description="The two virtual instruments the Laboratory Portfolio is built from."
+  {...siteConfig}
+>
+  <p>
+    Two instruments run entirely in the browser, each built from the models a
+    module already introduced. Both feed directly into the Laboratory
+    Portfolio (worth 25% of the course), which asks you to use each one and
+    report what you found rather than describe it in the abstract.
+  </p>
+  <ul class="labs-list">
+    <li>
+      <h2><a href={withBase("/labs/virtual-rheometer/")}>Virtual Rheometer</a></h2>
+      <p>
+        Fit Newtonian, power-law and Herschel-Bulkley models to a specimen's
+        flow curve and read the residual plot. Builds on
+        <a href={withBase("/sessions/02-rheology-i-flow-behaviour/")}>Module 2</a>
+        and is used directly in <a href={withBase("/sessions/10-building-predictive-models/")}>Module 10</a>.
+      </p>
+    </li>
+  </ul>
+</ContentLayout>
+
+<style>
+  .labs-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-spacing-xl);
+  }
+
+  .labs-list h2 {
+    margin-bottom: var(--at-spacing-xs);
+  }
+</style>

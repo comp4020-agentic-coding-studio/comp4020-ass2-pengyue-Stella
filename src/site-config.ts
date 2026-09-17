@@ -24,10 +24,11 @@ export const siteConfig = defineSiteConfig({
     { text: "Overview", href: "/overview/" },
     { text: sessionLabels.plural, href: "/sessions/" },
     { text: "Lectures", href: "/lectures/" },
+    { text: "Labs", href: "/labs/" },
     { text: "Assessment", href: "/assessments/" },
     { text: "People", href: "/people/" },
-    { text: "Resources", href: "/resources/" },
     { text: "Policies", href: "/policies/" },
+    { text: "Resources", href: "/resources/" },
   ],
 
   licence: "CC-BY-NC-SA-4.0",

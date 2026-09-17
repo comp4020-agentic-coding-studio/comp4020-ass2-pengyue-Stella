@@ -1,0 +1,461 @@
+---
+import Callout from "astro-theme-university/components/Callout.astro";
+import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { withBase } from "astro-theme-university/url";
+import { siteConfig } from "../../../site-config";
+import { SPECIMENS } from "../../../lib/rheometer";
+import "../../../styles/scientific.css";
+---
+
+<ContentLayout
+  title="Virtual Rheometer"
+  description="Sweep shear rate over a specimen, fit Newtonian, power-law and Herschel-Bulkley models to the resulting flow curve, and read the residual plot that tells you whether the fit is trustworthy."
+  {...siteConfig}
+>
+  <p>
+    This instrument implements the three flow models from
+    <a href={withBase("/sessions/02-rheology-i-flow-behaviour/")}>Module 2</a>
+    and is the tool <a href={withBase("/sessions/10-building-predictive-models/")}>Module 10</a>
+    asks you to use for model fitting. Choose a specimen, choose a model to
+    fit to it, and drag the shear-rate cursor to read the flow curve and
+    viscosity curve at a point. The fit updates live; the residual plot below
+    the curves is what tells you whether the model you picked actually
+    describes the specimen, independently of the R² number.
+  </p>
+
+  <div class="rheometer" id="rheometer">
+    <form class="rheometer__controls">
+      <div class="control">
+        <label for="specimen-select">Specimen</label>
+        <select id="specimen-select">
+          {SPECIMENS.map((specimen) => <option value={specimen.id}>{specimen.label}</option>)}
+        </select>
+        <p class="control__hint" id="specimen-hint"></p>
+      </div>
+
+      <div class="control">
+        <label for="model-select">Model to fit</label>
+        <select id="model-select">
+          <option value="newtonian">Newtonian (τ = η·γ̇)</option>
+          <option value="power-law">Power-law (τ = K·γ̇ⁿ)</option>
+          <option value="herschel-bulkley">Herschel-Bulkley (τ = τ₀ + K·γ̇ⁿ)</option>
+        </select>
+        <p class="control__hint">
+          Fitting the wrong model is a valid, useful thing to do here — that is
+          how you see a model fail.
+        </p>
+      </div>
+
+      <div class="control">
+        <label for="shear-rate-slider">
+          Shear-rate cursor: <output id="shear-rate-value" for="shear-rate-slider">— s⁻¹</output>
+        </label>
+        <input type="range" id="shear-rate-slider" min="0" max="1000" step="1" value="700" />
+        <p class="control__hint" id="cursor-readout" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <div class="rheometer__plots">
+      <figure class="rheometer__plot">
+        <figcaption>Flow curve — shear stress τ (Pa) vs shear rate γ̇ (s⁻¹), log–log</figcaption>
+        <svg id="flow-plot" viewBox="0 0 640 360" role="img" aria-label="Flow curve: measured points and fitted model curve"></svg>
+      </figure>
+      <figure class="rheometer__plot">
+        <figcaption>Viscosity curve — apparent viscosity η (Pa·s) vs shear rate γ̇ (s⁻¹), log–log</figcaption>
+        <svg id="viscosity-plot" viewBox="0 0 640 360" role="img" aria-label="Apparent viscosity: measured points and fitted model curve"></svg>
+      </figure>
+      <figure class="rheometer__plot rheometer__plot--wide">
+        <figcaption>Residual plot — measured minus fitted stress (Pa) vs shear rate γ̇ (s⁻¹, log axis)</figcaption>
+        <svg id="residual-plot" viewBox="0 0 640 200" role="img" aria-label="Residuals of the fitted model against shear rate"></svg>
+      </figure>
+    </div>
+
+    <div class="rheometer__fit">
+      <h2>Fitted parameters</h2>
+      <dl class="variable-list" id="fit-summary" aria-live="polite"></dl>
+    </div>
+  </div>
+
+  <Callout type="warning">
+    <p>
+      <strong>Assumptions and limitations.</strong> These are steady-shear
+      models fitted to a single sweep — they say nothing about how a
+      specimen behaves under a sudden impact or over repeated loading (a
+      viscoelastic, time-dependent question; see Module 1). The fit
+      minimises the residual sum of squares in stress space, not log-stress
+      space, so it weights high-shear-rate points more heavily than
+      low-shear-rate ones. A high R² does not guarantee a good fit at low
+      shear rate — that is exactly what the residual plot is for.
+    </p>
+  </Callout>
+
+  <Callout type="info">
+    <p>
+      <strong>Data provenance.</strong> Every specimen's "measured" flow
+      curve here is synthetic: generated from a labelled true model and
+      illustrative parameters (chosen to sit within the ranges Steffe, 1996,
+      reports for the corresponding food class), plus a small fixed random
+      scatter standing in for instrument noise. Nothing on this page is a
+      measurement of honey, doubanjiang, dumpling dough or congee taken for
+      this course — the specimen descriptions above the plots say so
+      explicitly, and the same note appears in Module 2.
+    </p>
+  </Callout>
+
+  <h2>References</h2>
+  <ul>
+    <li>Steffe, J.F. (1996). <em>Rheological Methods in Food Process Engineering</em>, 2nd ed. Freeman Press.</li>
+    <li>Walstra, P. (2003). <em>Physical Chemistry of Foods</em>. Marcel Dekker.</li>
+  </ul>
+</ContentLayout>
+
+<script>
+  import {
+    SPECIMENS,
+    SHEAR_RATE_MIN,
+    SHEAR_RATE_MAX,
+    generateSweep,
+    fitModel,
+    stressAt,
+    viscosityAt,
+    MODEL_LABELS,
+    type FlowModel,
+  } from "../../../lib/rheometer";
+
+  const specimenSelect = document.getElementById("specimen-select") as HTMLSelectElement;
+  const modelSelect = document.getElementById("model-select") as HTMLSelectElement;
+  const slider = document.getElementById("shear-rate-slider") as HTMLInputElement;
+  const sliderOutput = document.getElementById("shear-rate-value") as HTMLOutputElement;
+  const cursorReadout = document.getElementById("cursor-readout") as HTMLParagraphElement;
+  const specimenHint = document.getElementById("specimen-hint") as HTMLParagraphElement;
+  const fitSummary = document.getElementById("fit-summary") as HTMLDListElement;
+  const flowPlot = document.getElementById("flow-plot") as unknown as SVGSVGElement;
+  const viscosityPlot = document.getElementById("viscosity-plot") as unknown as SVGSVGElement;
+  const residualPlot = document.getElementById("residual-plot") as unknown as SVGSVGElement;
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function sliderToShearRate(value: number): number {
+    const logMin = Math.log10(SHEAR_RATE_MIN);
+    const logMax = Math.log10(SHEAR_RATE_MAX);
+    const t = value / 1000;
+    return 10 ** (logMin + t * (logMax - logMin));
+  }
+
+  function formatNumber(value: number, digits = 3): string {
+    if (!Number.isFinite(value)) return "—";
+    return value.toLocaleString("en-AU", { maximumSignificantDigits: digits });
+  }
+
+  function clearSvg(svg: SVGSVGElement) {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+  }
+
+  function svgEl<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number> = {}) {
+    const el = document.createElementNS(SVG_NS, tag);
+    for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, String(value));
+    return el;
+  }
+
+  interface LogAxis {
+    min: number;
+    max: number;
+    toPixel(value: number): number;
+  }
+
+  function makeLogAxis(min: number, max: number, pixelMin: number, pixelMax: number): LogAxis {
+    const logMin = Math.log10(min);
+    const logMax = Math.log10(max);
+    return {
+      min,
+      max,
+      toPixel(value: number) {
+        const t = (Math.log10(Math.max(value, min)) - logMin) / (logMax - logMin);
+        return pixelMin + t * (pixelMax - pixelMin);
+      },
+    };
+  }
+
+  function logTicks(min: number, max: number): number[] {
+    const ticks: number[] = [];
+    const startExp = Math.floor(Math.log10(min));
+    const endExp = Math.ceil(Math.log10(max));
+    for (let exp = startExp; exp <= endExp; exp++) {
+      const tick = 10 ** exp;
+      if (tick >= min * 0.999 && tick <= max * 1.001) ticks.push(tick);
+    }
+    return ticks;
+  }
+
+  const MARGIN = { left: 64, right: 20, top: 16, bottom: 40 };
+
+  function renderLogLogPlot(
+    svg: SVGSVGElement,
+    height: number,
+    seriesPoints: { gammaDot: number; value: number }[],
+    fittedCurve: { gammaDot: number; value: number }[],
+    highlightGammaDot: number,
+    highlightValue: number,
+  ) {
+    clearSvg(svg);
+    const width = 640;
+    const plotLeft = MARGIN.left;
+    const plotRight = width - MARGIN.right;
+    const plotTop = MARGIN.top;
+    const plotBottom = height - MARGIN.bottom;
+
+    const allValues = [...seriesPoints.map((p) => p.value), ...fittedCurve.map((p) => p.value)].filter((v) => v > 0);
+    const yMin = Math.min(...allValues) * 0.7;
+    const yMax = Math.max(...allValues) * 1.4;
+
+    const xAxis = makeLogAxis(SHEAR_RATE_MIN, SHEAR_RATE_MAX, plotLeft, plotRight);
+    const yAxis = makeLogAxis(yMin, yMax, plotBottom, plotTop);
+
+    svg.append(svgEl("rect", { x: plotLeft, y: plotTop, width: plotRight - plotLeft, height: plotBottom - plotTop, fill: "none", stroke: "var(--at-border)" }));
+
+    for (const tick of logTicks(SHEAR_RATE_MIN, SHEAR_RATE_MAX)) {
+      const x = xAxis.toPixel(tick);
+      svg.append(svgEl("line", { x1: x, y1: plotTop, x2: x, y2: plotBottom, stroke: "var(--at-border)", "stroke-dasharray": "2,3" }));
+      const label = svgEl("text", { x, y: plotBottom + 16, "font-size": 11, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+      label.textContent = tick >= 1 ? String(tick) : tick.toString();
+      svg.append(label);
+    }
+    for (const tick of logTicks(yMin, yMax)) {
+      const y = yAxis.toPixel(tick);
+      svg.append(svgEl("line", { x1: plotLeft, y1: y, x2: plotRight, y2: y, stroke: "var(--at-border)", "stroke-dasharray": "2,3" }));
+      const label = svgEl("text", { x: plotLeft - 8, y: y + 4, "font-size": 11, "text-anchor": "end", fill: "var(--at-text-secondary)" });
+      label.textContent = tick >= 1 ? String(Math.round(tick)) : tick.toFixed(2);
+      svg.append(label);
+    }
+
+    const axisLabelX = svgEl("text", { x: (plotLeft + plotRight) / 2, y: height - 6, "font-size": 12, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+    axisLabelX.textContent = "γ̇ (s⁻¹)";
+    svg.append(axisLabelX);
+
+    const fittedPath = fittedCurve.map((p, i) => `${i === 0 ? "M" : "L"} ${xAxis.toPixel(p.gammaDot)} ${yAxis.toPixel(p.value)}`).join(" ");
+    svg.append(svgEl("path", { d: fittedPath, fill: "none", stroke: "var(--at-primary)", "stroke-width": 2 }));
+
+    for (const point of seriesPoints) {
+      svg.append(
+        svgEl("circle", {
+          cx: xAxis.toPixel(point.gammaDot),
+          cy: yAxis.toPixel(point.value),
+          r: 3.5,
+          fill: "var(--at-secondary)",
+          class: "rheometer__point",
+        }),
+      );
+    }
+
+    if (highlightValue > 0) {
+      const hx = xAxis.toPixel(highlightGammaDot);
+      const hy = yAxis.toPixel(highlightValue);
+      svg.append(svgEl("line", { x1: hx, y1: plotTop, x2: hx, y2: plotBottom, stroke: "var(--at-text-muted)", class: "rheometer__cursor" }));
+      svg.append(svgEl("circle", { cx: hx, cy: hy, r: 6, fill: "none", stroke: "var(--at-text)", "stroke-width": 2, class: "rheometer__cursor" }));
+    }
+  }
+
+  function renderResidualPlot(svg: SVGSVGElement, residuals: { gammaDot: number; residual: number }[]) {
+    clearSvg(svg);
+    const width = 640;
+    const height = 200;
+    const plotLeft = MARGIN.left;
+    const plotRight = width - MARGIN.right;
+    const plotTop = MARGIN.top;
+    const plotBottom = height - MARGIN.bottom;
+
+    const maxAbs = Math.max(...residuals.map((r) => Math.abs(r.residual)), 1) * 1.2;
+    const xAxis = makeLogAxis(SHEAR_RATE_MIN, SHEAR_RATE_MAX, plotLeft, plotRight);
+    const zeroY = plotTop + (plotBottom - plotTop) / 2;
+    const scaleY = (plotBottom - plotTop) / 2 / maxAbs;
+
+    svg.append(svgEl("rect", { x: plotLeft, y: plotTop, width: plotRight - plotLeft, height: plotBottom - plotTop, fill: "none", stroke: "var(--at-border)" }));
+    svg.append(svgEl("line", { x1: plotLeft, y1: zeroY, x2: plotRight, y2: zeroY, stroke: "var(--at-text-secondary)", "stroke-width": 1.5 }));
+
+    for (const tick of logTicks(SHEAR_RATE_MIN, SHEAR_RATE_MAX)) {
+      const x = xAxis.toPixel(tick);
+      const label = svgEl("text", { x, y: plotBottom + 16, "font-size": 11, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+      label.textContent = String(tick);
+      svg.append(label);
+    }
+
+    const axisLabelX = svgEl("text", { x: (plotLeft + plotRight) / 2, y: height - 6, "font-size": 12, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+    axisLabelX.textContent = "γ̇ (s⁻¹)";
+    svg.append(axisLabelX);
+
+    for (const point of residuals) {
+      const x = xAxis.toPixel(point.gammaDot);
+      const y = zeroY - point.residual * scaleY;
+      svg.append(svgEl("line", { x1: x, y1: zeroY, x2: x, y2: y, stroke: "var(--at-border)" }));
+      svg.append(
+        svgEl("circle", {
+          cx: x,
+          cy: y,
+          r: 3.5,
+          fill: point.residual >= 0 ? "var(--at-success)" : "var(--at-error)",
+        }),
+      );
+    }
+  }
+
+  function render() {
+    const specimen = SPECIMENS.find((s) => s.id === specimenSelect.value) ?? SPECIMENS[0];
+    const model = modelSelect.value as FlowModel;
+    specimenHint.textContent = specimen.description;
+
+    const sweep = generateSweep(specimen);
+    const fit = fitModel(model, sweep);
+
+    const curveSamples: { gammaDot: number; value: number }[] = [];
+    const viscositySamples: { gammaDot: number; value: number }[] = [];
+    const sampleCount = 60;
+    for (let i = 0; i <= sampleCount; i++) {
+      const logMin = Math.log10(SHEAR_RATE_MIN);
+      const logMax = Math.log10(SHEAR_RATE_MAX);
+      const gammaDot = 10 ** (logMin + ((logMax - logMin) * i) / sampleCount);
+      curveSamples.push({ gammaDot, value: stressAt(fit.model, fit.params, gammaDot) });
+      viscositySamples.push({ gammaDot, value: viscosityAt(fit.model, fit.params, gammaDot) });
+    }
+
+    const sliderValue = Number(slider.value);
+    const cursorGamma = sliderToShearRate(sliderValue);
+    const cursorTau = stressAt(fit.model, fit.params, cursorGamma);
+    const cursorEta = viscosityAt(fit.model, fit.params, cursorGamma);
+
+    sliderOutput.textContent = `${formatNumber(cursorGamma)} s⁻¹`;
+    cursorReadout.textContent = `At γ̇ = ${formatNumber(cursorGamma)} s⁻¹, the fitted model predicts τ = ${formatNumber(cursorTau)} Pa and η = ${formatNumber(cursorEta)} Pa·s.`;
+
+    renderLogLogPlot(
+      flowPlot,
+      360,
+      sweep.map((p) => ({ gammaDot: p.gammaDot, value: p.tau })),
+      curveSamples,
+      cursorGamma,
+      cursorTau,
+    );
+    renderLogLogPlot(
+      viscosityPlot,
+      360,
+      sweep.map((p) => ({ gammaDot: p.gammaDot, value: p.tau / p.gammaDot })),
+      viscositySamples,
+      cursorGamma,
+      cursorEta,
+    );
+    renderResidualPlot(residualPlot, fit.residuals);
+
+    fitSummary.innerHTML = "";
+    const rows: [string, string][] = [
+      ["Model fitted", MODEL_LABELS[fit.model]],
+      ["K", `${formatNumber(fit.params.k)} Pa·s${fit.params.n === 1 ? "" : "ⁿ"}`],
+      ["n", formatNumber(fit.params.n)],
+    ];
+    if (fit.model === "herschel-bulkley") rows.push(["τ₀", `${formatNumber(fit.params.tau0)} Pa`]);
+    rows.push(["R²", formatNumber(fit.r2, 4)]);
+    rows.push(["Residual sum of squares", `${formatNumber(fit.rss)} Pa²`]);
+    for (const [label, value] of rows) {
+      const dt = document.createElement("dt");
+      dt.textContent = label;
+      const dd = document.createElement("dd");
+      dd.textContent = value;
+      fitSummary.append(dt, dd);
+    }
+  }
+
+  specimenSelect.addEventListener("change", render);
+  modelSelect.addEventListener("change", render);
+  slider.addEventListener("input", render);
+  window.addEventListener("resize", () => {
+    if (prefersReducedMotion) return;
+  });
+
+  render();
+</script>
+
+<style>
+  .rheometer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-spacing-xl);
+    margin: var(--at-spacing-xl) 0;
+  }
+
+  .rheometer__controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--at-spacing-lg);
+    padding: var(--at-spacing-lg);
+    background: var(--at-bg-alt);
+    border-radius: var(--at-border-radius);
+  }
+
+  .control {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-spacing-xs);
+  }
+
+  .control label {
+    font-weight: 600;
+    color: var(--at-heading);
+  }
+
+  .control select,
+  .control input[type="range"] {
+    font: inherit;
+  }
+
+  .control__hint {
+    margin: 0;
+    font-size: var(--at-font-size-sm);
+    color: var(--at-text-secondary);
+  }
+
+  .rheometer__plots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--at-spacing-lg);
+  }
+
+  .rheometer__plot--wide {
+    grid-column: 1 / -1;
+  }
+
+  .rheometer__plot {
+    margin: 0;
+    padding: var(--at-spacing-md);
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+  }
+
+  .rheometer__plot figcaption {
+    font-size: var(--at-font-size-sm);
+    color: var(--at-text-secondary);
+    margin-bottom: var(--at-spacing-sm);
+  }
+
+  .rheometer__plot svg {
+    width: 100%;
+    height: auto;
+    font-family: var(--at-font-sans);
+  }
+
+  .rheometer__fit {
+    padding: var(--at-spacing-lg);
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+  }
+
+  .rheometer__fit h2 {
+    margin-top: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rheometer__point,
+    .rheometer__cursor {
+      transition:
+        cx 0.15s ease,
+        cy 0.15s ease;
+    }
+  }
+</style>
