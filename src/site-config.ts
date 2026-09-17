@@ -29,6 +29,7 @@ export const siteConfig = defineSiteConfig({
     { text: "People", href: "/people/" },
     { text: "Policies", href: "/policies/" },
     { text: "Resources", href: "/resources/" },
+    { text: "References", href: "/references/" },
   ],
 
   licence: "CC-BY-NC-SA-4.0",
