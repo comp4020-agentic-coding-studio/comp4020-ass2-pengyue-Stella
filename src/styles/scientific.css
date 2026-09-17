@@ -1,0 +1,79 @@
+/* Lab-notebook visual system shared by module pages: displayed equations,
+   nomenclature lists, and the stage badge used on module index/detail pages.
+   Tokens only — no hard-coded colour, so this follows the SlopU brand CSS
+   and dark mode automatically. */
+
+.equation {
+  margin: var(--at-spacing-lg) 0;
+  padding: var(--at-spacing-md) var(--at-spacing-lg);
+  border-left: 3px solid var(--at-secondary);
+  border-radius: 0 var(--at-border-radius) var(--at-border-radius) 0;
+  background: var(--at-code-bg);
+  font-family: var(--at-font-mono);
+  font-size: var(--at-font-size-h4);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.variable-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: var(--at-spacing-lg);
+  row-gap: var(--at-spacing-sm);
+  margin: var(--at-spacing-md) 0 var(--at-spacing-xl);
+  padding: var(--at-spacing-md) var(--at-spacing-lg);
+  background: var(--at-bg-alt);
+  border-radius: var(--at-border-radius);
+}
+
+.variable-list dt {
+  font-family: var(--at-font-mono);
+  font-size: var(--at-font-size-sm);
+  font-weight: 600;
+  color: var(--at-heading);
+  white-space: nowrap;
+}
+
+.variable-list dd {
+  margin: 0;
+  color: var(--at-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .equation {
+    font-size: var(--at-font-size-sm);
+  }
+
+  .variable-list {
+    grid-template-columns: 1fr;
+    row-gap: var(--at-spacing-xs);
+  }
+
+  .variable-list dt {
+    margin-top: var(--at-spacing-sm);
+  }
+
+  .variable-list dt:first-child {
+    margin-top: 0;
+  }
+}
+
+.stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: var(--at-spacing-xs) var(--at-spacing-sm);
+  border: 1px solid var(--at-border);
+  border-radius: var(--at-border-radius);
+  background: var(--at-bg-alt);
+  color: var(--at-text-secondary);
+  font-family: var(--at-font-mono);
+  font-size: var(--at-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.stage-badge strong {
+  color: var(--at-heading);
+}

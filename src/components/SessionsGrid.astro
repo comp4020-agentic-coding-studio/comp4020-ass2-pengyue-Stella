@@ -3,20 +3,50 @@ import { getPublishedCollection } from "astro-course-university/content";
 import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
 import { formatCourseDate } from "../lib/dates";
+import { STAGES } from "../stages";
 
 const sessions = await getPublishedCollection("sessions");
-const visible = sessions.sort((a, b) => a.data.week - b.data.week);
+const byWeek = sessions.slice().sort((a, b) => a.data.week - b.data.week);
 ---
 
-<CardGrid columns={2}>
-  {
-    visible.map((session) => (
-      <Card headingLevel="h2" title={session.data.title} href={`/sessions/${session.id}/`}>
-        {session.data.description && <p>{session.data.description}</p>}
-        <p>
-          <small>Week {session.data.week} · {formatCourseDate(session.data.date)}</small>
-        </p>
-      </Card>
-    ))
+{
+  STAGES.map((stage) => {
+    const modules = byWeek.filter((session) => session.data.stage === stage.number);
+    return (
+      <section class="stage-group" aria-labelledby={`stage-${stage.number}`}>
+        <h2 id={`stage-${stage.number}`}>
+          Stage {stage.number} · {stage.title}
+        </h2>
+        <p class="stage-description">{stage.description}</p>
+        <CardGrid columns={3}>
+          {modules.map((session) => (
+            <Card headingLevel="h3" title={session.data.title} href={`/sessions/${session.id}/`}>
+              {session.data.description && <p>{session.data.description}</p>}
+              <p>
+                <small>
+                  Week {session.data.week} · {formatCourseDate(session.data.date)}
+                </small>
+              </p>
+            </Card>
+          ))}
+        </CardGrid>
+      </section>
+    );
+  })
+}
+
+<style>
+  .stage-group {
+    margin-block-end: var(--at-spacing-2xl);
   }
-</CardGrid>
+
+  .stage-group h2 {
+    margin-block-end: var(--at-spacing-xs);
+  }
+
+  .stage-description {
+    max-width: 42rem;
+    margin-block-end: var(--at-spacing-lg);
+    color: var(--at-text-secondary);
+  }
+</style>

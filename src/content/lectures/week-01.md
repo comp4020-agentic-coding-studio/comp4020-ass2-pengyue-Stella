@@ -1,30 +1,35 @@
 ---
-title: Opening lecture
+title: "Opening Lecture: Why Treat Food as a Material"
 description:
-  The first lecture — what the course is, why it is shaped this way, and what
-  happens in week 1
+  The course's central claim — texture is a measurable material property —
+  and how the four-stage curriculum builds toward testing it.
 week: 1
 date: 2027-02-22
 teachers:
   - marisol-quaye
-slides: /decks/week-01/
 related:
   - sessions/01-what-is-edible-matter
 ---
 
-<!-- STARTER_CONTENT: replace this lecture, then remove this comment. -->
-
-Replace this page. A lecture entry says what was covered and links to the pages
-that own the detail, so the lecture stays short and nothing is explained twice.
-
-The `related:` ref above is a graph edge: it renders on this page and on the
-session's, so declare a connection once, on whichever side is convenient.
-
-The page renders its `slides:` link automatically. Decks are markdown too,
-under `src/decks/`; the path is part of the lecture's API metadata.
-
 ## Outline
 
-- what the course is for
-- how the weeks are shaped
-- what to do before the first session
+- The claim this course makes: "QQ," "crisp," and "chewy" are not vague
+  adjectives — each names a specific, measurable material property, and
+  this course spends twelve weeks building the tools to name which one.
+- Why Chinese cooking specifically: a wide range of material states
+  (hydrogel, glass, emulsion, crystalline fat) appear across a small,
+  well-known set of dishes, making it an unusually efficient teaching
+  corpus for soft-matter physics.
+- The four-stage shape of the course and why it runs in this order:
+  measure first (Stage 1), then ask what gives a material its structure
+  (Stage 2), then how that structure changes under cooking (Stage 3), and
+  only then whether the whole chain can be run backward to design a target
+  texture (Stage 4).
+- What "honest modelling" means in this course, and why it is marked
+  explicitly: every quantitative claim states whether it is measured,
+  literature-derived, or a labelled illustrative estimate.
+- Introduction to the Laboratory Portfolio's two instruments (the Virtual
+  Rheometer and the Crispness Phase Diagram), used across the course rather
+  than built fresh for each module.
+- What to do before [Module 1](/sessions/01-what-is-edible-matter/): no
+  preparation beyond the prerequisites in the [course overview](/overview/).

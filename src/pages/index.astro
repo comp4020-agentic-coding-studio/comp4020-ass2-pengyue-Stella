@@ -2,42 +2,72 @@
 import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
-import heroImage from "../assets/images/hero-home.avif";
+import heroImage from "../assets/images/hero-home.svg";
 import { courseMeta } from "../course-config";
 import { sessionLabels, siteConfig } from "../site-config";
-
-// STARTER_CONTENT: replace the hero artwork and its alt text below, then
-// remove this comment.
+import { STAGES } from "../stages";
+import "../styles/scientific.css";
 ---
 
 <ContentLayout
   title={`${courseMeta.code}: ${courseMeta.title}`}
   description={courseMeta.description}
   heroImage={heroImage}
-  heroImageAlt="A lecture theatre reduced to flat gold and black shapes, rows of seats sweeping past the frame, in a two-ink risograph print"
+  heroImageAlt="An abstract diagram combining a parallel-plate rheometer's radial graduations with a plotted flow curve, in the SlopU gold and ink palette"
   {...siteConfig}
 >
   <ul class="course-tags" aria-label="Course tags">
     {courseMeta.tags.map((tag) => <li>{tag}</li>)}
   </ul>
 
-  <!-- STARTER_CONTENT: replace the authored page below, then remove this comment. -->
-  <h2>What you will do</h2>
+  <h2>The claim</h2>
   <p>
-    Say what a student spends their time on — the making, reading, arguing or
-    measuring that fills the weeks. Name the artefact they walk out with.
+    Every question this course asks starts from the same premise: a food's
+    texture is a measurable material property, governed by the same
+    thermodynamics, transport equations and rheology used to characterise any
+    soft material — not a matter of taste, and not beyond the reach of a
+    model. A boba pearl's "QQ" bounce is a storage-to-loss modulus ratio. A
+    spring roll's crunch is a material below its glass transition. Twelve
+    modules build the vocabulary and the tools to say exactly which
+    property, and why.
   </p>
 
-  <h2>Who it is for</h2>
+  <h2>Four stages</h2>
   <p>
-    Say who this is aimed at and what they need to already know. Be specific
-    enough that someone can rule themselves in or out without emailing you.
+    The teaching period runs in four stages, each three modules long, each
+    building directly on the last:
+  </p>
+  <ol class="stage-list">
+    {
+      STAGES.map((stage) => (
+        <li>
+          <strong>
+            Stage {stage.number}: {stage.title}
+          </strong>{" "}
+          — {stage.description}
+        </li>
+      ))
+    }
+  </ol>
+
+  <h2>Two instruments, not two dozen</h2>
+  <p>
+    Rather than one simulation per module, the course concentrates its
+    interactive work into two instruments used repeatedly across the
+    Laboratory Portfolio: a <strong>Virtual Rheometer</strong> for flow
+    behaviour, and a <strong>Crispness Phase Diagram</strong> for the
+    glass-transition physics behind texture loss. Both are built to the same
+    honesty standard as the written modules — labelled assumptions, visible
+    fit quality, no invented data.
   </p>
 
   <h2>Where to go next</h2>
   <CardGrid columns={2}>
+    <Card title="Course overview" href="/overview/">
+      <p>Thesis, learning outcomes, prerequisites, and how the four stages fit together.</p>
+    </Card>
     <Card title={sessionLabels.plural} href="/sessions/">
-      <p>The weekly schedule and what happens in each teaching session.</p>
+      <p>All twelve teaching modules, grouped by stage.</p>
     </Card>
     <Card title="Assessment" href="/assessments/">
       <p>What is marked, what it is worth, and when it is due.</p>
@@ -64,5 +94,11 @@ import { sessionLabels, siteConfig } from "../site-config";
     color: var(--at-text-secondary);
     background: var(--at-bg-alt);
     font-size: 0.9rem;
+  }
+
+  .stage-list {
+    display: grid;
+    gap: var(--at-spacing-sm);
+    padding-left: 1.25rem;
   }
 </style>

@@ -4,17 +4,25 @@ import { getPublishedCollection } from "astro-course-university/content";
 import RelatedContent from "astro-course-university/components/RelatedContent.astro";
 import SpecList from "astro-course-university/components/SpecList.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { withBase } from "astro-theme-university/url";
 import TeachingTeam from "../../components/TeachingTeam.astro";
 import { formatCourseDate } from "../../lib/dates";
 import { graphCollections, sessionLabels, siteConfig } from "../../site-config";
+import { stageInfo } from "../../stages";
+import "../../styles/scientific.css";
 
 export async function getStaticPaths() {
   const sessions = await getPublishedCollection("sessions");
-  return sessions.map((session) => ({ params: { slug: session.id }, props: { session } }));
+  const ordered = sessions.slice().sort((a, b) => a.data.week - b.data.week);
+  return ordered.map((session, index) => ({
+    params: { slug: session.id },
+    props: { session, previous: ordered[index - 1], next: ordered[index + 1] },
+  }));
 }
 
-const { session } = Astro.props;
+const { session, previous, next } = Astro.props;
 const { Content } = await render(session);
+const stage = stageInfo(session.data.stage);
 ---
 
 <ContentLayout
@@ -22,6 +30,11 @@ const { Content } = await render(session);
   description={session.data.description}
   {...siteConfig}
 >
+  <p>
+    <a class="stage-badge" href={withBase("/sessions/")}>
+      Stage {stage.number} · <strong>{stage.title}</strong>
+    </a>
+  </p>
   <p><strong>{formatCourseDate(session.data.date)}</strong></p>
   <Content />
   <SpecList spec={session.data.spec}>
@@ -30,4 +43,50 @@ const { Content } = await render(session);
   </SpecList>
   <TeachingTeam teachers={session.data.teachers} />
   <RelatedContent entry={session} collections={graphCollections} />
+  <nav class="module-pager" aria-label="Module sequence">
+    {
+      previous ? (
+        <a href={withBase(`/sessions/${previous.id}/`)} rel="prev">
+          ← Week {previous.data.week}: {previous.data.title}
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      next ? (
+        <a href={withBase(`/sessions/${next.id}/`)} rel="next">
+          Week {next.data.week}: {next.data.title} →
+        </a>
+      ) : (
+        <span />
+      )
+    }
+  </nav>
 </ContentLayout>
+
+<style>
+  .module-pager {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--at-spacing-lg);
+    margin-top: var(--at-spacing-2xl);
+    padding-top: var(--at-spacing-lg);
+    border-top: 1px solid var(--at-divider);
+  }
+
+  .module-pager a {
+    max-width: 46%;
+  }
+
+  @media (max-width: 640px) {
+    .module-pager {
+      flex-direction: column;
+      gap: var(--at-spacing-sm);
+    }
+
+    .module-pager a {
+      max-width: 100%;
+    }
+  }
+</style>
