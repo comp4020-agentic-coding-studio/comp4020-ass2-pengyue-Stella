@@ -7,8 +7,8 @@ date: 2027-03-01
 teachers:
   - idris-fenn
 related:
-  - sessions/02-first-review
-  - assessments/assignment-1
+  - sessions/02-rheology-i-flow-behaviour
+  - assessments/material-characterisation-report
 ---
 
 <!-- STARTER_CONTENT: replace this lecture, then remove this comment. -->

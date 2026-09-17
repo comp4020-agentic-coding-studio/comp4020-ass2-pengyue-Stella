@@ -4,6 +4,7 @@ import { z } from "astro/zod";
 import { courseNodeSchema } from "astro-course-university/schemas";
 
 const weekSchema = z.coerce.number().int().min(1).max(12);
+const stageSchema = z.coerce.number().int().min(1).max(4);
 const courseNodeLoader = (dir: string) =>
   glob({ pattern: ["**/*.{md,mdx}", "!**/CLAUDE.md"], base: `src/content/${dir}` });
 const teacherRefs = z.array(reference("people")).min(1);
@@ -37,6 +38,7 @@ export const collections = {
     schema: courseNodeSchema
       .extend({
         week: weekSchema,
+        stage: stageSchema,
         date: z.coerce.date(),
         teachers: teacherRefs.optional(),
       })
