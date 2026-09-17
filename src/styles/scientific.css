@@ -77,3 +77,94 @@
 .stage-badge strong {
   color: var(--at-heading);
 }
+
+/* Shared layout for the two interactive instruments (Virtual Rheometer,
+   Crispness Phase Diagram): a control panel, a grid of SVG plot panels, and
+   a live-updating summary box. Kept here rather than per-page so the two
+   instruments read as one family. */
+
+.instrument {
+  display: flex;
+  flex-direction: column;
+  gap: var(--at-spacing-xl);
+  margin: var(--at-spacing-xl) 0;
+}
+
+.instrument-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--at-spacing-lg);
+  padding: var(--at-spacing-lg);
+  background: var(--at-bg-alt);
+  border-radius: var(--at-border-radius);
+}
+
+.instrument-control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--at-spacing-xs);
+}
+
+.instrument-control label {
+  font-weight: 600;
+  color: var(--at-heading);
+}
+
+.instrument-control select,
+.instrument-control input[type="range"] {
+  font: inherit;
+}
+
+.instrument-control__hint {
+  margin: 0;
+  font-size: var(--at-font-size-sm);
+  color: var(--at-text-secondary);
+}
+
+.instrument-plots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: var(--at-spacing-lg);
+}
+
+.instrument-plot--wide {
+  grid-column: 1 / -1;
+}
+
+.instrument-plot {
+  margin: 0;
+  padding: var(--at-spacing-md);
+  border: 1px solid var(--at-border);
+  border-radius: var(--at-border-radius);
+}
+
+.instrument-plot figcaption {
+  font-size: var(--at-font-size-sm);
+  color: var(--at-text-secondary);
+  margin-bottom: var(--at-spacing-sm);
+}
+
+.instrument-plot svg {
+  width: 100%;
+  height: auto;
+  font-family: var(--at-font-sans);
+}
+
+.instrument-summary {
+  padding: var(--at-spacing-lg);
+  border: 1px solid var(--at-border);
+  border-radius: var(--at-border-radius);
+}
+
+.instrument-summary h2 {
+  margin-top: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .instrument-plot circle,
+  .instrument-plot line.instrument-cursor {
+    transition:
+      cx 0.15s ease,
+      cy 0.15s ease;
+  }
+}

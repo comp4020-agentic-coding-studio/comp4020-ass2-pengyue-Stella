@@ -35,7 +35,7 @@ related:
 
 The two instrument tasks ask you to use the
 [Virtual Rheometer](/labs/virtual-rheometer/) and the
-`/labs/crispness-phase-diagram/` instrument directly and report what you
+[Crispness Phase Diagram](/labs/crispness-phase-diagram/) instrument directly and report what you
 found, not to describe the instruments in the abstract. The two dataset tasks give you
 tabulated data (one mechanical, one thermal or moisture-related) with no
 instrument attached, so you practise the same fitting and interpretation

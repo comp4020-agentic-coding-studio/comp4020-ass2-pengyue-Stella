@@ -1,0 +1,276 @@
+---
+title: "Crispness Is a Metastable State"
+description:
+  Glass transition, water activity and fracture in amorphous food solids —
+  the physics behind the Crispness Phase Diagram instrument.
+---
+
+# Crispness Is a Metastable State
+
+## Week 10 · Stage 4 · SLOP3358
+
+```notes
+Second half of the week-10 lecture. Modules 9 and 11 have already given the
+class the Gordon-Taylor equation and the state-diagram framing — this talk
+is where those pieces become one physical story, told forward instead of
+module by module.
+```
+
+---
+
+## Where we've been
+
+- Stage 1 gave us the vocabulary: a food's mechanical state is measurable,
+  not just describable (Modules 1–3).
+- Stage 3 gave us transport and transformation: heat and moisture move
+  through a food object (Module 7), and a moving boundary can separate two
+  states of the same material (Module 9's youtiao crust).
+- Every one of those models describes a **snapshot**: a flow curve, a
+  modulus, a boundary position, at one instant.
+
+## Today's question
+
+Why does a food that is crisp *right now* not necessarily stay crisp — even
+sitting untouched, at constant room temperature?
+
+---
+
+{/* _class: impact */}
+
+**A crisp cracker is not at equilibrium. It's stuck.**
+
+```notes
+Land this before defining the term. The whole lecture is an unpacking of
+that one sentence.
+```
+
+---
+
+## Metastable, precisely
+
+A system is **metastable** when it sits in a *local* minimum of free energy
+rather than the *global* one — stable against small disturbances, but not
+truly at rest. Left alone for long enough, it still finds its way toward the
+lower-energy state; metastability only says that path is slow.
+
+An amorphous solid below its glass transition temperature is the textbook
+case: molecularly disordered, kinetically frozen, and — on any timescale
+short enough to matter to a person eating it — behaving as a rigid solid.
+Given enough time (or enough moisture, or enough heat), it reorganises.
+"Stale" is what that reorganisation looks like from the outside.
+
+---
+
+## The glass transition, restated
+
+Module 9 introduced this for a youtiao crust forming during frying. The same
+relationship runs the whole of today's lecture:
+
+**T_g(w₂) = (w₁·T_g,dry + k·w₂·T_g,water) / (w₁ + k·w₂)**
+
+- **w₁, w₂** — mass fractions of dry solid and water (w₁ + w₂ = 1)
+- **T_g,dry** — glass transition temperature of the pure dry solid
+- **T_g,water ≈ −135 °C** — glass transition of pure amorphous water, a
+  standard value in the food glass-transition literature, not a fitted
+  parameter
+- **k** — Gordon-Taylor constant: how strongly the two components' free
+  volumes mix, measured per material
+
+Water is a **plasticiser**. Add moisture (w₂ ↑) and T_g falls — sometimes by
+well over 100 °C between bone-dry and saturated.
+
+---
+
+## Same equation, opposite direction
+
+Module 9 read this equation **forward in time during frying**: moisture
+leaves the crust, so T_g *rises* past the crust's own temperature, and it
+locks into glass.
+
+Today reads it **backward, after cooking is over**: a crisp food sitting on
+a bench has *already* crossed that boundary once. The only way its state
+changes now is moisture coming back — and that has nothing to do with
+frying, oven temperature, or any process variable from Stage 3. It has to do
+with the air in the room.
+
+---
+
+## Water activity
+
+A food's **water activity**, a_w, measures how readily it exchanges
+moisture with its surroundings, on a scale where a_w = 1 is pure water and
+a_w = 0 is bone dry. A food left in air at a given relative humidity
+absorbs or loses moisture until its own a_w matches the air's:
+
+**a_w,food ≈ RH_air / 100 at equilibrium**
+
+This is the whole reason a sealed cracker stays crisp for weeks and an
+opened one softens in a day: nothing about the cracker's temperature
+changed. Its surroundings' relative humidity did — either because the
+packaging that used to hold a_w fixed is gone, or because it was never
+holding much back.
+
+```notes
+Emphasise: this is an equilibrium statement, not a rate. It tells you where
+a specimen is headed, not how fast — that's the next slide.
+```
+
+---
+
+## Moisture migration
+
+Two distinct moisture-movement problems show up across this course, and
+it's worth being precise about which one governs shelf life:
+
+- **Internal migration** (Module 7's territory) — moisture moving *within*
+  a food object, e.g. from a moist core outward to a drying crust during
+  cooking. Driven by internal gradients, resolved on the timescale of
+  cooking.
+- **External exchange** (today's territory) — moisture moving *between* a
+  food and the surrounding air, driven by the gap between the food's a_w
+  and the air's RH. Resolved on the timescale of storage: hours to weeks,
+  not minutes.
+
+The Crispness Phase Diagram instrument's moisture-uptake curve models the
+second kind: a food relaxing toward the equilibrium moisture content its
+storage humidity sets, over time.
+
+---
+
+## Amorphous, not crystalline
+
+Two food solids can share a chemical composition and behave completely
+differently, because a glass transition is a property of **disordered**
+matter. A crystal has a sharp melting point and no glass transition at all;
+an amorphous solid — quenched or dried too fast for its molecules to
+organise into a lattice — has neither a true melting point nor a fixed
+"solid" state, only a T_g that moves with composition.
+
+Most crisp food structures are amorphous by construction: a starch- or
+gluten-based matrix, dried or fried quickly enough that it never
+crystallises. That's precisely why the Gordon-Taylor picture applies to a
+rice cracker or a spring roll wrapper, and not to, say, table salt.
+
+---
+
+## Why crisp fractures the way it does
+
+Below T_g, a material is **glassy**: rigid, and — critically — brittle. Load
+it, and it deforms almost imperceptibly right up until a crack nucleates and
+runs through it in one uncontrolled event, releasing the elastic energy the
+structure was storing. That single sharp failure, repeated at hundreds of
+thin cell walls throughout a foam-like structure, is what a "crunch" *is* —
+acoustically as well as mechanically.
+
+Above T_g, the same matrix is **rubbery**: the same load instead produces
+slow, ductile deformation with no sudden release. No crack, no sound, no
+crunch — this is mechanically what "soft" and "stale" mean for a structure
+whose composition hasn't changed at all.
+
+**A necessary condition, not a sufficient one.** Being glassy is necessary
+for "crisp" in the everyday sense, but not sufficient: a thick glassy solid
+— hard candy — is rigid and brittle but reads as *hard*, not crisp.
+Crispness also needs a thin, cellular or foam-like structure that fractures
+audibly. The state diagram tells you which side of T_g a material sits on;
+it says nothing about geometry, and geometry is half of what "crisp" means
+to a person eating the food.
+
+---
+
+{/* _class: centered */}
+
+## One diagram, two axes
+
+**Temperature (vertical) against moisture content (horizontal).**
+
+The Gordon-Taylor curve T_g(moisture) splits the plane into **glassy**
+(below the curve) and **rubbery** (above it). Draw a horizontal line at
+ambient temperature, and a specimen's whole future is a single question:
+does its moisture trajectory, moving rightward under a fixed storage
+humidity, cross that line before or after anyone eats it?
+
+---
+
+## The instrument, live
+
+The [Crispness Phase Diagram](/labs/crispness-phase-diagram/) puts exactly
+this diagram in your hands:
+
+1. Choose a specimen — rice cracker, spring roll wrapper, youtiao crust —
+   each with its own T_g,dry, Gordon-Taylor k, and starting moisture.
+2. Set an ambient relative humidity. This fixes the equilibrium moisture
+   content the specimen is relaxing toward.
+3. Advance time and watch the moisture-uptake curve climb, and the state
+   point on the T_g diagram slide rightward.
+4. Read the **stability margin** — the elapsed time at which the
+   trajectory's T_g first drops to ambient temperature — the same crossing
+   this lecture just described in words, computed exactly.
+
+Compare two specimens at the same humidity, and the diagram makes visible
+*which* term — a higher T_g,dry, a smaller k, a lower starting moisture — is
+actually buying the more stable one its extra shelf life.
+
+---
+
+## Model limitations
+
+Carried over from Modules 9 and 11, stated together because today is where
+they compound:
+
+- The crust/core boundary and the glass transition itself are treated as
+  sharp; both occur over a range in a real food.
+- The Gordon-Taylor equation is an **empirical mixing rule** — it fits real
+  starch- and protein-water systems well, but k must be measured for a
+  specific formulation, never assumed.
+- The instrument's humidity-to-moisture relationship is a **linear sorption
+  isotherm** — a clearly labelled illustrative stand-in for a measured GAB
+  or BET isotherm, not a measurement of any specific food.
+- Moisture uptake here is driven only by the gap between food and air; real
+  uptake rate also depends on packaging resistance and internal structure,
+  which this model doesn't include.
+- None of this captures the geometric half of "crisp" — cell size, wall
+  thickness, density — only the thermodynamic half.
+
+```notes
+This slide is the honesty checkpoint, not a hedge — it's the same content
+as the instrument's own assumptions panel, restated for the room.
+```
+
+---
+
+## Where this points next
+
+Module 12 asks the design question in reverse: given a target stability
+margin, which of these free variables would you actually change, and by how
+much?
+
+- Raise T_g,dry — reformulate the dry solid itself (composition, degree of
+  gelatinisation).
+- Lower k — change which solid is doing the plasticising.
+- Lower the starting moisture — change the drying or frying endpoint.
+- Slow the approach to equilibrium — change the packaging, not the food.
+
+The state diagram doesn't just describe a specimen's fate. It names exactly
+which lever moves it.
+
+---
+
+{/* _class: centered */}
+
+## Questions
+
+**Crispness Phase Diagram:** `/labs/crispness-phase-diagram/`
+**This module:** `/sessions/11-the-crispness-design-space/`
+
+---
+
+## References
+
+- Gordon, M. & Taylor, J.S. (1952). "Ideal Copolymers and the Second-Order
+  Transitions of Synthetic Rubbers. I. Non-Crystalline Copolymers."
+  *Journal of Applied Chemistry* 2(9), 493–500.
+- Roos, Y.H. *Phase Transitions in Foods*, 2nd ed. Academic Press.
+- Williams, M.L., Landel, R.F. & Ferry, J.D. (1955). "The Temperature
+  Dependence of Relaxation Mechanisms in Amorphous Polymers and Other
+  Glass-Forming Liquids." *Journal of the American Chemical Society*
+  77(14), 3701–3707.

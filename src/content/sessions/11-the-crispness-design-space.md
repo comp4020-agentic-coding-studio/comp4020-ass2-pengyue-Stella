@@ -34,9 +34,10 @@ Second module of **Stage 4, Prediction and Material Design**. Module 9
 introduced the glass transition as a single moving boundary during frying;
 this module turns it into a full two-variable **state diagram** —
 temperature against moisture content or water activity — that the
-Crispness Phase Diagram instrument (`/labs/crispness-phase-diagram/`)
-implements directly, and that the required lecture, *Crispness Is a
-Metastable State*, uses as its central figure.
+[Crispness Phase Diagram](/labs/crispness-phase-diagram/) instrument
+implements directly, and that the required lecture,
+[*Crispness Is a Metastable State*](/decks/crispness-metastable/), uses as
+its central figure.
 
 ## The model: a temperature–moisture state diagram
 

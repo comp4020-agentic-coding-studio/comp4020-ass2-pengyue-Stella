@@ -1,0 +1,429 @@
+---
+import Callout from "astro-theme-university/components/Callout.astro";
+import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { withBase } from "astro-theme-university/url";
+import { siteConfig } from "../../../site-config";
+import { SPECIMENS } from "../../../lib/crispness";
+import "../../../styles/scientific.css";
+---
+
+<ContentLayout
+  title="Crispness Phase Diagram"
+  description="Place a specimen at a chosen storage humidity, run moisture uptake forward in time, and read the stability margin before it crosses from glassy and crisp into rubbery and softened."
+  {...siteConfig}
+>
+  <p>
+    This instrument implements the temperature–moisture state diagram from
+    <a href={withBase("/sessions/09-phase-transitions-in-cooking/")}>Module 9</a>
+    and <a href={withBase("/sessions/11-the-crispness-design-space/")}>Module 11</a>,
+    and is the central figure of the lecture
+    <a href={withBase("/decks/crispness-metastable/")}><em>Crispness Is a Metastable State</em></a>.
+    Choose a specimen and a storage relative humidity, then advance time to
+    watch its moisture content climb toward that humidity's equilibrium value
+    and its state slide across the diagram. The stability margin — how long
+    it takes to cross from glassy into rubbery at ambient temperature — is
+    read directly off the same crossing the moisture-uptake plot marks.
+  </p>
+
+  <div class="instrument" id="crispness">
+    <form class="instrument-controls">
+      <div class="instrument-control">
+        <label for="specimen-select">Specimen</label>
+        <select id="specimen-select">
+          {SPECIMENS.map((specimen) => <option value={specimen.id}>{specimen.label}</option>)}
+        </select>
+        <p class="instrument-control__hint" id="specimen-hint"></p>
+      </div>
+
+      <div class="instrument-control">
+        <label for="humidity-slider">
+          Storage relative humidity: <output id="humidity-value" for="humidity-slider">— %RH</output>
+        </label>
+        <input type="range" id="humidity-slider" min="10" max="95" step="1" value="60" />
+        <p class="instrument-control__hint">
+          Fixed for the whole simulation — this is "what humidity is the food
+          stored at," not a control the food itself has.
+        </p>
+      </div>
+
+      <div class="instrument-control">
+        <label for="time-slider">
+          Time since cooking: <output id="time-value" for="time-slider">— h</output>
+        </label>
+        <input type="range" id="time-slider" min="0" max="336" step="1" value="0" />
+        <p class="instrument-control__hint" id="time-readout" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <div class="instrument-plots">
+      <figure class="instrument-plot">
+        <figcaption>State diagram — temperature (°C) vs moisture content w₂ (mass fraction)</figcaption>
+        <svg id="state-plot" viewBox="0 0 640 360" role="img" aria-label="Temperature-moisture state diagram with glassy and rubbery regions, the specimen's initial state and its state at the current time"></svg>
+      </figure>
+      <figure class="instrument-plot">
+        <figcaption>Moisture uptake — moisture content w₂ vs time (hours since cooking)</figcaption>
+        <svg id="uptake-plot" viewBox="0 0 640 360" role="img" aria-label="Moisture content climbing toward its equilibrium value over time, with the current time and the stability-margin crossing marked"></svg>
+      </figure>
+    </div>
+
+    <div class="instrument-summary">
+      <h2>Current state</h2>
+      <dl class="variable-list" id="state-summary" aria-live="polite"></dl>
+    </div>
+
+    <div class="instrument-summary">
+      <h2>Specimen comparison at this humidity</h2>
+      <p>Stability margin for each specimen, all evaluated at the humidity set above.</p>
+      <table id="comparison-table" class="comparison-table">
+        <thead>
+          <tr>
+            <th scope="col">Specimen</th>
+            <th scope="col">Stability margin</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <Callout type="warning">
+    <p>
+      <strong>Assumptions and limitations.</strong> Moisture uptake here is
+      driven only by the gap between the specimen's water activity and the
+      storage relative humidity, ignoring diffusion resistance from packaging
+      or from the specimen's own internal structure — both of which set how
+      <em>fast</em>, not just whether, equilibration happens. The
+      humidity-to-moisture relationship is a linear sorption isotherm, a
+      clearly labelled illustrative stand-in for a measured GAB or BET
+      isotherm. The Gordon-Taylor equation is an empirical mixing rule whose
+      constant must be measured for a specific formulation, not assumed. And
+      being glassy is necessary but not sufficient for "crisp": a thick
+      glassy solid reads as hard, not crisp, so this diagram's boundary says
+      nothing about the thin, cellular structure crispness also requires.
+    </p>
+  </Callout>
+
+  <Callout type="info">
+    <p>
+      <strong>Data provenance.</strong> The state-diagram boundaries and
+      moisture-uptake curves for all three specimens are illustrative,
+      parameterised to be qualitatively consistent with the glass-transition
+      and water-activity behaviour Roos describes for starch- and
+      gluten-based food solids — they are not measurements of a specific
+      rice cracker, spring roll wrapper, or youtiao taken for this course.
+    </p>
+  </Callout>
+
+  <h2>References</h2>
+  <ul>
+    <li>Gordon, M. &amp; Taylor, J.S. (1952). "Ideal Copolymers and the Second-Order Transitions of Synthetic Rubbers. I. Non-Crystalline Copolymers." <em>Journal of Applied Chemistry</em> 2(9), 493–500.</li>
+    <li>Roos, Y.H. <em>Phase Transitions in Foods</em>, 2nd ed. Academic Press.</li>
+    <li>Williams, M.L., Landel, R.F. &amp; Ferry, J.D. (1955). "The Temperature Dependence of Relaxation Mechanisms in Amorphous Polymers and Other Glass-Forming Liquids." <em>Journal of the American Chemical Society</em> 77(14), 3701–3707.</li>
+  </ul>
+</ContentLayout>
+
+<script>
+  import {
+    SPECIMENS,
+    MOISTURE_AXIS_MAX,
+    TIME_AXIS_MAX_HOURS,
+    AMBIENT_TEMPERATURE,
+    glassTransitionTemp,
+    equilibriumMoisture,
+    moistureAtTime,
+    stabilityMarginHours,
+    isCrisp,
+    type CrispnessSpecimen,
+  } from "../../../lib/crispness";
+
+  const TEMP_MIN = -100;
+  const TEMP_MAX = 200;
+
+  const specimenSelect = document.getElementById("specimen-select") as HTMLSelectElement;
+  const humiditySlider = document.getElementById("humidity-slider") as HTMLInputElement;
+  const humidityOutput = document.getElementById("humidity-value") as HTMLOutputElement;
+  const timeSlider = document.getElementById("time-slider") as HTMLInputElement;
+  const timeOutput = document.getElementById("time-value") as HTMLOutputElement;
+  const timeReadout = document.getElementById("time-readout") as HTMLParagraphElement;
+  const specimenHint = document.getElementById("specimen-hint") as HTMLParagraphElement;
+  const stateSummary = document.getElementById("state-summary") as HTMLDListElement;
+  const comparisonBody = document.querySelector("#comparison-table tbody") as HTMLTableSectionElement;
+  const statePlot = document.getElementById("state-plot") as unknown as SVGSVGElement;
+  const uptakePlot = document.getElementById("uptake-plot") as unknown as SVGSVGElement;
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  function formatPercent(value: number): string {
+    return `${(value * 100).toFixed(1)}%`;
+  }
+
+  function formatTemp(value: number): string {
+    return `${Math.round(value)} °C`;
+  }
+
+  function formatHours(value: number): string {
+    if (!Number.isFinite(value)) return "beyond two weeks — stays crisp at this humidity";
+    if (value < 24) return `${value.toFixed(1)} h`;
+    return `${value.toFixed(1)} h (${(value / 24).toFixed(1)} d)`;
+  }
+
+  function clearSvg(svg: SVGSVGElement) {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+  }
+
+  function svgEl<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number> = {}) {
+    const el = document.createElementNS(SVG_NS, tag);
+    for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, String(value));
+    return el;
+  }
+
+  interface LinearAxis {
+    toPixel(value: number): number;
+  }
+
+  function makeLinearAxis(min: number, max: number, pixelMin: number, pixelMax: number): LinearAxis {
+    return {
+      toPixel(value: number) {
+        const t = (value - min) / (max - min);
+        return pixelMin + t * (pixelMax - pixelMin);
+      },
+    };
+  }
+
+  function linearTicks(min: number, max: number, count: number): number[] {
+    const ticks: number[] = [];
+    for (let i = 0; i <= count; i++) ticks.push(min + ((max - min) * i) / count);
+    return ticks;
+  }
+
+  const MARGIN = { left: 64, right: 20, top: 16, bottom: 40 };
+  const WIDTH = 640;
+  const HEIGHT = 360;
+
+  function renderStateDiagram(svg: SVGSVGElement, specimen: CrispnessSpecimen, relativeHumidity: number, hours: number) {
+    clearSvg(svg);
+    const plotLeft = MARGIN.left;
+    const plotRight = WIDTH - MARGIN.right;
+    const plotTop = MARGIN.top;
+    const plotBottom = HEIGHT - MARGIN.bottom;
+
+    const xAxis = makeLinearAxis(0, MOISTURE_AXIS_MAX, plotLeft, plotRight);
+    const yAxis = makeLinearAxis(TEMP_MIN, TEMP_MAX, plotBottom, plotTop);
+
+    const sampleCount = 48;
+    const curve: { moisture: number; tg: number }[] = [];
+    for (let i = 0; i <= sampleCount; i++) {
+      const moisture = (MOISTURE_AXIS_MAX * i) / sampleCount;
+      curve.push({ moisture, tg: glassTransitionTemp(specimen, moisture) });
+    }
+
+    const topPath = [
+      `M ${plotLeft} ${plotTop}`,
+      ...curve.map((p) => `L ${xAxis.toPixel(p.moisture)} ${yAxis.toPixel(Math.min(Math.max(p.tg, TEMP_MIN), TEMP_MAX))}`),
+      `L ${plotRight} ${plotTop}`,
+      "Z",
+    ].join(" ");
+    const bottomPath = [
+      `M ${plotLeft} ${plotBottom}`,
+      ...curve.map((p) => `L ${xAxis.toPixel(p.moisture)} ${yAxis.toPixel(Math.min(Math.max(p.tg, TEMP_MIN), TEMP_MAX))}`),
+      `L ${plotRight} ${plotBottom}`,
+      "Z",
+    ].join(" ");
+
+    svg.append(svgEl("path", { d: bottomPath, fill: "var(--at-success)", "fill-opacity": 0.1 }));
+    svg.append(svgEl("path", { d: topPath, fill: "var(--at-warning)", "fill-opacity": 0.1 }));
+    svg.append(svgEl("rect", { x: plotLeft, y: plotTop, width: plotRight - plotLeft, height: plotBottom - plotTop, fill: "none", stroke: "var(--at-border)" }));
+
+    for (const tick of linearTicks(0, MOISTURE_AXIS_MAX, 4)) {
+      const x = xAxis.toPixel(tick);
+      svg.append(svgEl("line", { x1: x, y1: plotTop, x2: x, y2: plotBottom, stroke: "var(--at-border)", "stroke-dasharray": "2,3" }));
+      const label = svgEl("text", { x, y: plotBottom + 16, "font-size": 11, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+      label.textContent = tick.toFixed(2);
+      svg.append(label);
+    }
+    for (const tick of linearTicks(TEMP_MIN, TEMP_MAX, 6)) {
+      const y = yAxis.toPixel(tick);
+      svg.append(svgEl("line", { x1: plotLeft, y1: y, x2: plotRight, y2: y, stroke: "var(--at-border)", "stroke-dasharray": "2,3" }));
+      const label = svgEl("text", { x: plotLeft - 8, y: y + 4, "font-size": 11, "text-anchor": "end", fill: "var(--at-text-secondary)" });
+      label.textContent = String(Math.round(tick));
+      svg.append(label);
+    }
+
+    const axisLabelX = svgEl("text", { x: (plotLeft + plotRight) / 2, y: HEIGHT - 6, "font-size": 12, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+    axisLabelX.textContent = "w₂ (moisture mass fraction)";
+    svg.append(axisLabelX);
+
+    const curvePath = curve
+      .map((p, i) => `${i === 0 ? "M" : "L"} ${xAxis.toPixel(p.moisture)} ${yAxis.toPixel(Math.min(Math.max(p.tg, TEMP_MIN), TEMP_MAX))}`)
+      .join(" ");
+    svg.append(svgEl("path", { d: curvePath, fill: "none", stroke: "var(--at-primary)", "stroke-width": 2 }));
+
+    const ambientY = yAxis.toPixel(AMBIENT_TEMPERATURE);
+    svg.append(svgEl("line", { x1: plotLeft, y1: ambientY, x2: plotRight, y2: ambientY, stroke: "var(--at-secondary)", "stroke-width": 1.5, "stroke-dasharray": "5,4" }));
+    const ambientLabel = svgEl("text", { x: plotRight - 4, y: ambientY - 6, "font-size": 11, "text-anchor": "end", fill: "var(--at-secondary)" });
+    ambientLabel.textContent = `ambient ${AMBIENT_TEMPERATURE} °C`;
+    svg.append(ambientLabel);
+
+    const initialX = xAxis.toPixel(specimen.initialMoisture);
+    svg.append(svgEl("circle", { cx: initialX, cy: ambientY, r: 5, fill: "none", stroke: "var(--at-text)", "stroke-width": 2 }));
+
+    const currentMoisture = moistureAtTime(specimen, relativeHumidity, hours);
+    const currentX = xAxis.toPixel(Math.min(currentMoisture, MOISTURE_AXIS_MAX));
+    svg.append(svgEl("line", { x1: initialX, y1: ambientY, x2: currentX, y2: ambientY, stroke: "var(--at-text)", "stroke-width": 1 }));
+    svg.append(svgEl("circle", { cx: currentX, cy: ambientY, r: 6, fill: "var(--at-text)", class: "instrument-cursor" }));
+  }
+
+  function renderUptakePlot(svg: SVGSVGElement, specimen: CrispnessSpecimen, relativeHumidity: number, hours: number) {
+    clearSvg(svg);
+    const plotLeft = MARGIN.left;
+    const plotRight = WIDTH - MARGIN.right;
+    const plotTop = MARGIN.top;
+    const plotBottom = HEIGHT - MARGIN.bottom;
+
+    const xAxis = makeLinearAxis(0, TIME_AXIS_MAX_HOURS, plotLeft, plotRight);
+    const yAxis = makeLinearAxis(0, MOISTURE_AXIS_MAX, plotBottom, plotTop);
+
+    svg.append(svgEl("rect", { x: plotLeft, y: plotTop, width: plotRight - plotLeft, height: plotBottom - plotTop, fill: "none", stroke: "var(--at-border)" }));
+
+    for (const tick of linearTicks(0, TIME_AXIS_MAX_HOURS, 6)) {
+      const x = xAxis.toPixel(tick);
+      svg.append(svgEl("line", { x1: x, y1: plotTop, x2: x, y2: plotBottom, stroke: "var(--at-border)", "stroke-dasharray": "2,3" }));
+      const label = svgEl("text", { x, y: plotBottom + 16, "font-size": 11, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+      label.textContent = String(Math.round(tick));
+      svg.append(label);
+    }
+    for (const tick of linearTicks(0, MOISTURE_AXIS_MAX, 4)) {
+      const y = yAxis.toPixel(tick);
+      svg.append(svgEl("line", { x1: plotLeft, y1: y, x2: plotRight, y2: y, stroke: "var(--at-border)", "stroke-dasharray": "2,3" }));
+      const label = svgEl("text", { x: plotLeft - 8, y: y + 4, "font-size": 11, "text-anchor": "end", fill: "var(--at-text-secondary)" });
+      label.textContent = tick.toFixed(2);
+      svg.append(label);
+    }
+
+    const axisLabelX = svgEl("text", { x: (plotLeft + plotRight) / 2, y: HEIGHT - 6, "font-size": 12, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
+    axisLabelX.textContent = "time since cooking (hours)";
+    svg.append(axisLabelX);
+
+    const equilibrium = equilibriumMoisture(specimen, relativeHumidity);
+    const eqY = yAxis.toPixel(Math.min(equilibrium, MOISTURE_AXIS_MAX));
+    svg.append(svgEl("line", { x1: plotLeft, y1: eqY, x2: plotRight, y2: eqY, stroke: "var(--at-text-muted)", "stroke-dasharray": "5,4" }));
+    const eqLabel = svgEl("text", { x: plotLeft + 4, y: eqY - 6, "font-size": 11, fill: "var(--at-text-secondary)" });
+    eqLabel.textContent = `equilibrium at this humidity`;
+    svg.append(eqLabel);
+
+    const sampleCount = 60;
+    const curve: { t: number; moisture: number }[] = [];
+    for (let i = 0; i <= sampleCount; i++) {
+      const t = (TIME_AXIS_MAX_HOURS * i) / sampleCount;
+      curve.push({ t, moisture: moistureAtTime(specimen, relativeHumidity, t) });
+    }
+    const curvePath = curve
+      .map((p, i) => `${i === 0 ? "M" : "L"} ${xAxis.toPixel(p.t)} ${yAxis.toPixel(Math.min(p.moisture, MOISTURE_AXIS_MAX))}`)
+      .join(" ");
+    svg.append(svgEl("path", { d: curvePath, fill: "none", stroke: "var(--at-primary)", "stroke-width": 2 }));
+
+    const margin = stabilityMarginHours(specimen, relativeHumidity);
+    if (Number.isFinite(margin) && margin <= TIME_AXIS_MAX_HOURS) {
+      const marginX = xAxis.toPixel(margin);
+      const marginMoisture = moistureAtTime(specimen, relativeHumidity, margin);
+      const marginY = yAxis.toPixel(Math.min(marginMoisture, MOISTURE_AXIS_MAX));
+      svg.append(svgEl("line", { x1: marginX, y1: plotTop, x2: marginX, y2: plotBottom, stroke: "var(--at-warning)", "stroke-width": 1.5, "stroke-dasharray": "4,3" }));
+      svg.append(svgEl("circle", { cx: marginX, cy: marginY, r: 5, fill: "var(--at-warning)" }));
+      const marginLabel = svgEl("text", { x: marginX + 6, y: plotTop + 14, "font-size": 11, fill: "var(--at-warning)" });
+      marginLabel.textContent = "crosses ambient Tg";
+      svg.append(marginLabel);
+    }
+
+    const currentX = xAxis.toPixel(hours);
+    const currentMoisture = moistureAtTime(specimen, relativeHumidity, hours);
+    const currentY = yAxis.toPixel(Math.min(currentMoisture, MOISTURE_AXIS_MAX));
+    svg.append(svgEl("line", { x1: currentX, y1: plotTop, x2: currentX, y2: plotBottom, stroke: "var(--at-text-muted)", class: "instrument-cursor" }));
+    svg.append(svgEl("circle", { cx: currentX, cy: currentY, r: 6, fill: "none", stroke: "var(--at-text)", "stroke-width": 2, class: "instrument-cursor" }));
+  }
+
+  function render() {
+    const specimen = SPECIMENS.find((s) => s.id === specimenSelect.value) ?? SPECIMENS[0];
+    const relativeHumidity = Number(humiditySlider.value);
+    const hours = Number(timeSlider.value);
+
+    specimenHint.textContent = specimen.description;
+    humidityOutput.textContent = `${relativeHumidity} %RH`;
+    timeOutput.textContent = `${hours} h`;
+
+    const currentMoisture = moistureAtTime(specimen, relativeHumidity, hours);
+    const tg = glassTransitionTemp(specimen, currentMoisture);
+    const crisp = isCrisp(specimen, currentMoisture);
+    const margin = stabilityMarginHours(specimen, relativeHumidity);
+
+    timeReadout.textContent = `${(hours / 24).toFixed(1)} days since cooking, at ${relativeHumidity}% RH.`;
+
+    renderStateDiagram(statePlot, specimen, relativeHumidity, hours);
+    renderUptakePlot(uptakePlot, specimen, relativeHumidity, hours);
+
+    stateSummary.innerHTML = "";
+    const rows: [string, string][] = [
+      ["Moisture content w₂", formatPercent(currentMoisture)],
+      ["Glass transition T_g at this moisture", formatTemp(tg)],
+      ["State", crisp ? "glassy — crisp" : "rubbery — softened"],
+      ["Stability margin at this humidity", formatHours(margin)],
+    ];
+    for (const [label, value] of rows) {
+      const dt = document.createElement("dt");
+      dt.textContent = label;
+      const dd = document.createElement("dd");
+      dd.textContent = value;
+      stateSummary.append(dt, dd);
+    }
+
+    comparisonBody.innerHTML = "";
+    for (const other of SPECIMENS) {
+      const otherMargin = stabilityMarginHours(other, relativeHumidity);
+      const row = document.createElement("tr");
+      if (other.id === specimen.id) row.setAttribute("aria-current", "true");
+      const th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = other.label;
+      const td = document.createElement("td");
+      td.textContent = formatHours(otherMargin);
+      row.append(th, td);
+      comparisonBody.append(row);
+    }
+  }
+
+  specimenSelect.addEventListener("change", render);
+  humiditySlider.addEventListener("input", render);
+  timeSlider.addEventListener("input", render);
+
+  render();
+</script>
+
+<style>
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--at-spacing-md);
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--at-spacing-sm) var(--at-spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--at-divider);
+  }
+
+  .comparison-table thead th {
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .comparison-table tbody th {
+    font-weight: 600;
+    color: var(--at-heading);
+  }
+
+  .comparison-table tbody tr[aria-current="true"] {
+    background: var(--at-bg-alt);
+  }
+</style>

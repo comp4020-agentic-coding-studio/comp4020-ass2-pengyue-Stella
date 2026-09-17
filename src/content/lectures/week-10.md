@@ -8,6 +8,7 @@ date: 2027-04-26
 teachers:
   - idris-fenn
   - marisol-quaye
+slides: /decks/crispness-metastable/
 related:
   - sessions/10-building-predictive-models
   - sessions/11-the-crispness-design-space
