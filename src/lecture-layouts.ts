@@ -15,7 +15,9 @@ type PlateVariant =
   | "lattice"
   | "rheometer-rig"
   | "thermal-trace"
-  | "inverse-design";
+  | "inverse-design"
+  | "model-fit"
+  | "design-space";
 
 export interface LectureVisual {
   stage: 1 | 2 | 3 | 4;
@@ -33,7 +35,7 @@ export const LECTURE_VISUALS: Record<number, LectureVisual> = {
   7: { stage: 3, plate: "dumplings", anchor: true },
   8: { stage: 3, plate: "noodle-fried" },
   9: { stage: 3, plate: "crispy" },
-  10: { stage: 4, plate: "rheometer-rig", anchor: true },
-  11: { stage: 4, plate: "crispy" },
+  10: { stage: 4, plate: "model-fit", anchor: true },
+  11: { stage: 4, plate: "design-space" },
   12: { stage: 4, plate: "inverse-design" },
 };

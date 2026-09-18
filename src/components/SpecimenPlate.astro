@@ -25,7 +25,9 @@ export type PlateVariant =
   | "lattice"
   | "rheometer-rig"
   | "thermal-trace"
-  | "inverse-design";
+  | "inverse-design"
+  | "model-fit"
+  | "design-space";
 
 interface Props {
   variant: PlateVariant;
@@ -100,6 +102,16 @@ const DRAWN_DEFAULTS: Record<string, { kicker: string; caption: string }> = {
     kicker: "Diagram — forward vs. inverse",
     caption:
       "<strong>Two directions through the same models.</strong> A forward model predicts an outcome from a process; an inverse problem starts from a target outcome and works backward to a process.",
+  },
+  "model-fit": {
+    kicker: "Diagram — fitting a predictive model",
+    caption:
+      "<strong>A model is only as good as its residuals.</strong> Fitting a curve through measured points is the easy part — what the gap between curve and point looks like is where a model earns trust.",
+  },
+  "design-space": {
+    kicker: "Diagram — a two-variable design space",
+    caption:
+      "<strong>A map, not a measurement.</strong> Once a boundary like the glass transition is known as a function of two variables, the whole plane becomes a space to choose a target from, not just a line to measure.",
   },
 };
 
@@ -262,6 +274,39 @@ const resolvedCaption = caption ?? PHOTO_DEFAULTS[variant]?.caption ?? DRAWN_DEF
             <path d="M0,0 L8,4 L0,8 Z" class="sci-plate-shape--ink" />
           </marker>
         </defs>
+      </svg>
+    )}
+    {variant === "model-fit" && (
+      <svg class="sci-plate__drawn" viewBox="0 0 400 300" role="img" aria-label="Illustration of a fitted predictive model: a curve running through scattered measured points, with the gap between one point and the curve marked as a residual">
+        <rect x="0" y="0" width="400" height="300" class="sci-plate-veil" />
+        <line class="sci-axis" x1="46" y1="250" x2="370" y2="250" />
+        <line class="sci-axis" x1="46" y1="250" x2="46" y2="40" />
+        <text class="sci-axis-label" x="208" y="274" text-anchor="middle">measured input →</text>
+        <text class="sci-axis-label" x="24" y="150" text-anchor="middle" transform="rotate(-90 24 150)">predicted output →</text>
+        <path class="sci-curve" d="M 60 224 C 120 202 160 130 220 104 C 270 82 320 68 360 54" />
+        <circle class="sci-point" cx="100" cy="192" r="4.5" />
+        <circle class="sci-point" cx="160" cy="150" r="4.5" />
+        <circle class="sci-point" cx="230" cy="92" r="4.5" />
+        <circle class="sci-point" cx="300" cy="76" r="4.5" />
+        <line class="sci-annotation" x1="230" y1="92" x2="230" y2="112" stroke-dasharray="2 3" />
+        <text class="sci-label" x="238" y="120">residual</text>
+        <text class="sci-label" x="130" y="86" text-anchor="middle">fitted model</text>
+      </svg>
+    )}
+    {variant === "design-space" && (
+      <svg class="sci-plate__drawn" viewBox="0 0 400 300" role="img" aria-label="Illustration of a two-variable design space: a boundary curve splitting the plane into a glassy region and a rubbery region, with a target point chosen inside the glassy region">
+        <rect x="0" y="0" width="400" height="300" class="sci-plate-veil" />
+        <line class="sci-axis" x1="46" y1="250" x2="370" y2="250" />
+        <line class="sci-axis" x1="46" y1="250" x2="46" y2="40" />
+        <text class="sci-axis-label" x="208" y="274" text-anchor="middle">moisture content, w₂ →</text>
+        <text class="sci-axis-label" x="24" y="150" text-anchor="middle" transform="rotate(-90 24 150)">temperature →</text>
+        <path class="sci-region" d="M 46 90 C 130 108 210 158 260 196 C 310 228 340 240 370 246 L 370 250 L 46 250 Z" />
+        <path class="sci-region--alt" d="M 46 90 C 130 108 210 158 260 196 C 310 228 340 240 370 246 L 370 40 L 46 40 Z" />
+        <path class="sci-curve" d="M 46 90 C 130 108 210 158 260 196 C 310 228 340 240 370 246" />
+        <text class="sci-label" x="110" y="230" text-anchor="middle">glassy — crisp</text>
+        <text class="sci-label" x="300" y="70" text-anchor="middle">rubbery — soft</text>
+        <circle class="sci-point" cx="140" cy="150" r="4.5" />
+        <text class="sci-label" x="140" y="134" text-anchor="middle">target</text>
       </svg>
     )}
   </div>
