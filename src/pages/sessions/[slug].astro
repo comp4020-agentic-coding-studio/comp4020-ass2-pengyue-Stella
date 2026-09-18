@@ -6,8 +6,10 @@ import SpecList from "astro-course-university/components/SpecList.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { withBase } from "astro-theme-university/url";
 import StageIcon from "../../components/StageIcon.astro";
+import SpecimenPlate from "../../components/SpecimenPlate.astro";
 import TeachingTeam from "../../components/TeachingTeam.astro";
 import { formatCourseDate } from "../../lib/dates";
+import { DEFAULT_MODULE_VISUAL, MODULE_VISUALS } from "../../module-layouts";
 import { graphCollections, sessionLabels, siteConfig } from "../../site-config";
 import { stageInfo } from "../../stages";
 import "../../styles/scientific.css";
@@ -24,6 +26,7 @@ export async function getStaticPaths() {
 const { session, previous, next } = Astro.props;
 const { Content } = await render(session);
 const stage = stageInfo(session.data.stage);
+const visual = MODULE_VISUALS[session.id] ?? DEFAULT_MODULE_VISUAL;
 ---
 
 <ContentLayout
@@ -31,7 +34,7 @@ const stage = stageInfo(session.data.stage);
   description={session.data.description}
   {...siteConfig}
 >
-  <div data-stage={stage.number}>
+  <div data-stage={stage.number} data-layout={visual.layout}>
     <div class="module-hero">
       <a class="stage-badge" href={withBase("/sessions/")}>
         <StageIcon stage={stage.number} />
@@ -41,6 +44,20 @@ const stage = stageInfo(session.data.stage);
         Week {session.data.week} · {formatCourseDate(session.data.date)}
       </span>
     </div>
+    {
+      visual.plate && (
+        <div class="module-visual">
+          <SpecimenPlate variant={visual.plate} frame="framed" hero />
+          {visual.instrument && (
+            <a class="module-instrument-callout" href={withBase(visual.instrument.href)}>
+              <span class="module-instrument-callout__kicker">Try it in the lab</span>
+              <span class="module-instrument-callout__title">{visual.instrument.title}</span>
+              <span class="module-instrument-callout__link">Open the instrument →</span>
+            </a>
+          )}
+        </div>
+      )
+    }
     <Content />
     <SpecList spec={session.data.spec}>
       What you bring to the session. Written so a reader can tell whether it

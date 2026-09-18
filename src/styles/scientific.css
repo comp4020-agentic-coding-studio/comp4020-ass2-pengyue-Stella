@@ -567,82 +567,9 @@
   }
 }
 
-/* Curriculum flow: the four-stage progression as a connected sequence
-   rather than four unrelated section headings. Shared by the homepage
-   journey summary and the /sessions/ curriculum map. */
-
-.curriculum-flow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--at-spacing-lg);
-  margin: var(--at-spacing-xl) 0 var(--at-spacing-2xl);
-  padding: 0;
-  list-style: none;
-}
-
-.curriculum-flow__item {
-  position: relative;
-}
-
-.curriculum-flow__stage {
-  display: flex;
-  flex-direction: column;
-  gap: var(--at-spacing-xs);
-  box-sizing: border-box;
-  height: 100%;
-  padding: var(--at-spacing-lg) var(--at-spacing-md);
-  border: 1px solid var(--at-border);
-  border-top: 4px solid var(--stage-accent);
-  border-radius: var(--at-border-radius);
-  background: var(--at-bg-alt);
-  color: inherit;
-  text-decoration: none;
-}
-
-.curriculum-flow__stage:hover,
-.curriculum-flow__stage:focus-visible {
-  border-color: var(--stage-accent);
-  box-shadow: var(--at-shadow-sm);
-}
-
-.curriculum-flow__verb {
-  font-family: var(--at-font-mono);
-  font-size: var(--at-font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--stage-accent);
-}
-
-.curriculum-flow__title {
-  margin: 0;
-  font-weight: 600;
-  color: var(--at-heading);
-}
-
-.curriculum-flow__item:not(:last-child)::after {
-  content: "→";
-  position: absolute;
-  top: 50%;
-  right: -1.55rem;
-  transform: translateY(-50%);
-  color: var(--at-text-secondary);
-  font-size: 1.3rem;
-}
-
 @media (max-width: 800px) {
-  .curriculum-flow,
   .module-stats {
     grid-template-columns: 1fr;
-  }
-
-  .curriculum-flow__item:not(:last-child)::after {
-    content: "↓";
-    top: auto;
-    bottom: -1.4rem;
-    right: 50%;
-    left: auto;
-    transform: translateX(50%);
   }
 }
 
@@ -653,6 +580,75 @@
 
   .sci-figure {
     padding: var(--at-spacing-md);
+  }
+}
+
+/* Module layout patterns (<[slug].astro>, src/module-layouts.ts): a module
+   is "instrument-led" (its own content directly drives one of the two
+   instruments), "specimen-led" (a real specimen photo anchors it), or
+   falls back to "measurement-led" (no strong specimen photo exists for it,
+   so its own inline .sci-figure gets more visual weight instead). This is
+   what keeps 12 modules on one template from reading as one repeated page. */
+
+.module-visual {
+  margin-bottom: var(--at-spacing-xl);
+}
+
+[data-layout="instrument-led"] .module-visual {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(14rem, 1fr);
+  align-items: stretch;
+  gap: var(--at-spacing-lg);
+}
+
+.module-instrument-callout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--at-spacing-xs);
+  padding: var(--at-spacing-lg);
+  border: 1px solid var(--at-border);
+  border-left: 3px solid var(--stage-accent, var(--at-secondary));
+  border-radius: var(--at-border-radius);
+  background: var(--at-bg-alt);
+  color: inherit;
+  text-decoration: none;
+}
+
+.module-instrument-callout:hover,
+.module-instrument-callout:focus-visible {
+  border-color: var(--stage-accent, var(--at-secondary));
+  box-shadow: var(--at-shadow-sm);
+}
+
+.module-instrument-callout__kicker {
+  font-family: var(--at-font-mono);
+  font-size: var(--at-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--stage-accent, var(--at-secondary));
+}
+
+.module-instrument-callout__title {
+  font-size: var(--at-font-size-h4);
+  font-weight: 600;
+  color: var(--at-heading);
+}
+
+.module-instrument-callout__link {
+  font-weight: 600;
+  color: var(--at-link);
+}
+
+[data-layout="measurement-led"] .sci-figure {
+  margin-top: var(--at-spacing-2xl);
+  border-width: 2px;
+  border-color: var(--stage-accent, var(--at-border));
+}
+
+@media (max-width: 760px) {
+  [data-layout="instrument-led"] .module-visual {
+    grid-template-columns: 1fr;
   }
 }
 
