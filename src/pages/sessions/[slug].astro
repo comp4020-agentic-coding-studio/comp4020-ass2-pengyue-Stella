@@ -5,6 +5,7 @@ import RelatedContent from "astro-course-university/components/RelatedContent.as
 import SpecList from "astro-course-university/components/SpecList.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { withBase } from "astro-theme-university/url";
+import StageIcon from "../../components/StageIcon.astro";
 import TeachingTeam from "../../components/TeachingTeam.astro";
 import { formatCourseDate } from "../../lib/dates";
 import { graphCollections, sessionLabels, siteConfig } from "../../site-config";
@@ -30,39 +31,44 @@ const stage = stageInfo(session.data.stage);
   description={session.data.description}
   {...siteConfig}
 >
-  <p>
-    <a class="stage-badge" href={withBase("/sessions/")}>
-      Stage {stage.number} · <strong>{stage.title}</strong>
-    </a>
-  </p>
-  <p><strong>{formatCourseDate(session.data.date)}</strong></p>
-  <Content />
-  <SpecList spec={session.data.spec}>
-    What you bring to the session. Written so a reader can tell whether it has
-    been met without asking you.
-  </SpecList>
-  <TeachingTeam teachers={session.data.teachers} />
-  <RelatedContent entry={session} collections={graphCollections} />
-  <nav class="module-pager" aria-label="Module sequence">
-    {
-      previous ? (
-        <a href={withBase(`/sessions/${previous.id}/`)} rel="prev">
-          ← Week {previous.data.week}: {previous.data.title}
-        </a>
-      ) : (
-        <span />
-      )
-    }
-    {
-      next ? (
-        <a href={withBase(`/sessions/${next.id}/`)} rel="next">
-          Week {next.data.week}: {next.data.title} →
-        </a>
-      ) : (
-        <span />
-      )
-    }
-  </nav>
+  <div data-stage={stage.number}>
+    <div class="module-hero">
+      <a class="stage-badge" href={withBase("/sessions/")}>
+        <StageIcon stage={stage.number} />
+        Stage {stage.number} · <strong>{stage.title}</strong>
+      </a>
+      <span class="module-hero__date">
+        Week {session.data.week} · {formatCourseDate(session.data.date)}
+      </span>
+    </div>
+    <Content />
+    <SpecList spec={session.data.spec}>
+      What you bring to the session. Written so a reader can tell whether it
+      has been met without asking you.
+    </SpecList>
+    <TeachingTeam teachers={session.data.teachers} />
+    <RelatedContent entry={session} collections={graphCollections} />
+    <nav class="module-pager" aria-label="Module sequence">
+      {
+        previous ? (
+          <a href={withBase(`/sessions/${previous.id}/`)} rel="prev">
+            ← Week {previous.data.week}: {previous.data.title}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a href={withBase(`/sessions/${next.id}/`)} rel="next">
+            Week {next.data.week}: {next.data.title} →
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </div>
 </ContentLayout>
 
 <style>

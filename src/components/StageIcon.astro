@@ -1,0 +1,70 @@
+---
+// One small monochrome motif per curriculum stage. Colour comes from the
+// `.stage-icon` CSS class (which reads `--stage-accent`, see
+// scientific.css) — these paths only ever use `currentColor`, so the same
+// glyph works in a badge, a card, or the curriculum map without a second
+// copy per context.
+interface Props {
+  stage: 1 | 2 | 3 | 4;
+  class?: string;
+}
+
+const { stage, class: className } = Astro.props;
+const titles: Record<Props["stage"], string> = {
+  1: "Measurement gauge",
+  2: "Network lattice",
+  3: "Flow streamlines",
+  4: "Feedback loop",
+};
+---
+
+<span class:list={["stage-icon", className]} aria-hidden="true">
+  {
+    stage === 1 && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <title>{titles[1]}</title>
+        <circle cx="12" cy="13.5" r="7.2" />
+        <path d="M12 7.6 V9.3 M17.3 10 L15.9 10.9 M6.7 10 L8.1 10.9" />
+        <path d="M12 13.5 L15.4 9.6" stroke-width="1.8" />
+        <circle cx="12" cy="13.5" r="1.15" fill="currentColor" stroke="none" />
+      </svg>
+    )
+  }
+  {
+    stage === 2 && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <title>{titles[2]}</title>
+        <path d="M6 8 L12 5 L18 8 L18 16 L12 19 L6 16 Z" />
+        <path d="M12 5 V12 M6 8 L12 12 L18 8 M6 16 L12 12 L18 16" />
+        <circle cx="12" cy="5" r="1" fill="currentColor" stroke="none" />
+        <circle cx="6" cy="8" r="1" fill="currentColor" stroke="none" />
+        <circle cx="18" cy="8" r="1" fill="currentColor" stroke="none" />
+        <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+        <circle cx="6" cy="16" r="1" fill="currentColor" stroke="none" />
+        <circle cx="18" cy="16" r="1" fill="currentColor" stroke="none" />
+        <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    )
+  }
+  {
+    stage === 3 && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+        <title>{titles[3]}</title>
+        <path d="M4 8 Q9 8 11 11 T18 14" />
+        <path d="M4 13 Q9 13 11 16 T18 19" opacity="0.55" />
+        <path d="M15.5 11.5 L18.4 14 L15.5 16.5" />
+      </svg>
+    )
+  }
+  {
+    stage === 4 && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <title>{titles[4]}</title>
+        <path d="M17.5 8.5 A6.5 6.5 0 1 0 18.6 14" />
+        <path d="M15.7 6.3 L17.9 8.3 L15.3 9.8" stroke-linejoin="round" />
+        <circle cx="12" cy="12.5" r="1.2" fill="currentColor" stroke="none" />
+        <circle cx="12" cy="12.5" r="4.2" stroke-dasharray="2.4 2.4" />
+      </svg>
+    )
+  }
+</span>

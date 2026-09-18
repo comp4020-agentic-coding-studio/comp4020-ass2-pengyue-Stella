@@ -4,6 +4,7 @@ import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
 import { formatCourseDate } from "../lib/dates";
 import { STAGES } from "../stages";
+import StageIcon from "./StageIcon.astro";
 
 const sessions = await getPublishedCollection("sessions");
 const byWeek = sessions.slice().sort((a, b) => a.data.week - b.data.week);
@@ -13,8 +14,9 @@ const byWeek = sessions.slice().sort((a, b) => a.data.week - b.data.week);
   STAGES.map((stage) => {
     const modules = byWeek.filter((session) => session.data.stage === stage.number);
     return (
-      <section class="stage-group" aria-labelledby={`stage-${stage.number}`}>
+      <section class="stage-group" data-stage={stage.number} aria-labelledby={`stage-${stage.number}`}>
         <h2 id={`stage-${stage.number}`}>
+          <StageIcon stage={stage.number} />
           Stage {stage.number} · {stage.title}
         </h2>
         <p class="stage-description">{stage.description}</p>
@@ -38,9 +40,14 @@ const byWeek = sessions.slice().sort((a, b) => a.data.week - b.data.week);
 <style>
   .stage-group {
     margin-block-end: var(--at-spacing-2xl);
+    padding-inline-start: var(--at-spacing-lg);
+    border-inline-start: 3px solid var(--stage-accent);
   }
 
   .stage-group h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--at-spacing-sm);
     margin-block-end: var(--at-spacing-xs);
   }
 

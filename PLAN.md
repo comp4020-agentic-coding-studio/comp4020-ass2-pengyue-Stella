@@ -259,3 +259,35 @@ both 1920×1080 and 390×844 (via `agent-browser` against the local preview),
 keyboard-only interaction with both instruments' controls, and a resize
 check. No `STARTER_CONTENT` marker, no broken internal link, no placeholder
 copy left anywhere in `dist`.
+
+## 11. Visual redesign (pass 2)
+
+The build above shipped a working, correct site that still read as "the
+starter theme with course text in it." This pass keeps every invariant in
+`CLAUDE.md` (palette, IA, curriculum, instruments, assessments, references)
+and rebuilds the page-body visual language so the site reads as *an
+experimental materials-science laboratory studying edible matter* — closer to
+a journal's figure style than a template's card grid.
+
+**Stage colour without new colour.** The four curriculum stages need to feel
+related but distinguishable without touching `--at-primary` /
+`--at-secondary` / `--at-tertiary`. Solution: a `--stage-accent` custom
+property, set per `[data-stage="n"]` scope, that only ever redistributes the
+three existing tokens (stage 4 uses `color-mix()` of two of them, not a new
+hue) — plus one small monochrome motif glyph per stage (gauge, lattice,
+flow arrows, feedback loop) that carries the rest of the distinction.
+
+**Figures live inside existing content, not a new pipeline.** Module pages
+stay `.md`; new figures are hand-authored inline `<svg>` markup styled by a
+shared `.sci-figure*` class family in `scientific.css`, the same
+raw-HTML-in-Markdown pattern `.equation`/`.variable-list` already use. No
+schema change, no `.mdx` conversion, no new build dependency.
+
+**Six stages, six commits** (never combined): (1) the shared visual
+system — figure/caption/specimen-label/stage-accent/motif classes; (2) the
+homepage and `/sessions/` curriculum map; (3) one original figure per module,
+committed in curriculum-stage-sized groups, not as one dump; (4) the
+*Crispness Is a Metastable State* deck rebuilt as claim-per-slide with
+supporting diagrams; (5) both instruments' surrounding framing/legends
+brought into the same visual language (no third instrument); (6) a final
+site-wide pass at 1920×1080 and 390×844, `pnpm check`, and `PROCESS.md`.
