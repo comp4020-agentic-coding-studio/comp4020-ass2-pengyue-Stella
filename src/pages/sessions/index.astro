@@ -1,5 +1,6 @@
 ---
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import CurriculumFlow from "../../components/CurriculumFlow.astro";
 import SessionsGrid from "../../components/SessionsGrid.astro";
 import { sessionLabels, siteConfig } from "../../site-config";
 import "../../styles/scientific.css";
@@ -11,10 +12,12 @@ import "../../styles/scientific.css";
   {...siteConfig}
 >
   <p>
-    Each stage builds on the last — Stage 2 assumes the vocabulary Stage 1
-    built, and so on through Stage 4. Read them in order the first time; use
-    the module pager and the links below each module to move forward or back
-    once you know the ground.
+    This is the curriculum map: measurement leads to structure, structure to
+    transformation, transformation to prediction and inverse design. Each
+    stage assumes the vocabulary the last one built — read them in order the
+    first time, then use the module pager and the links below each module to
+    move forward or back once you know the ground.
   </p>
+  <CurriculumFlow />
   <SessionsGrid />
 </ContentLayout>

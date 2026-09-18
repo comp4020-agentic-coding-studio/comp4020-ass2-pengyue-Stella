@@ -2,10 +2,12 @@
 import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import AssessmentBars from "../components/AssessmentBars.astro";
+import CurriculumFlow from "../components/CurriculumFlow.astro";
+import InstrumentTeaser from "../components/InstrumentTeaser.astro";
 import heroImage from "../assets/images/hero-home.svg";
 import { courseMeta } from "../course-config";
 import { sessionLabels, siteConfig } from "../site-config";
-import { STAGES } from "../stages";
 import "../styles/scientific.css";
 ---
 
@@ -35,31 +37,36 @@ import "../styles/scientific.css";
   <h2>Four stages</h2>
   <p>
     The teaching period runs in four stages, each three modules long, each
-    building directly on the last:
+    building directly on the last — measurement, then structure, then
+    transformation, then prediction and inverse design:
   </p>
-  <ol class="stage-list">
-    {
-      STAGES.map((stage) => (
-        <li>
-          <strong>
-            Stage {stage.number}: {stage.title}
-          </strong>{" "}
-          — {stage.description}
-        </li>
-      ))
-    }
-  </ol>
+  <CurriculumFlow />
 
   <h2>Two instruments, not two dozen</h2>
   <p>
     Rather than one simulation per module, the course concentrates its
     interactive work into two instruments used repeatedly across the
-    Laboratory Portfolio: a <strong>Virtual Rheometer</strong> for flow
-    behaviour, and a <strong>Crispness Phase Diagram</strong> for the
-    glass-transition physics behind texture loss. Both are built to the same
-    honesty standard as the written modules — labelled assumptions, visible
-    fit quality, no invented data.
+    Laboratory Portfolio. Both are built to the same honesty standard as the
+    written modules — labelled assumptions, visible fit quality, no invented
+    data.
   </p>
+  <CardGrid columns={2}>
+    <InstrumentTeaser title="Virtual Rheometer" href="/labs/virtual-rheometer/">
+      Apply a shear sweep to a simulated soft material and read its storage
+      and loss moduli straight off the resulting flow curve.
+    </InstrumentTeaser>
+    <InstrumentTeaser title="Crispness Phase Diagram" href="/labs/crispness-phase-diagram/">
+      Plot moisture content against temperature to find the glassy, rubbery
+      and soggy regions either side of a snack's crispness window.
+    </InstrumentTeaser>
+  </CardGrid>
+
+  <h2>Where the marks are</h2>
+  <p>
+    Assessment is staged the same way the curriculum is: earlier, lower-stakes
+    work builds toward the two pieces that carry most of the mark.
+  </p>
+  <AssessmentBars />
 
   <h2>Where to go next</h2>
   <CardGrid columns={2}>
@@ -96,9 +103,4 @@ import "../styles/scientific.css";
     font-size: 0.9rem;
   }
 
-  .stage-list {
-    display: grid;
-    gap: var(--at-spacing-sm);
-    padding-left: 1.25rem;
-  }
 </style>

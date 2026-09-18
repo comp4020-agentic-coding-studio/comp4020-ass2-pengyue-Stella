@@ -411,11 +411,16 @@
   list-style: none;
 }
 
-.curriculum-flow__stage {
+.curriculum-flow__item {
   position: relative;
+}
+
+.curriculum-flow__stage {
   display: flex;
   flex-direction: column;
   gap: var(--at-spacing-xs);
+  box-sizing: border-box;
+  height: 100%;
   padding: var(--at-spacing-lg) var(--at-spacing-md);
   border: 1px solid var(--at-border);
   border-top: 4px solid var(--stage-accent);
@@ -446,7 +451,7 @@
   color: var(--at-heading);
 }
 
-.curriculum-flow__stage:not(:last-child)::after {
+.curriculum-flow__item:not(:last-child)::after {
   content: "→";
   position: absolute;
   top: 50%;
@@ -462,7 +467,7 @@
     grid-template-columns: 1fr;
   }
 
-  .curriculum-flow__stage:not(:last-child)::after {
+  .curriculum-flow__item:not(:last-child)::after {
     content: "↓";
     top: auto;
     bottom: -1.4rem;
@@ -479,5 +484,114 @@
 
   .sci-figure {
     padding: var(--at-spacing-md);
+  }
+}
+
+/* Homepage instrument teasers: a lighter-weight preview of each full
+   instrument page, distinct from a generic Card so "central apparatus"
+   reads differently from "further reading". */
+
+.instrument-teaser {
+  display: flex;
+  flex-direction: column;
+  gap: var(--at-spacing-xs);
+  padding: var(--at-spacing-lg);
+  border: 1px solid var(--at-border);
+  border-radius: var(--at-border-radius);
+  background: var(--at-bg-alt);
+  color: inherit;
+  text-decoration: none;
+}
+
+.instrument-teaser:hover,
+.instrument-teaser:focus-visible {
+  border-color: var(--at-secondary);
+  box-shadow: var(--at-shadow-sm);
+}
+
+.instrument-teaser__kicker {
+  font-family: var(--at-font-mono);
+  font-size: var(--at-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--at-text-secondary);
+}
+
+.instrument-teaser__title {
+  margin: 0;
+  color: var(--at-heading);
+}
+
+.instrument-teaser__link {
+  margin-top: auto;
+  font-size: var(--at-font-size-sm);
+  font-weight: 600;
+  color: var(--at-link);
+}
+
+/* Assessment weighting bars: proportional width = weight, one row per
+   assessment, coloured by the curriculum stage its due week falls in — the
+   assessment journey and the teaching journey share one accent system. */
+
+.assessment-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--at-spacing-md);
+  margin: var(--at-spacing-lg) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.assessment-bars__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+
+.assessment-bars__label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--at-spacing-md);
+  color: inherit;
+  text-decoration: none;
+}
+
+.assessment-bars__label:hover .assessment-bars__title,
+.assessment-bars__label:focus-visible .assessment-bars__title {
+  text-decoration: underline;
+}
+
+.assessment-bars__title {
+  font-weight: 600;
+  color: var(--at-heading);
+}
+
+.assessment-bars__meta {
+  flex-shrink: 0;
+  font-family: var(--at-font-mono);
+  font-size: var(--at-font-size-sm);
+  color: var(--at-text-secondary);
+}
+
+.assessment-bars__track {
+  display: block;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--at-bg);
+  border: 1px solid var(--at-border);
+  overflow: hidden;
+}
+
+.assessment-bars__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--stage-accent, var(--at-secondary));
+}
+
+@media (max-width: 640px) {
+  .assessment-bars__label {
+    flex-direction: column;
+    gap: 0.15em;
   }
 }

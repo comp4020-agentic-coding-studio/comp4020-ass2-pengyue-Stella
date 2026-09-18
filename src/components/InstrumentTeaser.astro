@@ -1,0 +1,32 @@
+---
+// A lighter, apparatus-flavoured preview of a lab page, distinct from a
+// generic Card — used on the homepage so the two instruments read as
+// central course apparatus rather than one more "further reading" link.
+import { withBase } from "astro-theme-university/url";
+
+interface Props {
+  title: string;
+  href: string;
+}
+
+const { title, href } = Astro.props;
+---
+
+<a class="instrument-teaser" href={withBase(href)}>
+  <svg class="instrument-teaser__glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+    <path d="M9 3h6M10 3v5.2L5.6 17a2 2 0 0 0 1.8 2.9h9.2a2 2 0 0 0 1.8-2.9L14 8.2V3" />
+    <path d="M7.4 14.5h9.2" />
+  </svg>
+  <span class="instrument-teaser__kicker">Instrument</span>
+  <h3 class="instrument-teaser__title">{title}</h3>
+  <p><slot /></p>
+  <span class="instrument-teaser__link">Open the instrument →</span>
+</a>
+
+<style>
+  .instrument-teaser__glyph {
+    width: 1.8rem;
+    height: 1.8rem;
+    color: var(--at-secondary);
+  }
+</style>

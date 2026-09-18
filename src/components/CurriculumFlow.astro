@@ -1,0 +1,35 @@
+---
+// The four-stage progression as one connected sequence, shared by the
+// homepage's "journey" summary and the /sessions/ curriculum map so a
+// reader meets the same shape twice, not two unrelated layouts.
+import { withBase } from "astro-theme-university/url";
+import { STAGES, type StageInfo } from "../stages";
+import StageIcon from "./StageIcon.astro";
+
+interface Props {
+  verbs?: Partial<Record<StageInfo["number"], string>>;
+}
+
+const defaultVerbs: Record<StageInfo["number"], string> = {
+  1: "Measure",
+  2: "Find structure",
+  3: "Transform",
+  4: "Predict & design",
+};
+
+const { verbs = {} } = Astro.props;
+---
+
+<ul class="curriculum-flow" aria-label="The four-stage curriculum, in teaching order">
+  {
+    STAGES.map((stage) => (
+      <li class="curriculum-flow__item">
+        <a class="curriculum-flow__stage" data-stage={stage.number} href={withBase(`/sessions/#stage-${stage.number}`)}>
+          <StageIcon stage={stage.number} />
+          <span class="curriculum-flow__verb">{verbs[stage.number] ?? defaultVerbs[stage.number]}</span>
+          <p class="curriculum-flow__title">{stage.title}</p>
+        </a>
+      </li>
+    ))
+  }
+</ul>

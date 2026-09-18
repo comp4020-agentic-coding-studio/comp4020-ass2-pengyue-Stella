@@ -1,0 +1,29 @@
+---
+// Reads real assessment weights straight from the collection, so this
+// chart can never drift from the numbers assessments.test.ts already
+// enforces sum to 100.
+import { getPublishedCollection } from "astro-course-university/content";
+import { withBase } from "astro-theme-university/url";
+
+const assessments = (await getPublishedCollection("assessments")).slice().sort((a, b) => a.data.week - b.data.week);
+
+const stageForWeek = (week: number) => Math.min(4, Math.ceil(week / 3)) as 1 | 2 | 3 | 4;
+---
+
+<ol class="assessment-bars" aria-label="Assessment weighting across the course, in due-date order">
+  {
+    assessments.map((assessment) => (
+      <li class="assessment-bars__row" data-stage={stageForWeek(assessment.data.week)}>
+        <a href={withBase(`/assessments/${assessment.id}/`)} class="assessment-bars__label">
+          <span class="assessment-bars__title">{assessment.data.title}</span>
+          <span class="assessment-bars__meta">
+            Week {assessment.data.week} · {assessment.data.weight}%
+          </span>
+        </a>
+        <span class="assessment-bars__track">
+          <span class="assessment-bars__fill" style={{ width: `${assessment.data.weight}%` }} />
+        </span>
+      </li>
+    ))
+  }
+</ol>
