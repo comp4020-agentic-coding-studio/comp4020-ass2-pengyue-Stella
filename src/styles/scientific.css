@@ -474,6 +474,26 @@
   height: 100%;
 }
 
+/* .sci-label sits on a flat chart background in .sci-figure and on the
+   translucent .sci-plate-veil in .sci-plate__drawn — both already legible.
+   Directly over a photograph (.sci-plate__overlay) it needs its own contrast:
+   a bold fill with a halo stroke behind it (paint-order), so the label reads
+   regardless of what's in the photo underneath. --on-light flips the halo for
+   the few labels that fall over a genuinely light, high-key part of a photo. */
+.sci-plate__overlay .sci-label {
+  fill: #fdfaf3;
+  font-weight: 700;
+  paint-order: stroke fill;
+  stroke: #241a10;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.sci-plate__overlay .sci-label--on-light {
+  fill: #241a10;
+  stroke: #fdfaf3;
+}
+
 .sci-plate__drawn {
   display: block;
   width: 100%;
