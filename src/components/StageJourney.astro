@@ -2,8 +2,14 @@
 // The four-stage progression as an immersive, alternating plate/text
 // sequence — replaces CurriculumFlow's icon-badge row (removed in pass 3;
 // see PLAN.md §12) so "measure → structure → transform → predict" reads as
-// a journey through actual specimens, not four abstract glyphs. Shared by
-// the homepage and /sessions/ so a reader meets the same shape twice.
+// a journey through actual specimens, not four abstract glyphs. Used once,
+// on the homepage; /sessions/ links back here instead of repeating this
+// full telling a second time (it gets the compact StageNav instead).
+//
+// The specimen set below is deliberately disjoint from Overview's own
+// stage strip (rheometer-rig / lattice / emulsion / inverse-design, see
+// that page's STAGE_PLATES comment) so the two pages' imagery doesn't
+// repeat.
 import { withBase } from "astro-theme-university/url";
 import SpecimenPlate, { type PlateVariant } from "./SpecimenPlate.astro";
 import StageIcon from "./StageIcon.astro";
@@ -18,7 +24,7 @@ const VERB: Record<number, string> = {
 
 const PLATE: Record<number, PlateVariant> = {
   1: "noodle",
-  2: "lattice",
+  2: "tofu",
   3: "dumplings",
   4: "crispy",
 };

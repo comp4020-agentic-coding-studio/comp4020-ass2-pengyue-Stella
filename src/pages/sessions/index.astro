@@ -1,7 +1,8 @@
 ---
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { withBase } from "astro-theme-university/url";
 import SessionsGrid from "../../components/SessionsGrid.astro";
-import StageJourney from "../../components/StageJourney.astro";
+import StageNav from "../../components/StageNav.astro";
 import { sessionLabels, siteConfig } from "../../site-config";
 import "../../styles/scientific.css";
 ---
@@ -16,9 +17,10 @@ import "../../styles/scientific.css";
     transformation, transformation to prediction and inverse design. Each
     stage assumes the vocabulary the last one built — read them in order the
     first time, then use the module pager and the links below each module to
-    move forward or back once you know the ground.
+    move forward or back once you know the ground. For the fuller telling of
+    this same progression, with a specimen for each stage, see the{" "}
+    <a href={withBase("/")}>course overview journey</a>.
   </p>
-  <h2>The four-stage journey</h2>
-  <StageJourney />
+  <StageNav />
   <SessionsGrid />
 </ContentLayout>
