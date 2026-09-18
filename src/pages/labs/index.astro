@@ -1,7 +1,9 @@
 ---
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { withBase } from "astro-theme-university/url";
+import SpecimenPlate from "../../components/SpecimenPlate.astro";
 import { siteConfig } from "../../site-config";
+import "../../styles/scientific.css";
 ---
 
 <ContentLayout
@@ -17,21 +19,31 @@ import { siteConfig } from "../../site-config";
   </p>
   <ul class="labs-list">
     <li class="labs-list__item">
-      <span class="labs-list__kicker">Instrument 01 · steady shear</span>
-      <h2><a href={withBase("/labs/virtual-rheometer/")}>Virtual Rheometer</a></h2>
-      <p>
-        Fit Newtonian, power-law and Herschel-Bulkley models to a specimen's
-        flow curve and read the residual plot. Builds on <a href={withBase("/sessions/02-rheology-i-flow-behaviour/")}>Module 2</a> and is used directly in <a href={withBase("/sessions/10-building-predictive-models/")}>Module 10</a>.
-      </p>
+      <div class="labs-list__plate">
+        <SpecimenPlate variant="rheometer-rig" frame="framed" hideCaption />
+      </div>
+      <div class="labs-list__content">
+        <span class="labs-list__kicker">Instrument 01 · steady shear</span>
+        <h2><a href={withBase("/labs/virtual-rheometer/")}>Virtual Rheometer</a></h2>
+        <p>
+          Fit Newtonian, power-law and Herschel-Bulkley models to a specimen's
+          flow curve and read the residual plot. Builds on <a href={withBase("/sessions/02-rheology-i-flow-behaviour/")}>Module 2</a> and is used directly in <a href={withBase("/sessions/10-building-predictive-models/")}>Module 10</a>.
+        </p>
+      </div>
     </li>
     <li class="labs-list__item">
-      <span class="labs-list__kicker">Instrument 02 · state diagram</span>
-      <h2><a href={withBase("/labs/crispness-phase-diagram/")}>Crispness Phase Diagram</a></h2>
-      <p>
-        Place a specimen at a storage humidity, run moisture uptake forward
-        in time, and read its stability margin off a temperature-moisture
-        state diagram. Builds on <a href={withBase("/sessions/09-phase-transitions-in-cooking/")}>Module 9</a> and <a href={withBase("/sessions/11-the-crispness-design-space/")}>Module 11</a>, and is the centrepiece of the lecture <a href={withBase("/decks/crispness-metastable/")}><em>Crispness Is a Metastable State</em></a>.
-      </p>
+      <div class="labs-list__plate">
+        <SpecimenPlate variant="crispy" frame="framed" hideCaption />
+      </div>
+      <div class="labs-list__content">
+        <span class="labs-list__kicker">Instrument 02 · state diagram</span>
+        <h2><a href={withBase("/labs/crispness-phase-diagram/")}>Crispness Phase Diagram</a></h2>
+        <p>
+          Place a specimen at a storage humidity, run moisture uptake forward
+          in time, and read its stability margin off a temperature-moisture
+          state diagram. Builds on <a href={withBase("/sessions/09-phase-transitions-in-cooking/")}>Module 9</a> and <a href={withBase("/sessions/11-the-crispness-design-space/")}>Module 11</a>, and is the centrepiece of the lecture <a href={withBase("/decks/crispness-metastable/")}><em>Crispness Is a Metastable State</em></a>.
+        </p>
+      </div>
     </li>
   </ul>
 </ContentLayout>
@@ -42,15 +54,36 @@ import { siteConfig } from "../../site-config";
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--at-spacing-xl);
+    gap: var(--at-spacing-2xl);
   }
 
   .labs-list__item {
-    padding: var(--at-spacing-lg);
-    border: 1px solid var(--at-border);
-    border-left: 3px solid var(--at-secondary);
-    border-radius: 0 var(--at-border-radius) var(--at-border-radius) 0;
-    background: var(--at-bg-alt);
+    display: flex;
+    align-items: center;
+    gap: var(--at-spacing-xl);
+  }
+
+  .labs-list__item:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+
+  .labs-list__plate {
+    flex: 0 0 38%;
+    min-width: 0;
+  }
+
+  .labs-list__content {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-inline-start: var(--at-spacing-lg);
+    border-inline-start: 3px solid var(--at-secondary);
+  }
+
+  .labs-list__item:nth-child(even) .labs-list__content {
+    padding-inline-start: 0;
+    padding-inline-end: var(--at-spacing-lg);
+    border-inline-start: none;
+    border-inline-end: 3px solid var(--at-secondary);
   }
 
   .labs-list__kicker {
@@ -70,5 +103,24 @@ import { siteConfig } from "../../site-config";
 
   .labs-list p {
     margin-bottom: 0;
+  }
+
+  @media (max-width: 900px) {
+    .labs-list__item,
+    .labs-list__item:nth-child(even) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .labs-list__plate {
+      flex-basis: auto;
+    }
+
+    .labs-list__content,
+    .labs-list__item:nth-child(even) .labs-list__content {
+      padding-inline: var(--at-spacing-lg) 0;
+      border-inline-end: none;
+      border-inline-start: 3px solid var(--at-secondary);
+    }
   }
 </style>
