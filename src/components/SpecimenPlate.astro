@@ -1,13 +1,15 @@
 ---
 // Specimen plates: the site's illustration-grade imagery layer (see
-// PLAN.md §12). Six variants pair a real, credited photograph
+// PLAN.md §12). Most variants pair a real, credited photograph
 // (src/assets/images/photos/CREDITS.md) with a drawn scientific-annotation
-// overlay; two variants ("lattice", "rheometer-rig") are fully drawn, for
-// subjects a photograph can't show (sub-visible structure, a specific
-// apparatus). Every variant renders through the same .sci-plate frame so the
-// two imagery sources read as one technique.
+// overlay; "lattice", "rheometer-rig", "thermal-trace" and "inverse-design"
+// are fully drawn, for subjects a photograph can't show (sub-visible
+// structure, a specific apparatus, a schematic curve, a conceptual diagram).
+// Every variant renders through the same .sci-plate frame so the two
+// imagery sources read as one technique.
 import { Image } from "astro:assets";
 import noodlePhoto from "../assets/images/photos/noodle-dough.webp";
+import noodleFriedPhoto from "../assets/images/photos/noodle-fried.webp";
 import tofuPhoto from "../assets/images/photos/tofu.webp";
 import emulsionPhoto from "../assets/images/photos/emulsion.webp";
 import dumplingsPhoto from "../assets/images/photos/dumplings.webp";
@@ -15,12 +17,15 @@ import crispyPhoto from "../assets/images/photos/crispy-fried.webp";
 
 export type PlateVariant =
   | "noodle"
+  | "noodle-fried"
   | "tofu"
   | "emulsion"
   | "dumplings"
   | "crispy"
   | "lattice"
-  | "rheometer-rig";
+  | "rheometer-rig"
+  | "thermal-trace"
+  | "inverse-design";
 
 interface Props {
   variant: PlateVariant;
@@ -67,22 +72,48 @@ const PHOTO_DEFAULTS: Record<string, { kicker: string; caption: string; alt: str
       "<strong>A crisp material is a frozen liquid.</strong> Below its glass transition a starchy crust fractures instead of bending — every fracture is a crack propagating through a metastable solid.",
     alt: "Close-up of a crispy fried crust texture",
   },
+  "noodle-fried": {
+    kicker: "Specimen — Maillard browning",
+    caption:
+      "<strong>A reaction, not a colour.</strong> Browning is a temperature-sensitive chemical reaction, not a fixed cooking time — the same rate law that governs how fast a crust browns.",
+    alt: "Close-up of browned, fried Chinese noodles",
+  },
+};
+
+const DRAWN_DEFAULTS: Record<string, { kicker: string; caption: string }> = {
+  lattice: {
+    kicker: "Structure — gel network",
+    caption:
+      "<strong>Structure, not just stuff.</strong> A starch gel is swollen granules bridged by leached amylose — drawn, not photographed, because the structure that matters here is below what a lens resolves.",
+  },
+  "rheometer-rig": {
+    kicker: "Apparatus — parallel-plate rheometer",
+    caption:
+      "<strong>The instrument, not the specimen.</strong> A thin disc of material sheared between two plates is how every flow curve on this site was (synthetically) generated.",
+  },
+  "thermal-trace": {
+    kicker: "Diagram — calorimetry trace",
+    caption:
+      "<strong>A peak, not a point.</strong> Each transition lifts a heat-flow trace off its sensible-heating baseline — schematic, drawn to show the shape a real DSC trace has, not a measurement.",
+  },
+  "inverse-design": {
+    kicker: "Diagram — forward vs. inverse",
+    caption:
+      "<strong>Two directions through the same models.</strong> A forward model predicts an outcome from a process; an inverse problem starts from a target outcome and works backward to a process.",
+  },
 };
 
 const photoSrc = {
   noodle: noodlePhoto,
+  "noodle-fried": noodleFriedPhoto,
   tofu: tofuPhoto,
   emulsion: emulsionPhoto,
   dumplings: dumplingsPhoto,
   crispy: crispyPhoto,
 }[variant as string];
 
-const resolvedKicker = kicker ?? PHOTO_DEFAULTS[variant]?.kicker ??
-  (variant === "lattice" ? "Structure — gel network" : "Apparatus — parallel-plate rheometer");
-const resolvedCaption = caption ?? PHOTO_DEFAULTS[variant]?.caption ??
-  (variant === "lattice"
-    ? "<strong>Structure, not just stuff.</strong> A starch gel is swollen granules bridged by leached amylose — drawn, not photographed, because the structure that matters here is below what a lens resolves."
-    : "<strong>The instrument, not the specimen.</strong> A thin disc of material sheared between two plates is how every flow curve on this site was (synthetically) generated.");
+const resolvedKicker = kicker ?? PHOTO_DEFAULTS[variant]?.kicker ?? DRAWN_DEFAULTS[variant]?.kicker;
+const resolvedCaption = caption ?? PHOTO_DEFAULTS[variant]?.caption ?? DRAWN_DEFAULTS[variant]?.caption;
 ---
 
 <figure class:list={["sci-plate", frame === "bleed" && "sci-plate--bleed", frame === "framed" && "sci-plate--framed", hero && "sci-plate--hero"]} data-plate={variant}>
@@ -142,7 +173,57 @@ const resolvedCaption = caption ?? PHOTO_DEFAULTS[variant]?.caption ??
             <text class="sci-label" x="220" y="142">T &gt; Tg → leathery</text>
           </svg>
         )}
+        {variant === "noodle-fried" && (
+          <svg class="sci-plate__overlay" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+            <path class="sci-annotation" d="M50,250 C120,230 200,150 300,60" marker-end="url(#sci-arrow-browning)" />
+            <text class="sci-label" x="230" y="90">rate, k(T)</text>
+            <text class="sci-label" x="230" y="112">k = A·e^(−Ea/RT)</text>
+            <defs>
+              <marker id="sci-arrow-browning" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" class="sci-plate-shape" />
+              </marker>
+            </defs>
+          </svg>
+        )}
       </>
+    )}
+    {variant === "thermal-trace" && (
+      <svg class="sci-plate__drawn" viewBox="0 0 400 300" role="img" aria-label="Illustration of a calorimetry trace: heat flow against temperature, showing a broad melting peak followed by a narrower, larger denaturation peak">
+        <rect x="0" y="0" width="400" height="300" class="sci-plate-veil" />
+        <line class="sci-axis" x1="46" y1="250" x2="370" y2="250" />
+        <line class="sci-axis" x1="46" y1="250" x2="46" y2="40" />
+        <text class="sci-axis-label" x="208" y="274" text-anchor="middle">temperature, ramped →</text>
+        <text class="sci-axis-label" x="24" y="150" text-anchor="middle" transform="rotate(-90 24 150)">heat flow →</text>
+        <path class="sci-curve--alt" d="M 46 214 L 370 176" />
+        <path class="sci-curve" d="M 46 214 C 84 210 106 176 138 158 C 166 142 194 170 226 190 C 246 200 258 198 266 186 C 274 144 284 96 298 92 C 310 96 322 142 332 176 C 348 190 360 184 370 168" />
+        <circle class="sci-point" cx="138" cy="158" r="4.5" />
+        <text class="sci-label" x="138" y="142" text-anchor="middle">fat melting</text>
+        <circle class="sci-point" cx="298" cy="92" r="4.5" />
+        <text class="sci-label" x="298" y="76" text-anchor="middle">collagen denaturation</text>
+      </svg>
+    )}
+    {variant === "inverse-design" && (
+      <svg class="sci-plate__drawn" viewBox="0 0 400 300" role="img" aria-label="Illustration contrasting a forward model, which predicts outcome from process, with an inverse problem, which chooses process from a target outcome">
+        <rect x="0" y="0" width="400" height="300" class="sci-plate-veil" />
+        <rect x="30" y="120" width="120" height="60" rx="6" class="sci-plate-shape--ink" opacity="0.14" />
+        <rect x="30" y="120" width="120" height="60" rx="6" class="sci-plate-outline" />
+        <text class="sci-label" x="90" y="154" text-anchor="middle">process</text>
+        <rect x="250" y="120" width="120" height="60" rx="6" class="sci-plate-shape--ink" opacity="0.14" />
+        <rect x="250" y="120" width="120" height="60" rx="6" class="sci-plate-outline" />
+        <text class="sci-label" x="310" y="154" text-anchor="middle">target texture</text>
+        <line class="sci-curve" x1="152" y1="138" x2="248" y2="138" marker-end="url(#sci-arrow-forward)" />
+        <text class="sci-label" x="200" y="122" text-anchor="middle">forward model</text>
+        <line class="sci-curve--alt" x1="248" y1="164" x2="152" y2="164" marker-end="url(#sci-arrow-inverse)" />
+        <text class="sci-label" x="200" y="196" text-anchor="middle">inverse problem</text>
+        <defs>
+          <marker id="sci-arrow-forward" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" class="sci-plate-shape" />
+          </marker>
+          <marker id="sci-arrow-inverse" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" class="sci-plate-shape--alt" />
+          </marker>
+        </defs>
+      </svg>
     )}
     {variant === "lattice" && (
       <svg class="sci-plate__drawn" viewBox="0 0 400 300" role="img" aria-label="Illustration of a starch gel network: swollen granules bridged by leached amylose chains">
