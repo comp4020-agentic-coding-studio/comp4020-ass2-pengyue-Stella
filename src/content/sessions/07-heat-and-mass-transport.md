@@ -26,6 +26,8 @@ filling may still be cool and only partly melted. Both wrapper and filling
 sit in the same steam. Why does heat reach them at such different
 effective rates, and can that be predicted rather than just observed?
 
+<p class="specimen-label">Specimen <strong>xiaolongbao (小笼包), wrapper vs. gelatin-rich filling, mid-steam</strong></p>
+
 ## Where this sits
 
 Opening module of **Stage 3, Flow, Interfaces and Transformation**. Stage 2
@@ -79,6 +81,36 @@ surface, which is why a steamed wrapper gains weight and becomes
 translucent — a distinct process from a dry oven's heat-only transfer,
 governed by an analogous mass-transfer equation with a moisture-content
 gradient in place of dT/dx.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — internal temperature profile at two Biot numbers</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g7-title">
+    <title id="g7-title">Temperature against position from surface to centre for a low-Biot wrapper, which is near-uniform, and a high-Biot filling ball, which has a steep gradient and a cold core</title>
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">position: surface → centre</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">temperature</text>
+    <path class="sci-curve--alt" d="M 60 60 L 390 66" />
+    <text class="sci-axis-label" x="368" y="52" text-anchor="end">wrapper, Bi ≪ 0.1</text>
+    <path class="sci-curve" d="M 60 60 C 140 64 220 90 280 140 C 320 175 355 195 390 205" />
+    <circle class="sci-point" cx="390" cy="205" r="4.5" />
+    <text class="sci-label" x="300" y="150">filling, Bi ≫ 0.1</text>
+    <text class="sci-axis-label" x="300" y="166">still-cold centre</text>
+  </svg>
+  <figcaption>
+    Same steam bath, same time. The wrapper's low Biot number means surface
+    heat transfer is the bottleneck, so it heats almost uniformly. The
+    filling's higher Biot number means internal conduction is the
+    bottleneck instead, so a real gradient persists and the centre lags
+    behind the surface.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Lumped model valid</dt><dd>Bi ≪ 0.1</dd></div>
+  <div class="module-stat"><dt>Transports</dt><dd>heat + moisture</dd></div>
+  <div class="module-stat"><dt>Bi</dt><dd>= h·L<sub>c</sub>/k</dd></div>
+</dl>
 
 ## What you measure and analyse
 

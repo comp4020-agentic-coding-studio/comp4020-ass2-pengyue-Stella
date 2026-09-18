@@ -26,6 +26,8 @@ No new ingredient is added during frying. What physical change, exactly, is
 responsible for the shell being rigid when the interior a millimetre away
 is not?
 
+<p class="specimen-label">Specimen <strong>youtiao (油条), fried dough stick, crust mid-formation</strong></p>
+
 ## Where this sits
 
 Closing module of **Stage 3, Flow, Interfaces and Transformation**. Module
@@ -67,6 +69,36 @@ falling moisture content pushes T_g above the crust's actual temperature,
 the crust crystallises out of the rubbery state into a rigid glass — this
 is the instant it becomes crisp. The soft interior, still at high moisture,
 has a T_g far below its temperature and stays rubbery.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — glass transition temperature against moisture content</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g9-title">
+    <title id="g9-title">Glass transition temperature falling as moisture content rises, crossing the dough's actual temperature at the point that marks the crust-core boundary</title>
+    <rect class="sci-region" x="60" y="30" width="140" height="190" />
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">moisture content w₂ →</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">temperature</text>
+    <line class="sci-curve--alt" x1="60" y1="110" x2="390" y2="110" />
+    <text class="sci-axis-label" x="368" y="102" text-anchor="end">dough temperature</text>
+    <path class="sci-curve" d="M 60 45 C 120 60 160 95 200 110 C 250 128 320 165 390 195" />
+    <circle class="sci-point" cx="200" cy="110" r="4.5" />
+    <text class="sci-label" x="206" y="90">crust / core boundary</text>
+  </svg>
+  <figcaption>
+    T_g falls as water plasticises the starch matrix. Left of the crossing,
+    T_g sits above the dough's actual temperature and the shaded zone is a
+    rigid glass — the crust. Right of it, T_g falls below the local
+    temperature and the matrix stays a soft rubber — the core. The boundary
+    moves inward as frying continues to dry the dough.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>States</dt><dd>glass ⇌ rubber</dd></div>
+  <div class="module-stat"><dt>Model</dt><dd>Gordon–Taylor</dd></div>
+  <div class="module-stat"><dt>Plasticiser</dt><dd>water lowers T<sub>g</sub></dd></div>
+</dl>
 
 ## What you measure and analyse
 
