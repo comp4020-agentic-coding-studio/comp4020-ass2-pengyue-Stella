@@ -28,9 +28,13 @@ interface Props {
   kicker?: string;
   caption?: string;
   hero?: boolean;
+  /** Suppress the figcaption — for compact thumbnail contexts (e.g. an
+   *  instrument preview card) that already state the same information in
+   *  their own copy, where a second caption would just repeat it. */
+  hideCaption?: boolean;
 }
 
-const { variant, frame = "framed", kicker, caption, hero = false } = Astro.props;
+const { variant, frame = "framed", kicker, caption, hero = false, hideCaption = false } = Astro.props;
 
 const PHOTO_DEFAULTS: Record<string, { kicker: string; caption: string; alt: string }> = {
   noodle: {
@@ -180,8 +184,10 @@ const resolvedCaption = caption ?? PHOTO_DEFAULTS[variant]?.caption ??
       </svg>
     )}
   </div>
-  <figcaption class="sci-plate__caption">
-    <span class="sci-plate__kicker">{resolvedKicker}</span>
-    <span set:html={resolvedCaption} />
-  </figcaption>
+  {!hideCaption && (
+    <figcaption class="sci-plate__caption">
+      <span class="sci-plate__kicker">{resolvedKicker}</span>
+      <span set:html={resolvedCaption} />
+    </figcaption>
+  )}
 </figure>

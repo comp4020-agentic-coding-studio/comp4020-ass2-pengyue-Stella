@@ -1,0 +1,170 @@
+---
+// The four-stage progression as an immersive, alternating plate/text
+// sequence — replaces CurriculumFlow's icon-badge row (removed in pass 3;
+// see PLAN.md §12) so "measure → structure → transform → predict" reads as
+// a journey through actual specimens, not four abstract glyphs. Shared by
+// the homepage and /sessions/ so a reader meets the same shape twice.
+import { withBase } from "astro-theme-university/url";
+import SpecimenPlate, { type PlateVariant } from "./SpecimenPlate.astro";
+import StageIcon from "./StageIcon.astro";
+import { STAGES } from "../stages";
+
+const VERB: Record<number, string> = {
+  1: "Measure",
+  2: "Find structure",
+  3: "Transform",
+  4: "Predict & design",
+};
+
+const PLATE: Record<number, PlateVariant> = {
+  1: "noodle",
+  2: "lattice",
+  3: "dumplings",
+  4: "crispy",
+};
+---
+
+<ol class="stage-journey" aria-label="The four-stage curriculum, in teaching order">
+  {
+    STAGES.map((stage) => {
+      const weekStart = (stage.number - 1) * 3 + 1;
+      const weekEnd = stage.number * 3;
+      return (
+        <li class="stage-journey__item" data-stage={stage.number}>
+          <div class="stage-journey__plate">
+            <SpecimenPlate variant={PLATE[stage.number]} frame="framed" />
+          </div>
+          <div class="stage-journey__text">
+            <span class="stage-journey__number" aria-hidden="true">
+              0{stage.number}
+            </span>
+            <p class="stage-journey__kicker">
+              <StageIcon stage={stage.number} />
+              Stage {stage.number} · Weeks {weekStart}–{weekEnd}
+            </p>
+            <h3 class="stage-journey__verb">{VERB[stage.number]}</h3>
+            <p class="stage-journey__title">{stage.title}</p>
+            <p class="stage-journey__description">{stage.description}</p>
+            <a class="stage-journey__link" href={withBase(`/sessions/#stage-${stage.number}`)}>
+              See the modules →
+            </a>
+          </div>
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .stage-journey {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-spacing-2xl);
+    margin: var(--at-spacing-2xl) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stage-journey__item {
+    display: flex;
+    align-items: center;
+    gap: var(--at-spacing-xl);
+  }
+
+  .stage-journey__item:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+
+  .stage-journey__plate {
+    flex: 0 0 42%;
+    min-width: 0;
+  }
+
+  .stage-journey__text {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-inline-start: var(--at-spacing-lg);
+    border-inline-start: 3px solid var(--stage-accent);
+  }
+
+  .stage-journey__item:nth-child(even) .stage-journey__text {
+    padding-inline-start: 0;
+    padding-inline-end: var(--at-spacing-lg);
+    border-inline-start: none;
+    border-inline-end: 3px solid var(--stage-accent);
+  }
+
+  .stage-journey__number {
+    position: absolute;
+    top: -0.6em;
+    right: 0;
+    font-family: var(--at-font-mono);
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--stage-accent);
+    opacity: 0.16;
+  }
+
+  .stage-journey__item:nth-child(even) .stage-journey__number {
+    right: auto;
+    left: 0;
+  }
+
+  .stage-journey__kicker {
+    display: flex;
+    align-items: center;
+    gap: var(--at-spacing-xs);
+    margin: 0 0 var(--at-spacing-xs);
+    color: var(--stage-accent);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stage-journey__verb {
+    margin: 0 0 0.15em;
+    font-size: var(--at-font-size-h4);
+  }
+
+  .stage-journey__title {
+    margin: 0 0 var(--at-spacing-sm);
+    color: var(--at-text-secondary);
+    font-weight: 600;
+  }
+
+  .stage-journey__description {
+    margin: 0 0 var(--at-spacing-sm);
+    color: var(--at-text-secondary);
+  }
+
+  .stage-journey__link {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .stage-journey__item,
+    .stage-journey__item:nth-child(even) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .stage-journey__plate {
+      flex-basis: auto;
+    }
+
+    .stage-journey__text,
+    .stage-journey__item:nth-child(even) .stage-journey__text {
+      padding-inline: var(--at-spacing-lg) 0;
+      border-inline-end: none;
+      border-inline-start: 3px solid var(--stage-accent);
+    }
+
+    .stage-journey__number {
+      display: none;
+    }
+  }
+</style>

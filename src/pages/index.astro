@@ -1,26 +1,56 @@
 ---
+import { Image } from "astro:assets";
+import { getPublishedCollection } from "astro-course-university/content";
 import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
-import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import BaseLayout from "astro-theme-university/layouts/BaseLayout.astro";
+import { withBase } from "astro-theme-university/url";
 import AssessmentBars from "../components/AssessmentBars.astro";
-import CurriculumFlow from "../components/CurriculumFlow.astro";
 import InstrumentTeaser from "../components/InstrumentTeaser.astro";
-import heroImage from "../assets/images/hero-home.svg";
+import SpecimenPlate from "../components/SpecimenPlate.astro";
+import StageJourney from "../components/StageJourney.astro";
+import heroPhoto from "../assets/images/photos/noodle-dough.webp";
 import { courseMeta } from "../course-config";
 import { sessionLabels, siteConfig } from "../site-config";
+import { STAGES } from "../stages";
 import "../styles/scientific.css";
+
+const sessions = (await getPublishedCollection("sessions")).slice().sort((a, b) => a.data.week - b.data.week);
 ---
 
-<ContentLayout
-  title={`${courseMeta.code}: ${courseMeta.title}`}
-  description={courseMeta.description}
-  heroImage={heroImage}
-  heroImageAlt="An abstract diagram combining a parallel-plate rheometer's radial graduations with a plotted flow curve, in the SlopU gold and ink palette"
-  {...siteConfig}
->
-  <ul class="course-tags" aria-label="Course tags">
-    {courseMeta.tags.map((tag) => <li>{tag}</li>)}
-  </ul>
+<BaseLayout title={`${courseMeta.code}: ${courseMeta.title}`} description={courseMeta.description} {...siteConfig}>
+  <Fragment slot="hero">
+    <section class="at-hero home-hero" aria-label={courseMeta.title}>
+      <Image
+        src={heroPhoto}
+        alt=""
+        widths={[768, 1536, 2560]}
+        sizes="100vw"
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+        class="at-hero-image"
+      />
+      <div class="at-hero-content home-hero__content">
+        <p class="home-hero__kicker">
+          {courseMeta.code} · {courseMeta.session} {courseMeta.year}
+        </p>
+        <h1 class="at-hero-title">{courseMeta.title}</h1>
+        <p class="home-hero__lead">{courseMeta.description}</p>
+        <ul class="home-hero__tags" aria-label="Course tags">
+          {courseMeta.tags.map((tag) => <li>{tag}</li>)}
+        </ul>
+        <div class="home-hero__actions">
+          <a class="home-hero__cta home-hero__cta--primary" href={withBase("/sessions/")}>
+            Explore the {sessionLabels.plural.toLowerCase()}
+          </a>
+          <a class="home-hero__cta" href={withBase("/labs/")}>
+            Try the instruments
+          </a>
+        </div>
+      </div>
+    </section>
+  </Fragment>
 
   <h2>The claim</h2>
   <p>
@@ -34,13 +64,43 @@ import "../styles/scientific.css";
     property, and why.
   </p>
 
-  <h2>Four stages</h2>
+  <h2>A journey through matter, structure and transformation</h2>
   <p>
     The teaching period runs in four stages, each three modules long, each
     building directly on the last — measurement, then structure, then
-    transformation, then prediction and inverse design:
+    transformation, then prediction and inverse design. Each stage's
+    specimen is the material it's named for:
   </p>
-  <CurriculumFlow />
+  <StageJourney />
+
+  <h2>Twelve modules, at a glance</h2>
+  <p>
+    The same four stages, laid out week by week. Follow a module link straight
+    into its content, or read the full curriculum map in {sessionLabels.plural}.
+  </p>
+  <ol class="week-track" aria-label="All twelve modules across four stages">
+    {
+      STAGES.map((stage) => (
+        <li class="week-track__stage" data-stage={stage.number}>
+          <p class="week-track__stage-label">
+            Stage {stage.number} · {stage.title}
+          </p>
+          <ol class="week-track__weeks">
+            {sessions
+              .filter((session) => session.data.stage === stage.number)
+              .map((session) => (
+                <li>
+                  <a href={withBase(`/sessions/${session.id}/`)}>
+                    <span class="week-track__week">Week {session.data.week}</span>
+                    <span class="week-track__title">{session.data.title}</span>
+                  </a>
+                </li>
+              ))}
+          </ol>
+        </li>
+      ))
+    }
+  </ol>
 
   <h2>Two instruments, not two dozen</h2>
   <p>
@@ -50,18 +110,24 @@ import "../styles/scientific.css";
     written modules — labelled assumptions, visible fit quality, no invented
     data.
   </p>
-  <CardGrid columns={2}>
+  <div class="instrument-showcase">
     <InstrumentTeaser title="Virtual Rheometer" href="/labs/virtual-rheometer/">
+      <Fragment slot="image">
+        <SpecimenPlate variant="rheometer-rig" frame="bleed" hideCaption />
+      </Fragment>
       Sweep shear rate across a simulated soft material, fit Newtonian,
       power-law and Herschel-Bulkley models to the flow curve, and read the
       residual plot to see which fit actually holds.
     </InstrumentTeaser>
     <InstrumentTeaser title="Crispness Phase Diagram" href="/labs/crispness-phase-diagram/">
+      <Fragment slot="image">
+        <SpecimenPlate variant="crispy" frame="bleed" hideCaption />
+      </Fragment>
       Move a specimen through a temperature-moisture state diagram and watch
       it cross from the glassy, crisp region into the rubbery, softened one
       as it absorbs humidity.
     </InstrumentTeaser>
-  </CardGrid>
+  </div>
 
   <h2>Where the marks are</h2>
   <p>
@@ -85,24 +151,155 @@ import "../styles/scientific.css";
       <p>Who teaches the course and how to reach them.</p>
     </Card>
   </CardGrid>
-</ContentLayout>
+</BaseLayout>
 
 <style>
-  .course-tags {
+  .home-hero {
+    min-height: 32rem;
+  }
+
+  .home-hero__content {
+    gap: var(--at-spacing-sm);
+    padding-block-end: var(--at-spacing-2xl);
+  }
+
+  .home-hero__kicker {
+    grid-column: content;
+    margin: 0;
+    color: var(--at-white);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+  }
+
+  .home-hero__lead {
+    grid-column: content;
+    max-width: 46rem;
+    margin: 0;
+    color: var(--at-white);
+    font-size: 1.15rem;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 55%);
+  }
+
+  .home-hero__tags {
     display: flex;
     flex-wrap: wrap;
+    grid-column: content;
     gap: 0.5rem;
-    margin-block: 0 2rem;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .course-tags li {
+  .home-hero__tags li {
     padding: 0.25rem 0.65rem;
+    border: 1px solid rgb(255 255 255 / 35%);
     border-radius: 999px;
-    color: var(--at-text-secondary);
-    background: var(--at-bg-alt);
-    font-size: 0.9rem;
+    color: var(--at-white);
+    background: rgb(255 255 255 / 10%);
+    font-size: 0.85rem;
   }
 
+  .home-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: content;
+    gap: var(--at-spacing-sm);
+    margin-block-start: var(--at-spacing-sm);
+  }
+
+  .home-hero__cta {
+    padding: 0.65rem 1.25rem;
+    border: 1px solid rgb(255 255 255 / 55%);
+    border-radius: var(--at-border-radius);
+    color: var(--at-white);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .home-hero__cta:hover,
+  .home-hero__cta:focus-visible {
+    background: rgb(255 255 255 / 12%);
+  }
+
+  .home-hero__cta--primary {
+    border-color: var(--at-primary);
+    background: var(--at-primary);
+    color: var(--at-heading);
+  }
+
+  .home-hero__cta--primary:hover,
+  .home-hero__cta--primary:focus-visible {
+    background: color-mix(in oklch, var(--at-primary) 85%, white 15%);
+  }
+
+  .week-track {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-spacing-lg);
+    margin: var(--at-spacing-xl) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .week-track__stage {
+    padding-top: var(--at-spacing-sm);
+    border-top: 3px solid var(--stage-accent);
+  }
+
+  .week-track__stage-label {
+    margin: 0 0 var(--at-spacing-sm);
+    color: var(--stage-accent);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    font-weight: 600;
+  }
+
+  .week-track__weeks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: var(--at-spacing-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .week-track__weeks a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    height: 100%;
+    padding: var(--at-spacing-sm) var(--at-spacing-md);
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .week-track__weeks a:hover,
+  .week-track__weeks a:focus-visible {
+    border-color: var(--stage-accent);
+    box-shadow: var(--at-shadow-sm);
+  }
+
+  .week-track__week {
+    color: var(--stage-accent);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .week-track__title {
+    font-size: var(--at-font-size-sm);
+  }
+
+  .instrument-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--at-spacing-lg);
+    margin: var(--at-spacing-xl) 0;
+  }
 </style>

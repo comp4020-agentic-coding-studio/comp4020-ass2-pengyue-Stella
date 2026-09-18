@@ -1,7 +1,10 @@
 ---
 // A lighter, apparatus-flavoured preview of a lab page, distinct from a
 // generic Card — used on the homepage so the two instruments read as
-// central course apparatus rather than one more "further reading" link.
+// central course apparatus rather than one more "further reading" link. An
+// `image` slot (a SpecimenPlate with hideCaption) bleeds to the card's top
+// edge as a cover photo; without one the card falls back to its original
+// line-drawn apparatus glyph.
 import { withBase } from "astro-theme-university/url";
 
 interface Props {
@@ -10,13 +13,20 @@ interface Props {
 }
 
 const { title, href } = Astro.props;
+const hasImage = Astro.slots.has("image");
 ---
 
 <a class="instrument-teaser" href={withBase(href)}>
-  <svg class="instrument-teaser__glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-    <path d="M9 3h6M10 3v5.2L5.6 17a2 2 0 0 0 1.8 2.9h9.2a2 2 0 0 0 1.8-2.9L14 8.2V3" />
-    <path d="M7.4 14.5h9.2" />
-  </svg>
+  {hasImage ? (
+    <div class="instrument-teaser__media">
+      <slot name="image" />
+    </div>
+  ) : (
+    <svg class="instrument-teaser__glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <path d="M9 3h6M10 3v5.2L5.6 17a2 2 0 0 0 1.8 2.9h9.2a2 2 0 0 0 1.8-2.9L14 8.2V3" />
+      <path d="M7.4 14.5h9.2" />
+    </svg>
+  )}
   <span class="instrument-teaser__kicker">Instrument</span>
   <h3 class="instrument-teaser__title">{title}</h3>
   <p><slot /></p>
@@ -28,5 +38,11 @@ const { title, href } = Astro.props;
     width: 1.8rem;
     height: 1.8rem;
     color: var(--at-secondary);
+  }
+
+  .instrument-teaser__media {
+    overflow: hidden;
+    margin: calc(var(--at-spacing-lg) * -1) calc(var(--at-spacing-lg) * -1) var(--at-spacing-sm);
+    border-radius: var(--at-border-radius) var(--at-border-radius) 0 0;
   }
 </style>
