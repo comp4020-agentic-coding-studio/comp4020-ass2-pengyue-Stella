@@ -5,8 +5,15 @@ description:
   getting help.
 ---
 
+import PolicyCallout from "../../components/PolicyCallout.astro";
+import PolicyNav from "../../components/PolicyNav.astro";
+
 These rules apply to all four assessments; each assessment's own page states
 its due date and weight, and defers to this page for everything else.
+
+<PolicyNav />
+
+<PolicyCallout type="warning" icon="clock">
 
 ## Late submission
 
@@ -16,6 +23,10 @@ an approved extension. This is calculated from the mark actually achieved,
 not from a fixed maximum — a strong report submitted two days late is still
 worth submitting.
 
+</PolicyCallout>
+
+<PolicyCallout type="tip" icon="calendar">
+
 ## Extensions
 
 Request an extension from the course convenor before the deadline wherever
@@ -23,6 +34,10 @@ possible, stating the new date you're asking for. Extensions granted for
 illness, bereavement or an equivalent circumstance are not penalised; a late
 request made after the deadline has passed is considered only where the
 circumstance made an earlier request genuinely impossible.
+
+</PolicyCallout>
+
+<PolicyCallout type="error" icon="shield">
 
 ## Academic integrity
 
@@ -41,6 +56,10 @@ and any numeric result you report. Two rules specific to this course:
   rule (see any module's "Data provenance" note) and is marked as part of
   scientific honesty, not an optional flourish.
 
+</PolicyCallout>
+
+<PolicyCallout type="info" icon="cpu">
+
 ## Use of generative AI tools
 
 You may use a generative AI tool to explain a concept, check your working,
@@ -52,6 +71,10 @@ on your own reasoning about a model's fit to a specific material, which an
 unexamined AI-generated answer does not demonstrate. If in doubt, ask
 before submitting, not after.
 
+</PolicyCallout>
+
+<PolicyCallout type="tip" icon="help">
+
 ## Getting help
 
 For a question about a specific module or piece of marked work, start with
@@ -60,3 +83,5 @@ the teaching team listed on that module or assessment's own page — see
 matters outside the course (wellbeing, disability access, hardship), use
 your enrolling institution's central student support service; the
 convenor can point you to the right one on request.
+
+</PolicyCallout>

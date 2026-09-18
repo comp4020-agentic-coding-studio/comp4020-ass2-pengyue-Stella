@@ -1,0 +1,52 @@
+---
+// Turns the theme's plain Callout into a quick-reference panel: an icon
+// beside the heading so a reader scanning the page recognises a topic
+// before reading a word of it. Wraps whole sections (heading included) so
+// the policy wording itself is untouched — only the surrounding markup and
+// styling change.
+import Callout from "astro-theme-university/components/Callout.astro";
+import PolicyIcon from "./PolicyIcon.astro";
+
+interface Props {
+  type: "info" | "tip" | "warning" | "error";
+  icon: "clock" | "calendar" | "shield" | "cpu" | "help";
+}
+
+const { type, icon } = Astro.props;
+---
+
+<Callout type={type}>
+  <div class="policy-callout">
+    <PolicyIcon name={icon} size="1.75rem" />
+    <div class="policy-callout__body">
+      <slot />
+    </div>
+  </div>
+</Callout>
+
+<style>
+  .policy-callout {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: var(--at-spacing-md);
+    align-items: start;
+  }
+
+  .policy-callout__body {
+    min-width: 0;
+  }
+
+  .policy-callout__body :global(h2) {
+    margin-top: 0;
+  }
+
+  .policy-callout__body :global(> :last-child) {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 640px) {
+    .policy-callout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

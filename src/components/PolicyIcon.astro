@@ -1,0 +1,83 @@
+---
+// One small monochrome glyph per policy topic, in the same currentColor,
+// stroke-based style as StageIcon — so a policy callout reads as part of
+// the same visual system as the rest of the site, not a borrowed icon set.
+interface Props {
+  name: "clock" | "calendar" | "shield" | "cpu" | "help";
+  size?: string;
+  class?: string;
+}
+
+const { name, size = "1.5rem", class: className } = Astro.props;
+const titles: Record<Props["name"], string> = {
+  clock: "Clock",
+  calendar: "Calendar",
+  shield: "Shield",
+  cpu: "Processor",
+  help: "Life ring",
+};
+---
+
+<span class:list={["policy-icon", className]} style={{ width: size, height: size }} aria-hidden="true">
+  {
+    name === "clock" && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <title>{titles.clock}</title>
+        <circle cx="12" cy="12" r="8.4" />
+        <path d="M12 7.2 V12 L15.4 14.2" />
+      </svg>
+    )
+  }
+  {
+    name === "calendar" && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <title>{titles.calendar}</title>
+        <rect x="4" y="5.5" width="16" height="14.5" rx="1.6" />
+        <path d="M4 10 H20 M8 3.5 V6.5 M16 3.5 V6.5" />
+        <path d="M9 14 L11 16 L15.5 11.5" />
+      </svg>
+    )
+  }
+  {
+    name === "shield" && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <title>{titles.shield}</title>
+        <path d="M12 3.5 L19 6.3 V11.3 C19 15.9 16 19.1 12 20.5 C8 19.1 5 15.9 5 11.3 V6.3 Z" />
+        <path d="M9 11.6 L11.2 13.8 L15.3 9.4" />
+      </svg>
+    )
+  }
+  {
+    name === "cpu" && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <title>{titles.cpu}</title>
+        <rect x="7" y="7" width="10" height="10" rx="1.2" />
+        <rect x="10" y="10" width="4" height="4" />
+        <path d="M12 3.5 V6.5 M12 17.5 V20.5 M3.5 12 H6.5 M17.5 12 H20.5 M6 6 L8 8 M18 6 L16 8 M6 18 L8 16 M18 18 L16 16" />
+      </svg>
+    )
+  }
+  {
+    name === "help" && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <title>{titles.help}</title>
+        <circle cx="12" cy="12" r="8.4" />
+        <circle cx="12" cy="12" r="3.4" />
+        <path d="M6.1 6.1 L9.6 9.6 M17.9 6.1 L14.4 9.6 M6.1 17.9 L9.6 14.4 M17.9 17.9 L14.4 14.4" />
+      </svg>
+    )
+  }
+</span>
+
+<style>
+  .policy-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .policy-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

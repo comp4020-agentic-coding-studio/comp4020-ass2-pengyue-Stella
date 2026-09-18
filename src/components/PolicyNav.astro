@@ -1,0 +1,56 @@
+---
+// A quick-reference strip for the fixed five policy topics on this page —
+// hardcoded rather than data-driven, since these anchors only ever belong
+// to this one page's headings.
+import PolicyIcon from "./PolicyIcon.astro";
+
+const items: { href: string; label: string; icon: "clock" | "calendar" | "shield" | "cpu" | "help" }[] = [
+  { href: "#late-submission", label: "Late submission", icon: "clock" },
+  { href: "#extensions", label: "Extensions", icon: "calendar" },
+  { href: "#academic-integrity", label: "Academic integrity", icon: "shield" },
+  { href: "#use-of-generative-ai-tools", label: "Generative AI tools", icon: "cpu" },
+  { href: "#getting-help", label: "Getting help", icon: "help" },
+];
+---
+
+<ul class="policy-nav" aria-label="Jump to a policy">
+  {
+    items.map((item) => (
+      <li>
+        <a href={item.href}>
+          <PolicyIcon name={item.icon} size="1.1em" />
+          {item.label}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .policy-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--at-spacing-sm);
+    margin: var(--at-spacing-lg) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .policy-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.4em 0.8em;
+    border: 1px solid var(--at-border);
+    border-radius: 999px;
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+    text-decoration: none;
+  }
+
+  .policy-nav a:hover,
+  .policy-nav a:focus-visible {
+    border-color: var(--at-primary);
+    color: var(--at-primary);
+  }
+</style>
