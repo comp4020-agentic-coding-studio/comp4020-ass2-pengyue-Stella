@@ -1,13 +1,115 @@
-/* The deck stylesheet. It is one import on purpose.
+/* The deck stylesheet. It is two imports on purpose.
  *
  * astro-theme-university's deck.css derives every colour it uses from the
- * same --at-* brand tokens the site's own styles derive from, and
- * `brandCss: "astro-theme-slop/slop.css"` in astro.config.ts puts the Slop
- * palette behind those tokens. So a deck already matches the site, and
- * restating a colour here is how the two start to disagree.
+ * same --at-* brand tokens the site's own styles derive from, but it only
+ * *declares* those tokens with standalone-safe defaults (inside
+ * `@layer at.tokens`, so any unlayered brand CSS wins the cascade regardless
+ * of import order) --- it never pulls in a brand file itself. `astromotion`'s
+ * `theme` option in astro.config.ts points here, not at `universityTheme`'s
+ * `brandCss`, so the Slop palette has to be imported again for decks: without
+ * this second import a deck silently renders in deck.css's own default teal,
+ * not the site's gold. Restating a *value* here (rather than importing the
+ * same source) is how the two would start to disagree.
  *
  * Deck pages are dark surfaces and they don't load the site's stylesheets ---
- * only the brand CSS and this file. Add your own rules below the import: a
- * slide class you reach for (`_class: quote`), a code-heavy layout, a
- * background. */
+ * only these two imports and the rules below. Add your own rules below the
+ * imports: a slide class you reach for (`_class: quote`), a code-heavy
+ * layout, a background. */
 @import url("astro-theme-university/styles/deck.css");
+@import url("astro-theme-slop/slop.css");
+
+/* Deck-scoped scientific figures --- the same "journal figure" idea as the
+ * site's .sci-figure family in src/styles/scientific.css, rebuilt from only
+ * the tokens deck.css actually declares. tokens.css (--at-bg-alt, --at-border,
+ * --at-heading, --at-font-mono, --at-spacing-lg and the rest) is never loaded
+ * on a deck page, confirmed against the compiled output, so those classes
+ * can't be reused verbatim here --- this is a parallel, deck-safe vocabulary,
+ * not a duplicate. */
+
+.deck-figure {
+  margin: 0;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--at-divider);
+  border-radius: var(--at-border-radius);
+  background: rgb(255 255 255 / 4%);
+}
+
+.deck-figure__kicker {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--r-code-font);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--at-primary);
+}
+
+.deck-figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.deck-figure figcaption {
+  margin-top: 0.75rem;
+  font-size: 1.35rem;
+  line-height: 1.4;
+  color: var(--at-text-secondary);
+}
+
+.deck-axis {
+  stroke: var(--at-text-secondary);
+  stroke-width: 2;
+  fill: none;
+}
+
+.deck-axis-label {
+  fill: var(--at-text-secondary);
+  font-family: var(--r-code-font);
+  font-size: 20px;
+}
+
+.deck-curve {
+  stroke: var(--at-primary);
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.deck-curve--alt {
+  stroke: var(--at-text-secondary);
+  stroke-width: 3;
+  stroke-dasharray: 8 6;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.deck-region {
+  fill: rgb(from var(--at-primary) r g b / 16%);
+  stroke: none;
+}
+
+.deck-region--alt {
+  fill: rgb(255 255 255 / 7%);
+  stroke: none;
+}
+
+.deck-point {
+  fill: var(--at-primary);
+  stroke: var(--at-dark-grey);
+  stroke-width: 2;
+}
+
+.deck-label {
+  fill: var(--r-main-color);
+  font-family: var(--r-code-font);
+  font-size: 20px;
+}
+
+.deck-annotation {
+  stroke: var(--at-text-secondary);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+  fill: none;
+}
