@@ -14,6 +14,8 @@ photographer.
 | `rao.webp` | *Rheology of Fluid and Semisolid Foods: Principles and Applications* (2nd ed.) | M.A. Rao | 0387709290 | Springer |
 | `aguilera.webp` | *Food Materials Science: Principles and Practice* | José Miguel Aguilera & Peter J. Lillford (eds.) | 0387719466 | Springer |
 | `walstra.webp` | *Physical Chemistry of Foods* | Pieter Walstra | 0824793552 | CRC Press |
+| `mcclements.webp` | *Food Emulsions: Principles, Practices, and Techniques* (3rd ed.) | David Julian McClements | 1498726682 | CRC Press |
+| `roos.webp` | *Phase Transitions in Foods* (2nd ed.) | Yrjö H. Roos & Stephan Drusch | 0124080863 | Academic Press |
 
 Each cover was visually checked against the known real cover art (title,
 author, edition markings) before use. Links on the Resources page point to

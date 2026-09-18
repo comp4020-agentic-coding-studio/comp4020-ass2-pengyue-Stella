@@ -1,0 +1,223 @@
+---
+// A small, fixed shelf of accessible general texts — hardcoded rather than
+// data-driven, since this list only changes by hand (a new cover image and a
+// checked link, both added deliberately; see
+// src/assets/images/covers/CREDITS.md for how each cover and link was
+// verified). Distinct from the "Further reading, by topic" list above it,
+// which points at exact citations from References — these are whole books
+// worth having on a shelf, not citations behind a specific figure.
+import { Image } from "astro:assets";
+import mcgeeCover from "../assets/images/covers/mcgee.webp";
+import bourneCover from "../assets/images/covers/bourne.webp";
+import raoCover from "../assets/images/covers/rao.webp";
+import aguileraCover from "../assets/images/covers/aguilera.webp";
+import walstraCover from "../assets/images/covers/walstra.webp";
+import mcclementsCover from "../assets/images/covers/mcclements.webp";
+import roosCover from "../assets/images/covers/roos.webp";
+
+const books = [
+  {
+    cover: mcgeeCover,
+    title: "On Food and Cooking",
+    subtitle: "The Science and Lore of the Kitchen",
+    author: "Harold McGee",
+    tags: ["Module 1", "Kitchen chemistry"],
+    note: "The classic, accessible bridge between the kitchen and the chemistry lab — a good first stop before the more technical texts below.",
+    href: "https://www.simonandschuster.com/books/On-Food-and-Cooking/Harold-McGee/9780684800011",
+  },
+  {
+    cover: raoCover,
+    title: "Rheology of Fluid and Semisolid Foods",
+    subtitle: "Principles and Applications",
+    author: "M.A. Rao",
+    tags: ["Module 1", "Module 2", "Rheology"],
+    note: "A deeper, more mathematical treatment of the flow models the Virtual Rheometer fits.",
+    href: "https://link.springer.com/book/10.1007/978-0-387-70930-7",
+  },
+  {
+    cover: bourneCover,
+    title: "Food Texture and Viscosity",
+    subtitle: "Concept and Measurement",
+    author: "Malcolm C. Bourne",
+    tags: ["Module 2", "Texture measurement"],
+    note: "The standard reference for how texture itself is defined and measured — the vocabulary Module 2 builds on.",
+    href: "https://shop.elsevier.com/books/food-texture-and-viscosity/bourne/978-0-12-119062-0",
+  },
+  {
+    cover: aguileraCover,
+    title: "Food Materials Science",
+    subtitle: "Principles and Practice",
+    author: "José Miguel Aguilera & Peter J. Lillford (Eds.)",
+    tags: ["Module 4", "Module 6", "Materials science"],
+    note: "A materials-science lens on food structure, bridging the gel and emulsion material in Modules 4–6.",
+    href: "https://link.springer.com/book/10.1007/978-0-387-71947-4",
+  },
+  {
+    cover: mcclementsCover,
+    title: "Food Emulsions",
+    subtitle: "Principles, Practices, and Techniques",
+    author: "David Julian McClements",
+    tags: ["Module 6", "Emulsions"],
+    note: "The field's standard text on how a stable emulsion is built and why it eventually fails — same source cited directly in References.",
+    href: "https://www.routledge.com/Food-Emulsions-Principles-Practices-and-Techniques-Third-Edition/McClements/p/book/9781498726689",
+  },
+  {
+    cover: roosCover,
+    title: "Phase Transitions in Foods",
+    subtitle: null,
+    author: "Yrjö H. Roos & Stephan Drusch",
+    tags: ["Module 9", "Module 11", "Glass transitions"],
+    note: "The reference for the glass transition and crispness material behind Modules 9–11 and the Crispness Phase Diagram.",
+    href: "https://www.sciencedirect.com/book/9780124080867/phase-transitions-in-foods",
+  },
+  {
+    cover: walstraCover,
+    title: "Physical Chemistry of Foods",
+    subtitle: null,
+    author: "Pieter Walstra",
+    tags: ["Modules 1–8", "Foundational"],
+    note: "Already cited directly in References — the single volume that spans nearly every topic this course touches.",
+    href: "https://www.routledge.com/Physical-Chemistry-of-Foods/Walstra/p/book/9780824793555",
+  },
+];
+---
+
+<div class="bookshelf">
+  <ul class="bookshelf__row">
+    {
+      books.map((book) => (
+        <li class="bookshelf__item">
+          <a class="bookshelf__link" href={book.href} target="_blank" rel="noopener noreferrer">
+            <Image class="bookshelf__cover" src={book.cover} alt={`Cover of ${book.title} by ${book.author}`} width={160} height={240} />
+          </a>
+          <h3 class="bookshelf__title">{book.title}</h3>
+          {book.subtitle && <p class="bookshelf__subtitle">{book.subtitle}</p>}
+          <p class="bookshelf__author">{book.author}</p>
+          <ul class="bookshelf__tags">
+            {book.tags.map((tag) => (
+              <li class="bookshelf__tag">{tag}</li>
+            ))}
+          </ul>
+          <p class="bookshelf__note">{book.note}</p>
+          <a class="bookshelf__publisher-link" href={book.href} target="_blank" rel="noopener noreferrer">
+            Publisher / catalogue page <span aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="bookshelf__ledge" aria-hidden="true"></div>
+</div>
+
+<style>
+  .bookshelf {
+    margin: var(--at-spacing-lg) 0;
+  }
+
+  .bookshelf__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: var(--at-spacing-lg);
+    margin: 0;
+    padding: 0 0 var(--at-spacing-md);
+    list-style: none;
+  }
+
+  .bookshelf__item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bookshelf__link {
+    display: block;
+    align-self: flex-start;
+  }
+
+  .bookshelf__cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.15),
+      0 8px 16px -8px rgba(0, 0, 0, 0.35);
+    transition: transform 0.15s ease;
+  }
+
+  .bookshelf__link:hover .bookshelf__cover,
+  .bookshelf__link:focus-visible .bookshelf__cover {
+    transform: translateY(-3px);
+  }
+
+  .bookshelf__title {
+    margin: var(--at-spacing-sm) 0 0;
+    font-size: var(--at-font-size-sm);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .bookshelf__subtitle {
+    margin: 0.15em 0 0;
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+    font-style: italic;
+    line-height: 1.3;
+  }
+
+  .bookshelf__author {
+    margin: 0.3em 0 0;
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+  }
+
+  .bookshelf__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    margin: 0.5em 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bookshelf__tag {
+    padding: 0.15em 0.55em;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--at-primary) 14%, transparent);
+    color: var(--at-primary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .bookshelf__note {
+    margin: 0.5em 0 0;
+    font-size: var(--at-font-size-sm);
+    line-height: 1.4;
+  }
+
+  .bookshelf__publisher-link {
+    margin-top: 0.6em;
+    font-size: var(--at-font-size-sm);
+  }
+
+  .bookshelf__ledge {
+    height: 0.5rem;
+    background: linear-gradient(180deg, var(--at-primary), var(--at-secondary));
+    border-radius: 1px;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 900px) {
+    .bookshelf__row {
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      grid-auto-columns: minmax(9.5rem, 42vw);
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+    }
+
+    .bookshelf__item {
+      scroll-snap-align: start;
+    }
+  }
+</style>
