@@ -25,6 +25,8 @@ Newtonian. What actually justifies choosing one model over another from
 data, rather than from a name pinned to a food in advance — and what does
 it mean for one model to be a *better fit* than another?
 
+<p class="specimen-label">Specimen <strong>doubanjiang &amp; honey, Virtual Rheometer flow-curve fits</strong></p>
+
 ## Where this sits
 
 Opening module of **Stage 4, Prediction and Material Design**. Stages 1–3
@@ -58,6 +60,42 @@ yield stress systematically under-predicts stress at low shear rate and
 over-predicts it at high shear rate, even if the overall R² looks
 respectable. The pattern, not the summary number, is what tells you the
 model family itself is wrong.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — residuals reveal what R² alone hides</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g10-title">
+    <title id="g10-title">Model residuals against shear rate: a good fit scatters randomly around zero while a wrong model family shows a systematic trend crossing zero</title>
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <line class="sci-curve--alt" x1="60" y1="125" x2="390" y2="125" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">shear rate γ̇ →</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">residual (model − measured)</text>
+    <circle class="sci-point" cx="100" cy="118" r="3.5" />
+    <circle class="sci-point" cx="140" cy="132" r="3.5" />
+    <circle class="sci-point" cx="180" cy="120" r="3.5" />
+    <circle class="sci-point" cx="220" cy="130" r="3.5" />
+    <circle class="sci-point" cx="260" cy="119" r="3.5" />
+    <circle class="sci-point" cx="300" cy="129" r="3.5" />
+    <circle class="sci-point" cx="340" cy="121" r="3.5" />
+    <text class="sci-label" x="330" y="105" text-anchor="end">Herschel–Bulkley: random scatter</text>
+    <path class="sci-curve" d="M 90 190 C 150 178 190 155 230 130 C 270 105 320 78 380 55" />
+    <text class="sci-label" x="300" y="192" text-anchor="end">Newtonian fit to doubanjiang</text>
+    <text class="sci-axis-label" x="300" y="207" text-anchor="end">systematic trend, not noise</text>
+  </svg>
+  <figcaption>
+    Two fits can share a similar overall R². The Herschel-Bulkley residuals
+    scatter randomly around zero across the whole range; the Newtonian
+    fit's residuals trend from negative to positive — under-predicting
+    stress at low shear rate, over-predicting it at high shear rate. That
+    trend, not the R² number, is what exposes the wrong model family.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Fit metric</dt><dd>R² = 1 − RSS/TSS</dd></div>
+  <div class="module-stat"><dt>Tells more than R²</dt><dd>residual pattern</dd></div>
+  <div class="module-stat"><dt>Models compared</dt><dd>≥ 2 per specimen</dd></div>
+</dl>
 
 ## What you measure and analyse
 

@@ -29,6 +29,8 @@ process choices would achieve that target, not what a given choice
 produces. Can the eleven forward models built across this course be
 inverted into a design procedure?
 
+<p class="specimen-label">Specimen <strong>capstone cracker, target shelf-life at fixed humidity</strong></p>
+
 ## Where this sits
 
 Closing module of **Stage 4, Prediction and Material Design**, and of the
@@ -67,6 +69,53 @@ direction to move a process variable**, to be tested, not a guaranteed
 specification. Module 10's residual-plot discipline is exactly the tool
 for checking, once real data exists, whether the model that was inverted
 was the right one to trust.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — forward prediction and inverse design, side by side</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g12-title">
+    <title id="g12-title">Forward direction running from process and formulation through a model to a predicted outcome, and inverse direction running backward from a target outcome through the same model to the free variables that would need to change</title>
+    <rect class="sci-region" x="55" y="45" width="95" height="50" rx="4" />
+    <rect class="sci-region" x="170" y="45" width="95" height="50" rx="4" />
+    <rect class="sci-region" x="285" y="45" width="95" height="50" rx="4" />
+    <text class="sci-label" x="102" y="66" text-anchor="middle">process /</text>
+    <text class="sci-label" x="102" y="80" text-anchor="middle">formulation</text>
+    <text class="sci-label" x="217" y="66" text-anchor="middle">forward</text>
+    <text class="sci-label" x="217" y="80" text-anchor="middle">model</text>
+    <text class="sci-label" x="332" y="66" text-anchor="middle">predicted</text>
+    <text class="sci-label" x="332" y="80" text-anchor="middle">outcome</text>
+    <path class="sci-curve" d="M 150 70 L 178 70" />
+    <path class="sci-point" d="M 265 65 L 279 70 L 265 75 Z" />
+    <path class="sci-curve" d="M 265 70 L 279 70" />
+    <text class="sci-axis-label" x="217" y="35" text-anchor="middle">forward: process → outcome</text>
+    <rect class="sci-region--alt" x="55" y="150" width="95" height="50" rx="4" />
+    <rect class="sci-region--alt" x="170" y="150" width="95" height="50" rx="4" />
+    <rect class="sci-region--alt" x="285" y="150" width="95" height="50" rx="4" />
+    <text class="sci-label" x="102" y="171" text-anchor="middle">free variables</text>
+    <text class="sci-label" x="102" y="185" text-anchor="middle">to set</text>
+    <text class="sci-label" x="217" y="171" text-anchor="middle">same model,</text>
+    <text class="sci-label" x="217" y="185" text-anchor="middle">inverted</text>
+    <text class="sci-label" x="332" y="171" text-anchor="middle">target</text>
+    <text class="sci-label" x="332" y="185" text-anchor="middle">outcome</text>
+    <path class="sci-curve--alt" d="M 283 175 L 269 175" />
+    <path class="sci-point" d="M 169 170 L 155 175 L 169 180 Z" />
+    <path class="sci-curve--alt" d="M 168 175 L 154 175" />
+    <text class="sci-axis-label" x="217" y="225" text-anchor="middle">inverse: target → free variables</text>
+  </svg>
+  <figcaption>
+    Same three ingredients, opposite direction of travel. Forward (top)
+    asks what a process produces; inverse (bottom) starts from a stated
+    target and solves backward through the identical model for which free
+    variables would reach it — which is exactly why an inverted model
+    inherits every assumption and fitted-parameter uncertainty (Module 10)
+    of the forward model it was built from.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Design steps</dt><dd>3 (target, model, variables)</dd></div>
+  <div class="module-stat"><dt>Inversion gives</dt><dd>a hypothesis, not a spec</dd></div>
+  <div class="module-stat"><dt>Stays honest via</dt><dd>Module 10's residuals</dd></div>
+</dl>
 
 ## What you measure and analyse
 

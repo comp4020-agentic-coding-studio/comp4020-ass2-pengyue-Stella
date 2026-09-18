@@ -28,6 +28,8 @@ hasn't changed, what has, and can the whole space of outcomes (crisp,
 soft, glassy, rubbery) be drawn on one map rather than described case by
 case?
 
+<p class="specimen-label">Specimen <strong>spring roll wrapper / rice cracker, ambient humidity uptake</strong></p>
+
 ## Where this sits
 
 Second module of **Stage 4, Prediction and Material Design**. Module 9
@@ -76,6 +78,37 @@ category: a thick glassy solid (a hard candy) reads as hard, not crisp —
 crispness in the everyday sense also needs a thin, cellular or foam-like
 structure that fractures audibly, which is a geometric property this
 diagram does not itself capture (noted as a limitation below).
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — the temperature–moisture state diagram</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g11-title">
+    <title id="g11-title">Temperature against moisture content divided by the glass-transition curve into a glassy, crisp region and a rubbery, softened region, with an arrow showing moisture uptake at constant temperature crossing the boundary</title>
+    <rect class="sci-region" x="60" y="30" width="330" height="120" />
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">moisture content →</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">temperature →</text>
+    <path class="sci-curve" d="M 60 45 C 130 60 190 100 250 140 C 300 172 340 195 390 205" />
+    <text class="sci-label" x="90" y="80">glassy — crisp</text>
+    <text class="sci-label" x="300" y="195">rubbery — softened</text>
+    <path class="sci-annotation" d="M 100 165 L 230 165" />
+    <circle class="sci-point" cx="100" cy="165" r="4" />
+    <circle class="sci-point" cx="230" cy="165" r="4" />
+    <text class="sci-axis-label" x="165" y="182" text-anchor="middle">moisture uptake, T fixed</text>
+  </svg>
+  <figcaption>
+    The Gordon-Taylor curve from Module 9, redrawn as a full map. A cracker
+    doesn't need to get hotter to go stale — moving rightward at constant
+    temperature, as moisture is absorbed from humid air, crosses the same
+    boundary from the glassy/crisp region into the rubbery/softened one.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>State variables</dt><dd>T, moisture</dd></div>
+  <div class="module-stat"><dt>Long-term fate</dt><dd>a<sub>w</sub> ≈ RH<sub>air</sub></dd></div>
+  <div class="module-stat"><dt>Crisp needs</dt><dd>glassy + thin structure</dd></div>
+</dl>
 
 ## What you measure and analyse
 
