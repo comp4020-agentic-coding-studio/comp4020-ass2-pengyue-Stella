@@ -1,0 +1,62 @@
+---
+// Wraps one bibliography entry (heading-free: the citation text itself,
+// unchanged wording, lives entirely in the slot) with a type icon and a
+// coloured accent so a book reads differently from a journal article at a
+// glance, without needing a card-grid layout for a dense list of sources.
+import CitationIcon from "./CitationIcon.astro";
+
+interface Props {
+  type: "book" | "article";
+}
+
+const { type } = Astro.props;
+---
+
+<li class="citation" data-type={type}>
+  <CitationIcon type={type} size="1.4rem" />
+  <div class="citation__body">
+    <slot />
+  </div>
+</li>
+
+<style>
+  .citation {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: var(--at-spacing-md);
+    align-items: start;
+    padding: var(--at-spacing-md) 0;
+    border-top: 1px solid var(--at-border);
+  }
+
+  .citation:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .citation[data-type="book"] {
+    --citation-accent: var(--at-primary);
+  }
+
+  .citation[data-type="article"] {
+    --citation-accent: var(--at-secondary);
+  }
+
+  :global(.citation-icon) {
+    color: var(--citation-accent, var(--at-text-secondary));
+  }
+
+  .citation__body {
+    min-width: 0;
+  }
+
+  .citation__body :global(p) {
+    margin: 0;
+  }
+
+  .citation__body :global(p) + :global(p) {
+    margin-top: 0.3em;
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+  }
+</style>
