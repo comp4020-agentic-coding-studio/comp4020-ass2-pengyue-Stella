@@ -65,6 +65,26 @@ bibliography before publishing the References page, and reading representative
 non-adjacent modules end to end rather than trusting the automated checks
 alone.
 
+After the seventh checkpoint I did one more pass over the whole deployed
+shape — every module, both instruments, the deck, and the pages the automated
+checks can't see the inside of — reading it the way a marker would rather than
+trusting a green `pnpm check`. Stepping through the required deck slide by
+slide caught what none of the checks could: `astromotion` renders each slide
+onto a fixed-size canvas and doesn't shrink text to fit, so six slides had
+content silently clipped below the visible frame, including the "Model
+limitations" slide's last two bullets — the deck's own "honesty checkpoint"
+losing exactly the content that makes it one. I fixed all six by splitting the
+overflowing slide in two, and separately fixed three lab-index pages where a
+line break in the markup was collapsing the space before an inline link
+([`e03cdfb`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/e03cdfb)).
+Re-verified at both 1920×1080 and 390×844 and against a fresh `pnpm check`
+before committing. I also resized both instruments through a range of
+intermediate window widths: their SVG-based plots reflow correctly throughout,
+though the supplied theme's own navigation bar clips two menu items in a
+narrow band around 650–900px — a vendored-component gap outside the two
+viewports this site is graded at, not something to patch inside a theme I was
+asked to preserve.
+
 ## Before you ship
 
 `pnpm check:evidence` passes: no `STARTER_CONTENT` marker remains in `src`,
