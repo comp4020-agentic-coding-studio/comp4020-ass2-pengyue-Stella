@@ -26,6 +26,8 @@ under gravity and does not move until you drag a spoon through it. Both are
 thick pastes. Why does one have a threshold and the other doesn't, and how
 do we describe that threshold quantitatively rather than just naming it?
 
+<p class="specimen-label">Specimen <strong>doubanjiang, fermented broad bean &amp; chilli paste</strong></p>
+
 ## Where this sits
 
 Second module of **Stage 1, Measuring Edible Matter**. Module 1 established
@@ -58,6 +60,36 @@ better described by the Herschel-Bulkley model: a suspension of bean and
 chilli solids in a viscous liquid phase forms a weak, jammed
 solid-like network at rest (giving τ₀ > 0), which breaks down and flows,
 shear-thinning, once τ₀ is exceeded.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — flow curves for honey and doubanjiang</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g2-title">
+    <title id="g2-title">Shear stress against shear rate for a Newtonian fluid and a Herschel-Bulkley yield-stress paste</title>
+    <rect class="sci-region" x="60" y="30" width="55" height="190" />
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">shear rate γ̇ (s⁻¹)</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">shear stress τ (Pa)</text>
+    <line class="sci-curve--alt" x1="60" y1="220" x2="372" y2="120" />
+    <text class="sci-axis-label" x="372" y="108" text-anchor="end">honey (Newtonian)</text>
+    <path class="sci-curve" d="M 60 186 Q 140 100 210 78 Q 300 60 372 50" />
+    <circle class="sci-point" cx="60" cy="186" r="4.5" />
+    <text class="sci-label" x="70" y="180">τ₀</text>
+    <text class="sci-label" x="372" y="40" text-anchor="end">doubanjiang (H-B)</text>
+  </svg>
+  <figcaption>
+    Same axes, two behaviours. Honey's straight line passes through the
+    origin — it flows at any nonzero stress. Doubanjiang's curve only leaves
+    zero once stress exceeds τ₀: below that threshold (shaded) the paste
+    behaves like a jammed solid, not a fluid.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Flow models</dt><dd>3</dd></div>
+  <div class="module-stat"><dt>Yield stress</dt><dd>τ₀ (Pa)</dd></div>
+  <div class="module-stat"><dt>n &lt; 1</dt><dd>shear-thinning</dd></div>
+</dl>
 
 ## What you measure and analyse
 

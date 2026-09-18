@@ -25,6 +25,8 @@ springy, resistant, bouncing back after a bite — what are they actually
 measuring? This module asks whether a texture word from a kitchen can be
 mapped onto a property a rheometer reports in pascals, and if so, which one.
 
+<p class="specimen-label">Specimen <strong>tapioca pearl (boba), cooked, at serving temperature</strong></p>
+
 ## Where this sits
 
 This is the opening module of **Stage 1, Measuring Edible Matter**. Before
@@ -66,6 +68,43 @@ that is both stiff and highly elastic, not merely stiff. A pearl that is
 stiff but has a high tan δ reads as "hard," not "QQ" — the two are
 mechanically distinguishable even though both would be called "firm" in
 English.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — the complex modulus as a vector</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g1-title">
+    <title id="g1-title">Vector diagram comparing a QQ tapioca pearl to a hard gel of similar magnitude but larger phase angle</title>
+    <line class="sci-axis" x1="70" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="70" y1="220" x2="70" y2="30" />
+    <text class="sci-axis-label" x="230" y="246" text-anchor="middle">G′ — elastic component (Pa)</text>
+    <text class="sci-axis-label" x="24" y="125" text-anchor="middle" transform="rotate(-90 24 125)">G″ — viscous component (Pa)</text>
+    <path class="sci-annotation" d="M 217 189 A 150 150 0 0 0 182 120" />
+    <path class="sci-annotation" d="M 217 189 L 217 220" />
+    <path class="sci-annotation" d="M 217 189 L 70 189" />
+    <line class="sci-curve" x1="70" y1="220" x2="217" y2="189" />
+    <circle class="sci-point" cx="217" cy="189" r="4.5" />
+    <text class="sci-label" x="223" y="182">QQ pearl</text>
+    <text class="sci-axis-label" x="223" y="198">low tan δ</text>
+    <line class="sci-curve--alt" x1="70" y1="220" x2="182" y2="120" />
+    <circle class="sci-point" cx="182" cy="120" r="4.5" />
+    <text class="sci-label" x="188" y="114">Hard gel</text>
+    <text class="sci-axis-label" x="188" y="130">high tan δ</text>
+    <path class="sci-annotation" d="M 102 220 A 32 32 0 0 0 100 213" />
+    <text class="sci-axis-label" x="106" y="209">δ</text>
+  </svg>
+  <figcaption>
+    Two gels can share the same |G*| — the same overall stiffness — and still
+    feel unrelated. A small phase angle δ puts almost all of that stiffness
+    into the elastic, energy-returning G′ component ("QQ"); a larger δ at the
+    same magnitude routes more of it into the dissipative G″ component
+    ("hard" but not springy).
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Material states</dt><dd>4</dd></div>
+  <div class="module-stat"><dt>Loss ratio</dt><dd>tan δ = G″⁄G′</dd></div>
+  <div class="module-stat"><dt>QQ target</dt><dd>high G′, low tan δ</dd></div>
+</dl>
 
 ## What you measure and analyse
 

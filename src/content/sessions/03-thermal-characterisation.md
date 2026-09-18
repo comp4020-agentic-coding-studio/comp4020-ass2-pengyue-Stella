@@ -26,6 +26,8 @@ extra time actually paying for, thermally — and can two separate physical
 transitions inside the same piece of meat be told apart from how much heat
 each one absorbs?
 
+<p class="specimen-label">Specimen <strong>pork belly (红烧肉), fat cap &amp; connective tissue</strong></p>
+
 ## Where this sits
 
 Closing module of **Stage 1, Measuring Edible Matter**. Modules 1 and 2 gave
@@ -69,6 +71,39 @@ gently sloping baseline, and each transition as a distinct **peak**: the
 area under a peak is the transition's ΔH, and the peak's position and width
 say something about how sharp or gradual the transition is at the molecular
 scale.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — a two-transition thermal trace</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g3-title">
+    <title id="g3-title">Schematic heat-flow trace against temperature showing a broad fat-melting peak followed by a narrower, larger collagen-denaturation peak</title>
+    <ellipse class="sci-region--alt" cx="150" cy="172" rx="60" ry="34" />
+    <ellipse class="sci-region" cx="298" cy="150" rx="36" ry="62" />
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">temperature, ramped →</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">heat flow →</text>
+    <path class="sci-curve--alt" d="M 60 192 L 390 150" />
+    <path class="sci-curve" d="M 60 192 C 95 190 115 158 150 140 C 180 126 205 155 240 172 C 258 180 268 178 275 168 C 282 130 290 88 300 84 C 310 88 320 128 330 158 C 345 172 365 165 390 150" />
+    <circle class="sci-point" cx="150" cy="140" r="4.5" />
+    <text class="sci-label" x="150" y="126" text-anchor="middle">fat melting</text>
+    <circle class="sci-point" cx="300" cy="84" r="4.5" />
+    <text class="sci-label" x="300" y="70" text-anchor="middle">collagen denaturation</text>
+  </svg>
+  <figcaption>
+    Schematic, not measured data. Sensible heating alone would trace the
+    dashed baseline; each transition lifts the trace into a peak whose area
+    is that transition's ΔH. The fat peak is broad and shallow — melting
+    spreads over a wide temperature band. The collagen peak is narrower and
+    larger — denaturation and hydrolysis into gelatin happen over a tighter
+    band, and cost more heat per gram.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Transitions</dt><dd>2</dd></div>
+  <div class="module-stat"><dt>Heat types</dt><dd>sensible + latent</dd></div>
+  <div class="module-stat"><dt>Peak area</dt><dd>= ΔH</dd></div>
+</dl>
 
 ## What you measure and analyse
 
