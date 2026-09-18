@@ -2,6 +2,7 @@
 import Callout from "astro-theme-university/components/Callout.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { withBase } from "astro-theme-university/url";
+import SpecimenPlate from "../../../components/SpecimenPlate.astro";
 import { siteConfig } from "../../../site-config";
 import { SPECIMENS } from "../../../lib/rheometer";
 import "../../../styles/scientific.css";
@@ -19,6 +20,8 @@ import "../../../styles/scientific.css";
     the curves is what tells you whether the model you picked actually
     describes the specimen, independently of the R² number.
   </p>
+
+  <SpecimenPlate variant="rheometer-rig" frame="framed" hero />
 
   <div class="instrument" id="rheometer">
     <form class="instrument-controls">
