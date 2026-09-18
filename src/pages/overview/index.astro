@@ -1,0 +1,404 @@
+---
+// The flagship page: the one place the site states its thesis outright and
+// shows, not just tells, what "texture is measurable" means. Built as a
+// plain .astro page (like the homepage) rather than an MDX page under
+// ContentLayout, because the layout below — a full-bleed statement hero,
+// an annotated two-column claim, and a stage strip distinct from
+// StageJourney (already used on the homepage and /sessions/, see that
+// component's own header comment) — needs more control than ContentLayout's
+// single prose column gives an MDX page. The prose itself (thesis, four
+// stages, five outcomes, prerequisites) is carried over unchanged.
+import { Image } from "astro:assets";
+import BaseLayout from "astro-theme-university/layouts/BaseLayout.astro";
+import { withBase } from "astro-theme-university/url";
+import SpecimenPlate from "../../components/SpecimenPlate.astro";
+import StageIcon from "../../components/StageIcon.astro";
+import heroPhoto from "../../assets/images/photos/tofu.webp";
+import { courseMeta } from "../../course-config";
+import { sessionLabels, siteConfig } from "../../site-config";
+import { STAGES } from "../../stages";
+import "../../styles/scientific.css";
+
+const title = "Course overview";
+const description =
+  "What SLOP3358 is, who it's for, what you should already know, and what you should be able to do by the end of it.";
+
+const VOCAB = [
+  "storage modulus, G′",
+  "loss modulus, G″",
+  "flow curve",
+  "transport coefficient",
+  "glass transition, Tg",
+  "percolation threshold",
+];
+
+// A distinct specimen set from StageJourney's (noodle / lattice / dumplings /
+// crispy), chosen for this page's own emphasis — measurement, structure,
+// interfaces, and the forward/inverse design diagram — so the two sections
+// don't just repeat each other's imagery a second time on the same site.
+const STAGE_PLATES = {
+  1: "rheometer-rig",
+  2: "lattice",
+  3: "emulsion",
+  4: "inverse-design",
+} as const;
+
+const OUTCOMES = [
+  "Identify which physical state (fluid, viscoelastic solid, amorphous glass, crystalline solid) a given cooked or processed food occupies, and justify that classification from its mechanical or thermal behaviour.",
+  "Select and apply an appropriate flow model (Newtonian, power-law, Herschel–Bulkley), thermal model (sensible or latent heat, Biot-number regime), or network model (percolation, Gordon–Taylor glass transition) to a specified food material, stating the governing equation and every variable in it.",
+  "Fit a model to a dataset, report a goodness-of-fit measure, and read that measure honestly — recognising when a model does not fit well rather than reporting a fit regardless.",
+  "State, for any quantitative claim you make about a food material, whether the underlying value is measured, drawn from published literature, or a labelled illustrative/synthetic estimate — and why that distinction matters.",
+  "Use a validated model in reverse: given a target texture or shelf-life outcome, propose a process or formulation change and justify it from the model rather than from taste alone.",
+];
+---
+
+<BaseLayout title={`${title} — ${courseMeta.code}`} description={description} {...siteConfig}>
+  <Fragment slot="hero">
+    <section class="at-hero overview-hero" aria-label={title}>
+      <Image
+        src={heroPhoto}
+        alt=""
+        widths={[768, 1536, 2560]}
+        sizes="100vw"
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+        class="at-hero-image"
+      />
+      <div class="at-hero-content overview-hero__content">
+        <p class="overview-hero__kicker">{courseMeta.code} · Course overview</p>
+        <h1 class="overview-hero__title">Food texture is a measurable material property.</h1>
+        <p class="overview-hero__lead">
+          Not a matter of taste, and not beyond the reach of a model. Twelve {sessionLabels.plural.toLowerCase()} build
+          the vocabulary and the tools to say exactly which property, and why.
+        </p>
+        <ul class="overview-hero__paths" aria-label="Where to look next">
+          <li><a href={withBase("/sessions/")}>See the {sessionLabels.plural.toLowerCase()} →</a></li>
+          <li><a href={withBase("/lectures/")}>See the lectures →</a></li>
+          <li><a href={withBase("/labs/")}>Try the instruments →</a></li>
+        </ul>
+      </div>
+    </section>
+  </Fragment>
+
+  <section class="claim">
+    <div class="claim__text">
+      <h2>What this course is</h2>
+      <p>
+        SLOP3358 treats Chinese cooking as an applied soft-matter physics problem. Across twelve weekly modules,
+        grouped into four three-module stages, you build the vocabulary and tools to describe a food's texture,
+        structure and behaviour under heat in the same terms a materials scientist would use for any soft material.
+        The course reuses standard, established models — Newtonian and power-law flow, Fourier conduction, Arrhenius
+        kinetics, Flory–Stockmayer percolation, the Gordon–Taylor equation — rather than inventing new theory. Depth
+        comes from applying real models honestly to real food systems, not from piling on unfamiliar vocabulary.
+      </p>
+      <ul class="claim__vocab" aria-label="Vocabulary this course builds">
+        {VOCAB.map((term) => <li>{term}</li>)}
+      </ul>
+    </div>
+    <div class="claim__plate">
+      <SpecimenPlate variant="rheometer-rig" frame="framed" />
+    </div>
+  </section>
+
+  <section class="stage-strip">
+    <h2>A journey through matter, structure and transformation</h2>
+    <p>
+      The four stages run in a fixed order, each depending on the vocabulary the last one built. See the{" "}
+      <a href={withBase("/sessions/")}>module index</a> for the full week-by-week breakdown, and{" "}
+      <a href={withBase("/assessments/")}>Assessment</a> for how the four pieces of graded work map onto these
+      stages.
+    </p>
+    <ol class="stage-strip__list" aria-label="The four teaching stages, in order">
+      {
+        STAGES.map((stage) => {
+          const lo = (stage.number - 1) * 3 + 1;
+          const hi = stage.number * 3;
+          return (
+            <li class="stage-strip__item" data-stage={stage.number}>
+              <div class="stage-strip__plate">
+                <SpecimenPlate variant={STAGE_PLATES[stage.number]} frame="plain" hideCaption />
+              </div>
+              <div class="stage-strip__head">
+                <StageIcon stage={stage.number} class="stage-strip__icon" />
+                <p class="stage-strip__num">
+                  Stage {stage.number} · Modules {lo}–{hi}
+                </p>
+              </div>
+              <h3 class="stage-strip__title">{stage.title}</h3>
+              <p class="stage-strip__desc">{stage.description}</p>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </section>
+
+  <section class="outcomes">
+    <h2>Learning outcomes</h2>
+    <p>By the end of SLOP3358, you should be able to:</p>
+    <ol class="outcomes__list">
+      {
+        OUTCOMES.map((text, i) => (
+          <li class="outcomes__item">
+            <span class="outcomes__num" aria-hidden="true">
+              {i + 1}
+            </span>
+            <p>{text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <aside class="prereq" aria-label="Prerequisites">
+    <p class="prereq__label">Before you start</p>
+    <p>
+      A second-year course covering thermodynamics and either physical chemistry or continuum mechanics (equivalent
+      to a standard undergraduate thermodynamics-and-kinetics sequence), plus enough calculus to be comfortable with
+      ordinary differential equations and basic curve fitting. No prior cooking experience, food science background,
+      or Chinese-language knowledge is assumed — every food system used in the course is introduced from first
+      principles, in translation, before any model is applied to it.
+    </p>
+  </aside>
+</BaseLayout>
+
+<style>
+  .overview-hero {
+    min-height: 34rem;
+  }
+
+  .overview-hero__content {
+    gap: var(--at-spacing-sm);
+    padding-block-end: var(--at-spacing-2xl);
+  }
+
+  .overview-hero__kicker {
+    grid-column: content;
+    margin: 0;
+    color: var(--at-white);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+  }
+
+  .overview-hero__title {
+    grid-column: content;
+    margin: 0;
+    max-width: 26ch;
+    color: var(--at-white);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.08;
+  }
+
+  .overview-hero__lead {
+    grid-column: content;
+    max-width: 42rem;
+    margin: 0;
+    color: var(--at-white);
+    font-size: 1.1rem;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 55%);
+  }
+
+  .overview-hero__paths {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: content;
+    gap: var(--at-spacing-sm) var(--at-spacing-lg);
+    margin: var(--at-spacing-sm) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .overview-hero__paths a {
+    color: var(--at-white);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgb(255 255 255 / 55%);
+  }
+
+  .overview-hero__paths a:hover,
+  .overview-hero__paths a:focus-visible {
+    border-color: var(--at-white);
+  }
+
+  .claim {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+    gap: var(--at-spacing-2xl);
+    align-items: start;
+    margin: var(--at-spacing-2xl) 0;
+  }
+
+  .claim__vocab {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin: var(--at-spacing-md) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .claim__vocab li {
+    padding: 0.2em 0.7em;
+    border: 1px solid var(--at-border);
+    border-radius: 999px;
+    color: var(--at-text-secondary);
+    background: var(--at-bg-alt);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+  }
+
+  .claim__plate {
+    position: sticky;
+    top: var(--at-spacing-lg);
+  }
+
+  .stage-strip {
+    margin: var(--at-spacing-2xl) 0;
+  }
+
+  .stage-strip__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--at-spacing-lg);
+    margin: var(--at-spacing-lg) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stage-strip__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+    padding-top: var(--at-spacing-sm);
+    border-top: 3px solid var(--stage-accent);
+  }
+
+  .stage-strip__plate {
+    margin-bottom: var(--at-spacing-sm);
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--at-border-radius);
+  }
+
+  .stage-strip__plate :global(.sci-plate) {
+    margin: 0;
+    height: 100%;
+  }
+
+  .stage-strip__plate :global(.sci-plate__frame) {
+    height: 100%;
+  }
+
+  .stage-strip__head {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  .stage-strip__icon {
+    flex-shrink: 0;
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .stage-strip__num {
+    margin: 0;
+    color: var(--stage-accent);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stage-strip__title {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .stage-strip__desc {
+    margin: 0;
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+  }
+
+  .outcomes__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--at-spacing-lg);
+    margin: var(--at-spacing-lg) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .outcomes__item {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    gap: var(--at-spacing-sm);
+    align-items: start;
+  }
+
+  .outcomes__num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--at-font-mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: color-mix(in oklch, var(--at-heading) 18%, transparent);
+  }
+
+  .outcomes__item p {
+    margin: 0;
+  }
+
+  .prereq {
+    margin: var(--at-spacing-2xl) 0;
+    padding: var(--at-spacing-lg);
+    border-left: 4px solid var(--at-secondary);
+    background: var(--at-bg-alt);
+    border-radius: 0 var(--at-border-radius) var(--at-border-radius) 0;
+  }
+
+  .prereq__label {
+    margin: 0 0 0.4em;
+    color: var(--at-secondary);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .prereq p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 900px) {
+    .claim {
+      grid-template-columns: 1fr;
+    }
+
+    .claim__plate {
+      position: static;
+    }
+
+    .stage-strip__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .overview-hero {
+      min-height: 28rem;
+    }
+
+    .stage-strip__list,
+    .outcomes__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
