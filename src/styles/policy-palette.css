@@ -1,0 +1,41 @@
+/* Warm status palette for policy callouts.
+ *
+ * The theme's four callout types default to a literal traffic light
+ * (green tip / amber warning / red error / blue info), which reads as a
+ * warning system bolted onto the warm gold-and-bronze identity everywhere
+ * else on this site. This keeps the four types just as distinguishable at
+ * a glance, but pulls all four into the same warm register instead: olive
+ * for the permissive one, ochre for the one that wants attention, muted
+ * terracotta for the serious one, warm charcoal for the neutral one.
+ *
+ * Scoped to PolicyCallout's own markup via :has() rather than overriding
+ * the shared --at-success/--at-warning/--at-error tokens outright, because
+ * those tokens aren't only decorative here: the rheometer and crispness
+ * instrument pages reuse them as literal data colours (residual sign,
+ * glassy/rubbery region fill), and Assessment has its own plain warning
+ * callout. This only ever matches a callout that wraps a .policy-callout.
+ *
+ * Written unlayered on purpose: the theme's own callout rules live in
+ * `@layer at.components`, so an unlayered rule here wins the cascade
+ * regardless of source order or specificity — the same mechanism the
+ * brand CSS relies on for --at-primary/secondary/tertiary. */
+
+.at-callout--info:has(.policy-callout) {
+  --at-accent: light-dark(#5c5347, #c9bcaa);
+  --at-accent-soft: light-dark(rgb(92 83 71 / 10%), rgb(201 188 170 / 14%));
+}
+
+.at-callout--tip:has(.policy-callout) {
+  --at-accent: light-dark(#6b7a3f, #a3b877);
+  --at-accent-soft: light-dark(rgb(107 122 63 / 10%), rgb(163 184 119 / 14%));
+}
+
+.at-callout--warning:has(.policy-callout) {
+  --at-accent: light-dark(#a8651a, #e3a355);
+  --at-accent-soft: light-dark(rgb(168 101 26 / 10%), rgb(227 163 85 / 14%));
+}
+
+.at-callout--error:has(.policy-callout) {
+  --at-accent: light-dark(#9c4530, #e08268);
+  --at-accent-soft: light-dark(rgb(156 69 48 / 10%), rgb(224 130 104 / 14%));
+}
