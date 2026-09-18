@@ -27,6 +27,8 @@ then cooling. What structural change makes a liquid slurry into a solid
 sheet, and is it the heating step or the cooling step that actually does
 the work?
 
+<p class="specimen-label">Specimen <strong>liangpi (凉皮), wheat-starch sheet, post-retrogradation</strong></p>
+
 ## Where this sits
 
 Opening module of **Stage 2, Structures and Networks**. Stage 1 measured
@@ -69,6 +71,37 @@ gelatinised sample (X well below 1) still has intact granules acting as
 inert filler rather than network-forming material, and sets weaker or not
 at all — which is why undercooking liangpi produces a sheet that tears
 rather than slices.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — degree of gelatinisation against steaming time</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g4-title">
+    <title id="g4-title">Degree of gelatinisation X rising with steaming time and plateauing near X = 1, with the point of diminishing return marked</title>
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">steaming time →</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">X — degree of gelatinisation</text>
+    <line class="sci-curve--alt" x1="60" y1="50" x2="390" y2="50" />
+    <text class="sci-axis-label" x="368" y="42" text-anchor="end">X = 1 (fully gelatinised)</text>
+    <path class="sci-curve" d="M 60 218 C 100 208 130 140 160 95 C 190 62 210 52 230 50 C 280 48 340 47 390 46" />
+    <path class="sci-annotation" d="M 230 50 L 230 220" />
+    <circle class="sci-point" cx="230" cy="50" r="4.5" />
+    <text class="sci-label" x="236" y="70">further steaming</text>
+    <text class="sci-label" x="236" y="86">wasted beyond here</text>
+  </svg>
+  <figcaption>
+    Illustrative shape, not measured data. X rises steeply while granules are
+    still gelatinising, then flattens once nearly all of them have lost their
+    native order — the marked point is where extra steaming time buys almost
+    no additional X, though it says nothing about whether the sheet has
+    finished retrograding into a solid network yet.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Key steps</dt><dd>2 (heat, then cool)</dd></div>
+  <div class="module-stat"><dt>Network former</dt><dd>retrogradation</dd></div>
+  <div class="module-stat"><dt>X range</dt><dd>0–1</dd></div>
+</dl>
 
 ## What you measure and analyse
 

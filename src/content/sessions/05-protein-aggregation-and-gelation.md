@@ -27,6 +27,8 @@ a precise instant at which the material stops being a liquid and starts
 being a solid. Can that instant be identified from a measurement, rather
 than by eye?
 
+<p class="specimen-label">Specimen <strong>soy milk mid-coagulation, approaching the gel point</strong></p>
+
 ## Where this sits
 
 Second module of **Stage 2, Structures and Networks**. Module 4 built a
@@ -63,6 +65,37 @@ relaxes like a liquid at long timescales; after gelation, it varies with
 frequency because the network is now a solid with its own elastic
 timescale; exactly at the transition, curves at different frequencies all
 cross at one point.
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — the Winter-Chambon crossing</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g5-title">
+    <title id="g5-title">Loss tangent against time at three oscillation frequencies, fanning apart before and after a single crossing point that marks the gel point</title>
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">cook time →</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">tan δ = G″/G′</text>
+    <path class="sci-curve--alt" d="M 60 95 L 230 125 L 390 155" />
+    <path class="sci-curve--alt" d="M 60 160 L 230 125 L 390 90" />
+    <path class="sci-curve" d="M 60 55 L 230 125 L 390 195" />
+    <path class="sci-annotation" d="M 230 125 L 230 220" />
+    <circle class="sci-point" cx="230" cy="125" r="4.5" />
+    <text class="sci-label" x="236" y="118">gel point</text>
+    <text class="sci-axis-label" x="236" y="134">tan δ frequency-independent</text>
+  </svg>
+  <figcaption>
+    Three oscillation frequencies, three curves — before the gel point they
+    disagree because the material still relaxes like a liquid; after, they
+    disagree because it is now an elastic solid with its own timescale. The
+    one instant where all frequencies report the same tan δ is the gel point
+    itself, located by crossing, not by eye.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>Percolation eqn</dt><dd>p<sub>c</sub> = 1/(f−1)</dd></div>
+  <div class="module-stat"><dt>Criterion</dt><dd>Winter–Chambon</dd></div>
+  <div class="module-stat"><dt>Gel point is</dt><dd>a moment, not a texture</dd></div>
+</dl>
 
 ## What you measure and analyse
 

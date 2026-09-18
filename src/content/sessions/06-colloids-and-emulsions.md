@@ -26,6 +26,8 @@ made from the same bones does not. Both contain fat. Why does one separate
 into a clear stock with fat floating on top, and the other stay a stable,
 uniform milky emulsion?
 
+<p class="specimen-label">Specimen <strong>奶汤, milky bone broth, fat-in-water emulsion</strong></p>
+
 ## Where this sits
 
 Closing module of **Stage 2, Structures and Networks**. Modules 4 and 5
@@ -62,6 +64,37 @@ viscosity η. Both effects push in the same direction: smaller r and higher
 emulsifier — though naturally-occurring phospholipids and proteins at the
 droplet surface also play a stabilising role that Stokes' law, on its own,
 does not capture (see limitations below).
+
+<figure class="sci-figure">
+  <span class="sci-figure__kicker">Figure — creaming velocity against droplet radius</span>
+  <svg viewBox="0 0 420 260" role="img" aria-labelledby="g6-title">
+    <title id="g6-title">Stokes' law creaming velocity rising with the square of droplet radius, comparing a milky broth's small droplets to a clear stock's large droplets</title>
+    <rect class="sci-region--alt" x="60" y="150" width="110" height="70" />
+    <line class="sci-axis" x1="60" y1="220" x2="390" y2="220" />
+    <line class="sci-axis" x1="60" y1="220" x2="60" y2="30" />
+    <text class="sci-axis-label" x="225" y="246" text-anchor="middle">droplet radius r →</text>
+    <text class="sci-axis-label" x="22" y="125" text-anchor="middle" transform="rotate(-90 22 125)">creaming velocity v ∝ r²</text>
+    <path class="sci-curve" d="M 60 218 C 150 214 230 190 290 140 C 330 105 355 70 390 40" />
+    <circle class="sci-point" cx="115" cy="205" r="4.5" />
+    <text class="sci-label" x="122" y="196">milky broth</text>
+    <text class="sci-axis-label" x="122" y="212">small r, stays dispersed</text>
+    <circle class="sci-point" cx="330" cy="105" r="4.5" />
+    <text class="sci-label" x="300" y="90" text-anchor="end">clear stock</text>
+    <text class="sci-axis-label" x="300" y="122" text-anchor="end">large r, creams out fast</text>
+  </svg>
+  <figcaption>
+    v scales with r², not r — halving droplet radius cuts creaming velocity
+    fourfold. The shaded band is the low-velocity region a stable emulsion
+    needs to sit in for hours, not just minutes; reaching it is about
+    breaking droplets down, not adding an emulsifier.
+  </figcaption>
+</figure>
+
+<dl class="module-stats">
+  <div class="module-stat"><dt>v scales as</dt><dd>r²</dd></div>
+  <div class="module-stat"><dt>Two levers</dt><dd>droplet size, η</dd></div>
+  <div class="module-stat"><dt>Stabiliser</dt><dd>smaller r + higher η</dd></div>
+</dl>
 
 ## What you measure and analyse
 
