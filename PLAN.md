@@ -212,12 +212,17 @@ cookbook.* Keep the supplied SlopU palette (`--at-primary: #b97d1c`,
 `--at-secondary: #8a5c13`, `--at-tertiary: #6b6154`) untouched — brand
 identity comes from motif and typography, not new colour.
 
-- **No stock/cartoon imagery.** The four starter raster images
-  (`card.png`, `hero-home.avif`, two people `.avif` photos) are deleted, not
-  replaced with new photography. `astro-theme-university`'s image resolver
-  passes SVG through unrasterised for `Card`/`Hero`, so identity is built
-  from hand-authored SVG: specimen labels, small material cross-sections,
-  a phase-diagram motif for the hero, axis/plot sketches.
+- **A small photo-and-plate library, not stock/cartoon imagery.** Pass 3
+  (§12) replaces this rule: the starter's generic stock/cartoon images are
+  still gone, but the site now carries a real (if small) image library —
+  six freely-licensed close-up photographs of food-as-material (dough,
+  tofu, an oil-water emulsion, dumplings, fried crust texture), credited in
+  `src/assets/images/photos/CREDITS.md` — plus a set of original,
+  richly-textured SVG "specimen plates" for the structural/apparatus
+  imagery no photo could show (a starch gel network, the rheometer rig).
+  Real photography and hand-authored illustration sit deliberately
+  side-by-side rather than one substituting wholesale for the other; see
+  §12 for why the split falls where it does.
 - **Equation and variable presentation.** A small set of global CSS classes
   (`.equation`, `.variable-list`, `.specimen-label`) styled with `--at-*`
   tokens so they inherit dark-mode support automatically. Equations are set
@@ -291,3 +296,97 @@ committed in curriculum-stage-sized groups, not as one dump; (4) the
 supporting diagrams; (5) both instruments' surrounding framing/legends
 brought into the same visual language (no third instrument); (6) a final
 site-wide pass at 1920×1080 and 390×844, `pnpm check`, and `PROCESS.md`.
+
+## 12. Visual redesign (pass 3) — an illustrated specimen-plate layer
+
+Pass 2 made the page-body language read as a lab's *figures* — diagrams,
+plots, cross-section sketches. It stopped short of the lab's *look*: no
+texture, no scale, no sense of a specimen actually sitting under light. This
+pass adds that layer without touching anything pass 1/2 fixed (the SlopU
+contract, the two instruments' models, the 12-module curriculum, the
+reference list) and without regressing to plated-food photography or a
+recipe-blog composition.
+
+**Thesis:** *Chinese food seen through the instruments, surfaces and hidden
+structures of a materials-science laboratory.* Imagery earns its place by
+showing something a line chart can't — texture, translucency, fracture,
+scale — not by decorating a page that already made its point in prose.
+
+**Imagery sourcing: a real photo library, corrected mid-pass.** The first
+check this pass ran found outbound network access off entirely (`curl` timed
+out against every external host tried, including Wikimedia) and `WebFetch`
+unable to verify any domain — so the plan below was first written around
+hand-authored SVG as the *only* possible imagery layer. Mid-pass, a
+follow-up user instruction arrived permitting fetched stock photography
+(Wikimedia Commons/Openverse/Unsplash/Pexels, lightly credited) or generated
+imagery, whichever was actually fast and available, rather than an
+exhaustive licence investigation. Re-testing found the network genuinely
+reachable by then (Unsplash and Pexels both returned real images; a single
+Wikimedia attempt timed out and was dropped per the "switch after one
+failure" instruction, not retried). Six Pexels photographs were sourced this
+way — dough, tofu, an oil-water emulsion, dumplings on a steamer, fried
+crispy texture, a second fried-noodle shot — downloaded, re-encoded to WebP
+locally (`cwebp -q 78`), and credited in
+`src/assets/images/photos/CREDITS.md` (creator where the source page listed
+one, source URL and platform always). Two subjects the brief asked for
+(starch/gel network structure, the rheometer rig itself) stayed hand-authored
+SVG rather than photographed, not from necessity this time but because a
+real macro photo of powder or a generic stock rheometer is a *worse*
+picture of "network structure" or "this specific instrument" than a
+purpose-drawn one — the split is a visual-quality choice now, not a
+fallback. `src/styles/scientific.css` gets a `.sci-plate*` class family
+(distinct from the existing chart-grade `.sci-figure*` family) that frames
+both the real photographs and the drawn plates identically — a caption bar,
+a kicker label, consistent rounding/shadow — plus a small set of reusable
+SVG `<filter>` primitives for the drawn plates only — `feTurbulence` +
+`feDisplacementMap` for granular/fibrous texture, layered low-opacity blurs
+for translucency, `feDropShadow` for depth. Every photograph is paired with
+a drawn SVG annotation layer (axis, callout, label) on top, so the two
+imagery sources read as one deliberate technique — "food examined as a lab
+specimen" — rather than a real photo dropped next to a cartoon.
+
+**Where specimen plates appear:**
+- One full-bleed hero plate for the homepage — a real photograph (hand-pulled
+  dough) with a scientific-annotation overlay, cropped tight, reading as lab
+  documentation rather than a banner.
+- One identity plate per curriculum stage (measuring / structure /
+  transformation / prediction) — real photos for three stages, a drawn
+  lattice plate for "structure" — used in the homepage's stage journey and
+  the `/sessions/` index.
+- A specimen plate on each instrument page, alongside (not instead of) the
+  existing live SVG plots — the rheometer's pairs the dough photo with a
+  shear-deformation annotation, the phase diagram's pairs the fried-crust
+  photo with a moisture-front annotation.
+- A handful of representative modules combine a specimen plate (photo or
+  drawn) with their existing chart-grade figure in one
+  `.sci-plate`/`.sci-figure` layout, rather than every module getting a new
+  plate — breadth of technique, not twelve repeats.
+
+**Homepage and `/sessions/` get bespoke layouts**, not another pass over the
+starter's `ContentLayout` + card grid: full-width hero, a four-stage journey
+section with alternating plate/text sides, a visual (not tabular) 12-week
+progression, instrument previews with their specimen plates, an assessment
+path, and clear entry points. `/sessions/` becomes a stage-by-stage journey
+rather than a flat grouped list.
+
+**Module layouts diversify into a small set of named patterns** —
+instrument-led, specimen/microstructure, transport/transformation,
+modelling/design — chosen per module by its content, not applied uniformly.
+Existing SVG figures may break out of the text column and combine with a
+specimen plate; the required Research question → placement → model →
+measurement → activity → references content stays, but its order and framing
+adapts to the pattern.
+
+**Motion stays restrained and explanatory** (moisture through a
+cross-section, a curve responding to a control, a boundary shifting),
+already gated on `prefers-reduced-motion`; this pass doesn't add decorative
+animation.
+
+**Five stages, five commits** (never combined): (1) this plan section, the
+resolved imagery blocker, and the `.sci-plate` texture system; (2) bespoke
+homepage + `/sessions/` journey; (3) diversified module layouts with
+integrated specimen plates on representative modules; (4) deck and both
+instruments brought into the specimen-plate layer; (5) responsive
+refinement, `PROCESS.md` corrected to 400–600 words with the Virtual
+Rheometer's model description fixed, full `pnpm check` +
+`pnpm check:evidence` + `pnpm build`.
