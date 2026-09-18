@@ -1,0 +1,320 @@
+---
+// Assessment as a due-date journey rather than the repeated bordered-card
+// grid every other index page had used: a single weight-proportioned bar
+// up top so the whole grade is visible at a glance, then one stop per
+// piece of graded work with its own marking breakdown — detail the card
+// grid never showed. Distinct in shape from AssessmentBars (the compact
+// per-item teaser already reused verbatim on the homepage) so a reader who
+// continues here sees the same weights read a new way, not a repeat.
+import { getPublishedCollection } from "astro-course-university/content";
+import { withBase } from "astro-theme-university/url";
+import StageIcon from "./StageIcon.astro";
+import { formatCourseDate } from "../lib/dates";
+
+const assessments = (await getPublishedCollection("assessments"))
+  .slice()
+  .sort((a, b) => a.data.week - b.data.week);
+
+const stageForWeek = (week: number) => Math.min(4, Math.ceil(week / 3)) as 1 | 2 | 3 | 4;
+const overviewLabel = `Grade weighting: ${assessments
+  .map((a) => `${a.data.title}, ${a.data.weight} per cent`)
+  .join("; ")}`;
+---
+
+<div class="assessment-journey">
+  <div class="assessment-journey__overview" role="img" aria-label={overviewLabel}>
+    {
+      assessments.map((assessment) => (
+        <span
+          class="assessment-journey__segment"
+          data-stage={stageForWeek(assessment.data.week)}
+          style={{ width: `${assessment.data.weight}%` }}
+        />
+      ))
+    }
+  </div>
+  <ul class="assessment-journey__legend" aria-hidden="true">
+    {
+      assessments.map((assessment) => (
+        <li data-stage={stageForWeek(assessment.data.week)}>
+          <span class="assessment-journey__swatch" />
+          {assessment.data.title} · {assessment.data.weight}%
+        </li>
+      ))
+    }
+  </ul>
+
+  <ol class="assessment-journey__list" aria-label="Every piece of graded work, in due-date order">
+    {
+      assessments.map((assessment) => {
+        const stage = stageForWeek(assessment.data.week);
+        const marking = assessment.data.marking;
+        return (
+          <li class="assessment-journey__stop" data-stage={stage}>
+            <div class="assessment-journey__stat">
+              <StageIcon stage={stage} class="assessment-journey__icon" />
+              <p class="assessment-journey__weight">
+                {assessment.data.weight}
+                <span>%</span>
+              </p>
+              <p class="assessment-journey__week">Week {assessment.data.week}</p>
+            </div>
+            <div class="assessment-journey__body">
+              <p class="assessment-journey__due">Due {formatCourseDate(assessment.data.due)}</p>
+              <h3 class="assessment-journey__title">
+                <a href={withBase(`/assessments/${assessment.id}/`)}>{assessment.data.title}</a>
+              </h3>
+              {assessment.data.description && <p class="assessment-journey__desc">{assessment.data.description}</p>}
+              {marking?.mode === "weighted" && (
+                <ul class="assessment-journey__criteria" aria-label="How it is marked">
+                  {marking.criteria.map((criterion) => (
+                    <li>
+                      <span class="assessment-journey__criterion-name">{criterion.name}</span>
+                      <span class="assessment-journey__criterion-track">
+                        <span class="assessment-journey__criterion-fill" style={{ width: `${criterion.weight}%` }} />
+                      </span>
+                      <span class="assessment-journey__criterion-weight">{criterion.weight}%</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {marking?.mode === "holistic" && <p class="assessment-journey__holistic">{marking.description}</p>}
+              <a class="assessment-journey__cta" href={withBase(`/assessments/${assessment.id}/`)}>
+                Read the brief →
+              </a>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+</div>
+
+<style>
+  .assessment-journey {
+    margin: var(--at-spacing-xl) 0;
+  }
+
+  .assessment-journey__overview {
+    display: flex;
+    height: 1.75rem;
+    border-radius: var(--at-border-radius);
+    overflow: hidden;
+    border: 1px solid var(--at-border);
+  }
+
+  .assessment-journey__segment {
+    display: block;
+    height: 100%;
+    background: var(--stage-accent, var(--at-secondary));
+  }
+
+  .assessment-journey__segment + .assessment-journey__segment {
+    border-left: 2px solid var(--at-bg);
+  }
+
+  .assessment-journey__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--at-spacing-sm) var(--at-spacing-lg);
+    margin: var(--at-spacing-sm) 0 var(--at-spacing-2xl);
+    padding: 0;
+    list-style: none;
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    color: var(--at-text-secondary);
+  }
+
+  .assessment-journey__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  .assessment-journey__swatch {
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 2px;
+    background: var(--stage-accent, var(--at-secondary));
+  }
+
+  .assessment-journey__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-spacing-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .assessment-journey__stop {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: var(--at-spacing-lg);
+    padding: var(--at-spacing-lg);
+    border: 1px solid var(--at-border);
+    border-left: 4px solid var(--stage-accent, var(--at-secondary));
+    border-radius: var(--at-border-radius);
+    background: var(--at-bg-alt);
+  }
+
+  .assessment-journey__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15em;
+    text-align: center;
+  }
+
+  .assessment-journey__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--stage-accent, var(--at-secondary));
+  }
+
+  .assessment-journey__weight {
+    margin: 0.2em 0 0;
+    color: var(--stage-accent, var(--at-secondary));
+    font-family: var(--at-font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .assessment-journey__weight span {
+    font-size: 1.1rem;
+  }
+
+  .assessment-journey__week {
+    margin: 0;
+    color: var(--at-text-secondary);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .assessment-journey__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+    min-width: 0;
+  }
+
+  .assessment-journey__due {
+    margin: 0;
+    color: var(--stage-accent, var(--at-secondary));
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .assessment-journey__title {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .assessment-journey__title a {
+    color: var(--at-heading);
+    text-decoration: none;
+  }
+
+  .assessment-journey__title a:hover,
+  .assessment-journey__title a:focus-visible {
+    text-decoration: underline;
+  }
+
+  .assessment-journey__desc {
+    margin: 0;
+    color: var(--at-text-secondary);
+  }
+
+  .assessment-journey__criteria {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+    margin: 0.4em 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .assessment-journey__criteria li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8rem 2.75rem;
+    align-items: center;
+    gap: 0.3em 0.6em;
+  }
+
+  .assessment-journey__criterion-name {
+    font-size: var(--at-font-size-sm);
+    color: var(--at-text-secondary);
+  }
+
+  .assessment-journey__criterion-track {
+    display: block;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--at-border);
+    overflow: hidden;
+  }
+
+  .assessment-journey__criterion-fill {
+    display: block;
+    height: 100%;
+    background: var(--stage-accent, var(--at-secondary));
+    border-radius: inherit;
+  }
+
+  .assessment-journey__criterion-weight {
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    color: var(--at-text-secondary);
+    text-align: right;
+  }
+
+  .assessment-journey__holistic {
+    margin: 0.4em 0 0;
+    padding: var(--at-spacing-sm) var(--at-spacing-md);
+    border-radius: var(--at-border-radius);
+    background: color-mix(in oklch, var(--stage-accent, var(--at-secondary)) 8%, var(--at-bg-alt));
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+  }
+
+  .assessment-journey__cta {
+    margin-top: 0.4em;
+    align-self: flex-start;
+    color: var(--stage-accent, var(--at-secondary));
+    font-weight: 600;
+    font-size: var(--at-font-size-sm);
+    text-decoration: none;
+  }
+
+  .assessment-journey__cta:hover,
+  .assessment-journey__cta:focus-visible {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .assessment-journey__stop {
+      grid-template-columns: 1fr;
+    }
+
+    .assessment-journey__stat {
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 0.6em;
+    }
+
+    .assessment-journey__criteria li {
+      grid-template-columns: 1fr;
+      gap: 0.2em;
+    }
+
+    .assessment-journey__criterion-weight {
+      text-align: left;
+    }
+  }
+</style>
