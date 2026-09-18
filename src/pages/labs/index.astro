@@ -16,14 +16,16 @@ import { siteConfig } from "../../site-config";
     report what you found rather than describe it in the abstract.
   </p>
   <ul class="labs-list">
-    <li>
+    <li class="labs-list__item">
+      <span class="labs-list__kicker">Instrument 01 · steady shear</span>
       <h2><a href={withBase("/labs/virtual-rheometer/")}>Virtual Rheometer</a></h2>
       <p>
         Fit Newtonian, power-law and Herschel-Bulkley models to a specimen's
         flow curve and read the residual plot. Builds on <a href={withBase("/sessions/02-rheology-i-flow-behaviour/")}>Module 2</a> and is used directly in <a href={withBase("/sessions/10-building-predictive-models/")}>Module 10</a>.
       </p>
     </li>
-    <li>
+    <li class="labs-list__item">
+      <span class="labs-list__kicker">Instrument 02 · state diagram</span>
       <h2><a href={withBase("/labs/crispness-phase-diagram/")}>Crispness Phase Diagram</a></h2>
       <p>
         Place a specimen at a storage humidity, run moisture uptake forward
@@ -43,7 +45,30 @@ import { siteConfig } from "../../site-config";
     gap: var(--at-spacing-xl);
   }
 
-  .labs-list h2 {
+  .labs-list__item {
+    padding: var(--at-spacing-lg);
+    border: 1px solid var(--at-border);
+    border-left: 3px solid var(--at-secondary);
+    border-radius: 0 var(--at-border-radius) var(--at-border-radius) 0;
+    background: var(--at-bg-alt);
+  }
+
+  .labs-list__kicker {
+    display: block;
     margin-bottom: var(--at-spacing-xs);
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--at-secondary);
+  }
+
+  .labs-list h2 {
+    margin: 0 0 var(--at-spacing-xs);
+  }
+
+  .labs-list p {
+    margin-bottom: 0;
   }
 </style>

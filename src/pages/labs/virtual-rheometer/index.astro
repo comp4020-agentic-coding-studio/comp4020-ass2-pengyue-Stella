@@ -20,54 +20,62 @@ import "../../../styles/scientific.css";
     describes the specimen, independently of the R² number.
   </p>
 
-  <div class="rheometer" id="rheometer">
-    <form class="rheometer__controls">
-      <div class="control">
+  <div class="instrument" id="rheometer">
+    <form class="instrument-controls">
+      <div class="instrument-control">
         <label for="specimen-select">Specimen</label>
         <select id="specimen-select">
           {SPECIMENS.map((specimen) => <option value={specimen.id}>{specimen.label}</option>)}
         </select>
-        <p class="control__hint" id="specimen-hint"></p>
+        <p class="instrument-control__hint" id="specimen-hint"></p>
       </div>
 
-      <div class="control">
+      <div class="instrument-control">
         <label for="model-select">Model to fit</label>
         <select id="model-select">
           <option value="newtonian">Newtonian (τ = η·γ̇)</option>
           <option value="power-law">Power-law (τ = K·γ̇ⁿ)</option>
           <option value="herschel-bulkley">Herschel-Bulkley (τ = τ₀ + K·γ̇ⁿ)</option>
         </select>
-        <p class="control__hint">
+        <p class="instrument-control__hint">
           Fitting the wrong model is a valid, useful thing to do here — that is
           how you see a model fail.
         </p>
       </div>
 
-      <div class="control">
+      <div class="instrument-control">
         <label for="shear-rate-slider">
           Shear-rate cursor: <output id="shear-rate-value" for="shear-rate-slider">— s⁻¹</output>
         </label>
         <input type="range" id="shear-rate-slider" min="0" max="1000" step="1" value="700" />
-        <p class="control__hint" id="cursor-readout" aria-live="polite"></p>
+        <p class="instrument-control__hint" id="cursor-readout" aria-live="polite"></p>
       </div>
     </form>
 
-    <div class="rheometer__plots">
-      <figure class="rheometer__plot">
+    <div class="instrument-plots">
+      <figure class="instrument-plot">
         <figcaption>Flow curve — shear stress τ (Pa) vs shear rate γ̇ (s⁻¹), log–log</figcaption>
         <svg id="flow-plot" viewBox="0 0 640 360" role="img" aria-label="Flow curve: measured points and fitted model curve"></svg>
       </figure>
-      <figure class="rheometer__plot">
+      <figure class="instrument-plot">
         <figcaption>Viscosity curve — apparent viscosity η (Pa·s) vs shear rate γ̇ (s⁻¹), log–log</figcaption>
         <svg id="viscosity-plot" viewBox="0 0 640 360" role="img" aria-label="Apparent viscosity: measured points and fitted model curve"></svg>
       </figure>
-      <figure class="rheometer__plot rheometer__plot--wide">
+      <figure class="instrument-plot instrument-plot--wide">
         <figcaption>Residual plot — measured minus fitted stress (Pa) vs shear rate γ̇ (s⁻¹, log axis)</figcaption>
         <svg id="residual-plot" viewBox="0 0 640 200" role="img" aria-label="Residuals of the fitted model against shear rate"></svg>
       </figure>
     </div>
 
-    <div class="rheometer__fit">
+    <ul class="plot-legend">
+      <li><span class="plot-legend__swatch" style="background: var(--at-secondary);"></span> Measured (synthetic) sweep point</li>
+      <li><span class="plot-legend__swatch plot-legend__swatch--line" style="background: var(--at-primary);"></span> Fitted model curve</li>
+      <li><span class="plot-legend__swatch plot-legend__swatch--ring"></span> Shear-rate cursor</li>
+      <li><span class="plot-legend__swatch" style="background: var(--at-success);"></span> Residual: model overpredicts</li>
+      <li><span class="plot-legend__swatch" style="background: var(--at-error);"></span> Residual: model underpredicts</li>
+    </ul>
+
+    <div class="instrument-summary">
       <h2>Fitted parameters</h2>
       <dl class="variable-list" id="fit-summary" aria-live="polite"></dl>
     </div>
@@ -194,6 +202,7 @@ import "../../../styles/scientific.css";
     fittedCurve: { gammaDot: number; value: number }[],
     highlightGammaDot: number,
     highlightValue: number,
+    yAxisLabel: string,
   ) {
     clearSvg(svg);
     const width = 640;
@@ -230,6 +239,17 @@ import "../../../styles/scientific.css";
     axisLabelX.textContent = "γ̇ (s⁻¹)";
     svg.append(axisLabelX);
 
+    const axisLabelY = svgEl("text", {
+      x: 14,
+      y: (plotTop + plotBottom) / 2,
+      "font-size": 12,
+      "text-anchor": "middle",
+      fill: "var(--at-text-secondary)",
+      transform: `rotate(-90 14 ${(plotTop + plotBottom) / 2})`,
+    });
+    axisLabelY.textContent = yAxisLabel;
+    svg.append(axisLabelY);
+
     const fittedPath = fittedCurve.map((p, i) => `${i === 0 ? "M" : "L"} ${xAxis.toPixel(p.gammaDot)} ${yAxis.toPixel(p.value)}`).join(" ");
     svg.append(svgEl("path", { d: fittedPath, fill: "none", stroke: "var(--at-primary)", "stroke-width": 2 }));
 
@@ -240,7 +260,6 @@ import "../../../styles/scientific.css";
           cy: yAxis.toPixel(point.value),
           r: 3.5,
           fill: "var(--at-secondary)",
-          class: "rheometer__point",
         }),
       );
     }
@@ -248,8 +267,8 @@ import "../../../styles/scientific.css";
     if (highlightValue > 0) {
       const hx = xAxis.toPixel(highlightGammaDot);
       const hy = yAxis.toPixel(highlightValue);
-      svg.append(svgEl("line", { x1: hx, y1: plotTop, x2: hx, y2: plotBottom, stroke: "var(--at-text-muted)", class: "rheometer__cursor" }));
-      svg.append(svgEl("circle", { cx: hx, cy: hy, r: 6, fill: "none", stroke: "var(--at-text)", "stroke-width": 2, class: "rheometer__cursor" }));
+      svg.append(svgEl("line", { x1: hx, y1: plotTop, x2: hx, y2: plotBottom, stroke: "var(--at-text-muted)", class: "instrument-cursor" }));
+      svg.append(svgEl("circle", { cx: hx, cy: hy, r: 6, fill: "none", stroke: "var(--at-text)", "stroke-width": 2, class: "instrument-cursor" }));
     }
   }
 
@@ -280,6 +299,17 @@ import "../../../styles/scientific.css";
     const axisLabelX = svgEl("text", { x: (plotLeft + plotRight) / 2, y: height - 6, "font-size": 12, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
     axisLabelX.textContent = "γ̇ (s⁻¹)";
     svg.append(axisLabelX);
+
+    const axisLabelY = svgEl("text", {
+      x: 14,
+      y: (plotTop + plotBottom) / 2,
+      "font-size": 12,
+      "text-anchor": "middle",
+      fill: "var(--at-text-secondary)",
+      transform: `rotate(-90 14 ${(plotTop + plotBottom) / 2})`,
+    });
+    axisLabelY.textContent = "residual τ (Pa)";
+    svg.append(axisLabelY);
 
     for (const point of residuals) {
       const x = xAxis.toPixel(point.gammaDot);
@@ -330,6 +360,7 @@ import "../../../styles/scientific.css";
       curveSamples,
       cursorGamma,
       cursorTau,
+      "τ (Pa)",
     );
     renderLogLogPlot(
       viscosityPlot,
@@ -338,6 +369,7 @@ import "../../../styles/scientific.css";
       viscositySamples,
       cursorGamma,
       cursorEta,
+      "η (Pa·s)",
     );
     renderResidualPlot(residualPlot, fit.residuals);
 
@@ -369,90 +401,3 @@ import "../../../styles/scientific.css";
   render();
 </script>
 
-<style>
-  .rheometer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--at-spacing-xl);
-    margin: var(--at-spacing-xl) 0;
-  }
-
-  .rheometer__controls {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--at-spacing-lg);
-    padding: var(--at-spacing-lg);
-    background: var(--at-bg-alt);
-    border-radius: var(--at-border-radius);
-  }
-
-  .control {
-    display: flex;
-    flex-direction: column;
-    gap: var(--at-spacing-xs);
-  }
-
-  .control label {
-    font-weight: 600;
-    color: var(--at-heading);
-  }
-
-  .control select,
-  .control input[type="range"] {
-    font: inherit;
-  }
-
-  .control__hint {
-    margin: 0;
-    font-size: var(--at-font-size-sm);
-    color: var(--at-text-secondary);
-  }
-
-  .rheometer__plots {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: var(--at-spacing-lg);
-  }
-
-  .rheometer__plot--wide {
-    grid-column: 1 / -1;
-  }
-
-  .rheometer__plot {
-    margin: 0;
-    padding: var(--at-spacing-md);
-    border: 1px solid var(--at-border);
-    border-radius: var(--at-border-radius);
-  }
-
-  .rheometer__plot figcaption {
-    font-size: var(--at-font-size-sm);
-    color: var(--at-text-secondary);
-    margin-bottom: var(--at-spacing-sm);
-  }
-
-  .rheometer__plot svg {
-    width: 100%;
-    height: auto;
-    font-family: var(--at-font-sans);
-  }
-
-  .rheometer__fit {
-    padding: var(--at-spacing-lg);
-    border: 1px solid var(--at-border);
-    border-radius: var(--at-border-radius);
-  }
-
-  .rheometer__fit h2 {
-    margin-top: 0;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .rheometer__point,
-    .rheometer__cursor {
-      transition:
-        cx 0.15s ease,
-        cy 0.15s ease;
-    }
-  }
-</style>

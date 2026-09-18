@@ -169,6 +169,41 @@
   }
 }
 
+.plot-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--at-spacing-md) var(--at-spacing-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--at-font-size-sm);
+  color: var(--at-text-secondary);
+}
+
+.plot-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.plot-legend__swatch {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.plot-legend__swatch--line {
+  height: 0.2em;
+  border-radius: 999px;
+}
+
+.plot-legend__swatch--ring {
+  background: none;
+  border: 2px solid var(--at-text);
+}
+
 /* Stage identity: one derived accent per curriculum stage, scoped by a
    `data-stage` attribute on an ancestor. This never introduces a new hue —
    stages 1-3 each claim one of the three existing brand tokens, and stage 4

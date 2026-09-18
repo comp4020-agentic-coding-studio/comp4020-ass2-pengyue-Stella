@@ -62,6 +62,15 @@ import "../../../styles/scientific.css";
       </figure>
     </div>
 
+    <ul class="plot-legend">
+      <li><span class="plot-legend__swatch" style="background: var(--at-success); opacity: 0.35;"></span> Glassy — crisp region</li>
+      <li><span class="plot-legend__swatch" style="background: var(--at-warning); opacity: 0.35;"></span> Rubbery — softened region</li>
+      <li><span class="plot-legend__swatch plot-legend__swatch--line" style="background: var(--at-primary);"></span> Glass-transition curve T_g(w₂)</li>
+      <li><span class="plot-legend__swatch plot-legend__swatch--ring"></span> Specimen's initial state</li>
+      <li><span class="plot-legend__swatch" style="background: var(--at-text);"></span> Specimen's current state</li>
+      <li><span class="plot-legend__swatch" style="background: var(--at-warning);"></span> Stability-margin crossing</li>
+    </ul>
+
     <div class="instrument-summary">
       <h2>Current state</h2>
       <dl class="variable-list" id="state-summary" aria-live="polite"></dl>
@@ -249,6 +258,25 @@ import "../../../styles/scientific.css";
     axisLabelX.textContent = "w₂ (moisture mass fraction)";
     svg.append(axisLabelX);
 
+    const axisLabelY = svgEl("text", {
+      x: 14,
+      y: (plotTop + plotBottom) / 2,
+      "font-size": 12,
+      "text-anchor": "middle",
+      fill: "var(--at-text-secondary)",
+      transform: `rotate(-90 14 ${(plotTop + plotBottom) / 2})`,
+    });
+    axisLabelY.textContent = "temperature (°C)";
+    svg.append(axisLabelY);
+
+    const glassyLabel = svgEl("text", { x: plotLeft + 10, y: plotBottom - 10, "font-size": 12, "font-weight": 600, fill: "var(--at-success)" });
+    glassyLabel.textContent = "glassy — crisp";
+    svg.append(glassyLabel);
+
+    const rubberyLabel = svgEl("text", { x: plotRight - 10, y: plotTop + 16, "font-size": 12, "font-weight": 600, "text-anchor": "end", fill: "var(--at-warning)" });
+    rubberyLabel.textContent = "rubbery — softened";
+    svg.append(rubberyLabel);
+
     const curvePath = curve
       .map((p, i) => `${i === 0 ? "M" : "L"} ${xAxis.toPixel(p.moisture)} ${yAxis.toPixel(Math.min(Math.max(p.tg, TEMP_MIN), TEMP_MAX))}`)
       .join(" ");
@@ -299,6 +327,17 @@ import "../../../styles/scientific.css";
     const axisLabelX = svgEl("text", { x: (plotLeft + plotRight) / 2, y: HEIGHT - 6, "font-size": 12, "text-anchor": "middle", fill: "var(--at-text-secondary)" });
     axisLabelX.textContent = "time since cooking (hours)";
     svg.append(axisLabelX);
+
+    const axisLabelY = svgEl("text", {
+      x: 14,
+      y: (plotTop + plotBottom) / 2,
+      "font-size": 12,
+      "text-anchor": "middle",
+      fill: "var(--at-text-secondary)",
+      transform: `rotate(-90 14 ${(plotTop + plotBottom) / 2})`,
+    });
+    axisLabelY.textContent = "w₂ (moisture mass fraction)";
+    svg.append(axisLabelY);
 
     const equilibrium = equilibriumMoisture(specimen, relativeHumidity);
     const eqY = yAxis.toPixel(Math.min(equilibrium, MOISTURE_AXIS_MAX));
