@@ -33,4 +33,18 @@ describe("course data integrity", () => {
       expect(date <= api.course.endDate, `${node.id} falls after teaching ends`).toBe(true);
     }
   });
+
+  it("dates every lecture the same as the module sharing its week", () => {
+    const lectures = api.nodes.filter((node) => node.type === "lectures");
+    const modules = api.nodes.filter((node) => node.type === "sessions");
+    for (const lecture of lectures) {
+      const week = lecture.meta?.week;
+      const module = modules.find((m) => m.meta?.week === week);
+      expect(module, `no module found for ${lecture.id}'s week ${week}`).toBeDefined();
+      expect(
+        dateOnly(lecture.meta?.date),
+        `${lecture.id} (week ${week}) is dated differently from its module ${module?.id}`,
+      ).toBe(dateOnly(module?.meta?.date));
+    }
+  });
 });

@@ -8,6 +8,7 @@ interface ApiNode {
   title: string;
   tags?: string[];
   related?: string[];
+  spec?: string[];
   meta?: Record<string, unknown>;
 }
 
@@ -18,6 +19,10 @@ interface CourseApi {
 
 const api = JSON.parse(readFileSync(resolve("dist/api/index.json"), "utf8")) as CourseApi;
 const modules = api.nodes.filter((node) => node.type === "sessions");
+
+function readDist(path: string): string {
+  return readFileSync(resolve("dist", path), "utf8");
+}
 
 describe("the 12 teaching modules", () => {
   it("has exactly 12 session (module) entries", () => {
@@ -67,5 +72,29 @@ describe("the 12 teaching modules", () => {
       expect((m.tags ?? []).length > 0, `${m.id} has no tags`).toBe(true);
       expect((m.related ?? []).length > 0, `${m.id} has no related links`).toBe(true);
     }
+  });
+
+  it("names the same four material regimes in Module 1's spec and body", () => {
+    const REGIMES = ["fluid", "viscoelastic solid", "amorphous glass", "crystalline/semi-crystalline solid"];
+    const module1 = modules.find((m) => m.id === "sessions/01-what-is-edible-matter");
+    expect(module1, "sessions/01-what-is-edible-matter not found").toBeDefined();
+
+    const specText = (module1?.spec ?? []).join(" ").toLowerCase();
+    for (const regime of REGIMES) {
+      expect(specText, `Module 1's frontmatter spec is missing the "${regime}" regime`).toContain(regime);
+    }
+
+    const html = readDist("sessions/01-what-is-edible-matter/index.html").toLowerCase();
+    for (const regime of REGIMES) {
+      expect(html, `Module 1's rendered body is missing the "${regime}" regime`).toContain(regime);
+    }
+  });
+
+  it('names Stage 3 exactly "Transport, Kinetics and Transformation" on the modules index', () => {
+    const html = readDist("sessions/index.html");
+    expect(
+      html,
+      'dist/sessions/index.html does not contain the exact Stage 3 heading "Transport, Kinetics and Transformation"',
+    ).toContain("Stage 3 · Transport, Kinetics and Transformation");
   });
 });

@@ -59,6 +59,20 @@ standing rules, not the plan.
   `<script type="module">` blocks inside plain `.astro` pages. Don't add a
   framework dependency to make this easier.
 
+## Curriculum sequencing rules
+
+- **An assessment can't be due before the material it needs is taught.** Check
+  every session in an assessment's `related` field against its `due` date, not
+  just the assessment's own `week`. `spec/assessments.test.ts` enforces this
+  generically, plus the specific case (Modelling Problem Sets must land after
+  Module 9).
+- **A lecture's date must agree with the module for the same week.** If one
+  moves, move the other in the same commit. `spec/data-integrity.test.ts`
+  enforces this by comparing dates for matching week numbers.
+- **A lecture must add something a module doesn't already say** — a
+  demonstration, comparison, calculation or discussion — not just paraphrase
+  its paired module's content as a recap bullet.
+
 ## Process discipline
 
 - Run `pnpm check` before every commit. Never commit a red state.

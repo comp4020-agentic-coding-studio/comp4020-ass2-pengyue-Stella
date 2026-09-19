@@ -6,6 +6,7 @@ interface ApiNode {
   id: string;
   type: string;
   title: string;
+  related?: string[];
   meta?: Record<string, unknown>;
 }
 
@@ -15,6 +16,9 @@ interface CourseApi {
 
 const api = JSON.parse(readFileSync(resolve("dist/api/index.json"), "utf8")) as CourseApi;
 const assessments = api.nodes.filter((node) => node.type === "assessments");
+const sessions = api.nodes.filter((node) => node.type === "sessions");
+const sessionById = new Map(sessions.map((s) => [s.id, s]));
+const dateOnly = (value: unknown): string => String(value).slice(0, 10);
 
 describe("assessments", () => {
   it("has exactly 4 assessment entries", () => {
@@ -54,5 +58,34 @@ describe("assessments", () => {
   it("gives every assessment a unique title", () => {
     const titles = assessments.map((a) => a.title);
     expect(new Set(titles).size).toBe(titles.length);
+  });
+
+  it("never sets an assessment due before a session listed in its related field", () => {
+    for (const a of assessments) {
+      const due = dateOnly(a.meta?.due);
+      const relatedSessions = (a.related ?? []).filter((id) => id.startsWith("sessions/"));
+      for (const sessionId of relatedSessions) {
+        const session = sessionById.get(sessionId);
+        expect(session, `${a.id} lists related session ${sessionId}, which does not exist`).toBeDefined();
+        const sessionDate = dateOnly(session?.meta?.date);
+        expect(
+          due >= sessionDate,
+          `${a.id} is due ${due}, before its related session ${sessionId} (taught ${sessionDate})`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it("schedules the Modelling Problem Sets assessment after Module 9", () => {
+    const assessment = assessments.find((a) => a.id === "assessments/modelling-problem-sets");
+    expect(assessment, "assessments/modelling-problem-sets not found").toBeDefined();
+    const module9 = sessionById.get("sessions/09-phase-transitions-in-cooking");
+    expect(module9, "sessions/09-phase-transitions-in-cooking not found").toBeDefined();
+    const due = dateOnly(assessment?.meta?.due);
+    const module9Date = dateOnly(module9?.meta?.date);
+    expect(
+      due > module9Date,
+      `Modelling Problem Sets is due ${due}, which is not after Module 9 (taught ${module9Date})`,
+    ).toBe(true);
   });
 });
