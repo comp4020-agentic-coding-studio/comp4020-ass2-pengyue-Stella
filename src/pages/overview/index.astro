@@ -2,11 +2,11 @@
 // The flagship page: the one place the site states its thesis outright — but
 // as a practical course guide, not a second landing page. The homepage
 // carries the prospective-student pitch (specimen photography, the
-// four-stage journey, the curriculum-at-a-glance list); this page exists for
-// someone who already wants the operational answer — who it's for, what it
-// assumes, how a week actually runs, and how the graded work maps onto what
-// you're meant to be able to do by the end. Built as a plain .astro page
-// (like the homepage) so the two-column claim section below can sit outside
+// four-stage journey, the two instruments); this page exists for someone who
+// already wants the operational answer — who it's for, what it assumes, how
+// a week actually runs, and how the graded work maps onto what you're meant
+// to be able to do by the end. Built as a plain .astro page (like the
+// homepage) so the two-column claim section below can sit outside
 // ContentLayout's single prose column; everything else is ordinary prose.
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { getPublishedCollection } from "astro-course-university/content";
@@ -14,6 +14,7 @@ import { withBase } from "astro-theme-university/url";
 import SpecimenPlate from "../../components/SpecimenPlate.astro";
 import { sessionLabels, siteConfig } from "../../site-config";
 import "../../styles/scientific.css";
+import "../../styles/nav.css";
 
 const title = "Course overview";
 const description =
@@ -58,7 +59,7 @@ const ASSESSMENT_OUTCOMES: { id: string; outcomes: number[]; note: string }[] = 
   {
     id: "laboratory-portfolio",
     outcomes: [0, 2, 3],
-    note: "Both instruments are marked on fit quality and state interpretation (outcomes 1 and 3), and a fifth of the mark is assumptions and data provenance stated throughout (outcome 4).",
+    note: "Both instruments are marked on fit quality and state interpretation (outcomes 1 and 3), and 15% of the mark is awarded for stating assumptions and data provenance throughout (outcome 4).",
   },
   {
     id: "inverse-material-design-project",

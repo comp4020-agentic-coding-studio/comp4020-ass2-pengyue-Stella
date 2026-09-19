@@ -10,6 +10,7 @@ import { formatCourseDate } from "../../lib/dates";
 import { LECTURE_VISUALS } from "../../lecture-layouts";
 import { graphCollections, siteConfig } from "../../site-config";
 import "../../styles/scientific.css";
+import "../../styles/nav.css";
 
 export async function getStaticPaths() {
   const lectures = await getPublishedCollection("lectures");

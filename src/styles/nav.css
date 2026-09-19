@@ -1,0 +1,35 @@
+/* Header nav override: the theme's Nav.astro lays the logo, links and search
+   button out as a single flex-wrap row, which wraps the search button onto
+   its own orphaned row on desktop once the links can't fit their unshrunk
+   width in the nav's content-width column. This rule is unlayered (the
+   theme's own nav CSS lives in @layer at.components), so it wins on every
+   property it sets without needing !important --- it switches the row to a
+   two-track CSS grid instead: a full-width logo row, then a row that puts
+   the search button in a fixed auto-sized column and lets the links track
+   shrink into the theme's own existing overflow-x scroll + fade-mask rather
+   than wrap. Search stays pinned to the row's end and on the links' baseline
+   at every width down to the theme's 640px hamburger breakpoint. */
+@media (width >= 640px) {
+  .at-nav-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    row-gap: var(--at-spacing-sm);
+    column-gap: var(--at-spacing-lg);
+  }
+
+  .at-nav-brand {
+    grid-column: 1 / -1;
+  }
+
+  .at-nav-links {
+    grid-column: 1;
+    min-width: 0;
+    margin-inline-start: 0;
+  }
+
+  .at-search-trigger {
+    grid-column: 2;
+    flex-shrink: 0;
+  }
+}
