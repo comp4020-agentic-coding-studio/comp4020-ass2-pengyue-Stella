@@ -1,76 +1,62 @@
 # Process overview
 
-## What I built
+## What a good course means here
 
-SLOP3358, *Edible Matter: Thermodynamics, Transport and Soft-Matter Physics in
-the Chinese Kitchen* — a fictional third-year course site on the supplied
-SlopU starter. Twelve dated modules across four teaching stages, four weighted
-assessments, one lecture deck, and two interactive instruments: a Virtual
-Rheometer and a Crispness Phase Diagram. Every claim is either a cited
-literature result, a clearly labelled synthetic simulation, or a stated
-assumption — never an invented number.
+SLOP3358 is a fictional third-year course — *Edible Matter: Thermodynamics,
+Transport and Soft-Matter Physics in the Chinese Kitchen* — built on the
+supplied SlopU starter. The bar I built against wasn't "looks like a course
+site"; it was "a real convenor could stand behind every claim on it." Twelve
+modules across four stages, four weighted assessments, and two interactive
+instruments only count as done once every equation states its assumptions,
+every number says whether it's measured, cited, or a labelled illustrative
+estimate, and the whole thing reads as one course rather than twelve
+unrelated pages stapled together
+([`3c75606`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/3c75606)
+records that plan before any content existed).
 
-## How I got here
+## What went into the harness, not into memory
 
-I started from the brief and the starter's schemas, recording decisions —
-course identity, the four-stage structure, the two instruments, the reference
-list — in `PLAN.md` alongside a project-specific `CLAUDE.md`
-([`3c75606`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/3c75606)).
+`CLAUDE.md` and `spec/` hold the decisions I didn't want to re-litigate on
+every page: the fixed four-stage order, the fixed SlopU palette, exactly two
+full instruments rather than one per module, and the rule that no citation,
+DOI or measurement is ever invented — a real source or a clearly labelled
+synthetic value, never a guess dressed up as data.
+`spec/no-starter-content.test.ts` and `spec/pages-present.test.ts`
+([`4016bd3`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/4016bd3))
+turn "the starter content is gone" and "every collection page exists" into
+something a check enforces on every push, so review time goes to what a test
+can't see.
 
-The build went in fixed, independently-green checkpoints: course data first —
-all twelve modules, the four assessments and their weights
-([`9d39452`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/9d39452));
-then navigation, stage grouping, and a lab-notebook visual system on the
-supplied SlopU palette
-([`188dc15`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/188dc15)).
+## What stayed human
 
-The two instruments were built separately, each with its own domain model.
-The Virtual Rheometer fits Newtonian, power-law and Herschel-Bulkley models to
-a synthetic steady-shear flow curve and shows the residuals — it does not
-attempt Winter-Chambon gel-point detection, which needs an oscillatory
-frequency sweep this instrument never runs, and an earlier draft of this file
-wrongly claimed it did
-([`66bff03`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/66bff03)).
-The Crispness Phase Diagram drives a Gordon-Taylor glass-transition model and
-an exponential moisture-uptake model, paired with the deck *Crispness Is a
-Metastable State*
-([`6ac6046`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/6ac6046)).
-Both share one `scientific.css` instrument system and respond to
-`prefers-reduced-motion`.
+No test can tell you whether a specimen photograph actually helps explain the
+material it's paired with, whether twelve modules genuinely ask twelve
+different questions rather than repeating a template, or whether a page reads
+as confident rather than padded. Those calls ran on full, non-adjacent reads
+of the built site rather than diffs — the kind of pass that caught
+`astromotion` silently clipping deck text below its fixed canvas
+([`e03cdfb`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/e03cdfb)),
+and, later, a full visual redesign (specimen photography, per-module figures,
+a curated Resources bookshelf, a type-coded References list) that a
+single-pass build would never have earned on its own.
 
-A References page and two spec files —
-`pages-present.test.ts` and `no-starter-content.test.ts` — closed the content
-loop
-([`4016bd3`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/4016bd3)).
-A later art-direction pass then rebuilt the visual system on top of that
-working content: a real specimen-plate photo library
-([`8143055`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/8143055)),
-a custom homepage and sessions journey
-([`fd78533`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/fd78533)),
-named layout patterns tying each module to a specimen photo or an instrument
-([`ff9856d`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/ff9856d)),
-and a lead specimen plate on both instrument pages plus a placard border on
-deck figures, so the two central objects on the site finally carry the same
-imagery the modules do
-([`a24bff8`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/a24bff8)).
+## How review changed what was accepted
 
-Nothing stayed red between checkpoints: every commit above followed a clean
-`pnpm check`, and every build reported 0 accessibility violations and 0
-broken links. Where a check couldn't see something — real citations, honest
-data provenance, whether the site reads coherently — I checked by hand:
-grepping every module's references against the bibliography, and reading
-non-adjacent modules end to end.
-
-One full read-through the way a marker would caught what no check could:
-`astromotion` doesn't shrink slide text to fit its fixed canvas, so six
-slides had content clipped below the frame, including the deck's own "model
-limitations" honesty checkpoint. I split all six, fixed three lab pages where
-a line break was collapsing space before an inline link, and re-verified at
-1920×1080 and 390×844
-([`e03cdfb`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/e03cdfb)).
-Both instruments' SVG plots reflow correctly across intermediate widths; the
-supplied theme's own nav clips two items around 650–900px, a vendored gap
-outside the graded viewports.
+Twice, a claim that read as plausible on first pass didn't survive a second.
+An early draft of this file credited the Virtual Rheometer with detecting a
+gel point from an oscillatory sweep it never runs; the instrument only ever
+fits Newtonian, power-law and Herschel–Bulkley models to a synthetic
+steady-shear curve, and the claim was named as wrong and corrected once that
+mismatch was caught
+([`5939856`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/5939856)).
+Later, a full reread of Module 9 found the same failure mode on the live
+site rather than in this file: a crisping crust was described as
+"crystallising" into a rigid glass, when a glass transition is specifically
+the freezing-in of a *disordered* structure, not the formation of a crystal
+lattice — fixed to read as vitrification, the term the rest of the module
+already used correctly. A separate visual audit caught gold specimen-plate
+annotations that had gone illegible against their own background — invisible
+in a code diff, obvious the moment the rendered page was actually looked at.
 
 ## Before you ship
 

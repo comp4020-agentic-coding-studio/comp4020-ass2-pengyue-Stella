@@ -37,9 +37,19 @@ standing rules, not the plan.
 - **Palette and platform are fixed.** Keep `--at-primary: #b97d1c`,
   `--at-secondary: #8a5c13`, `--at-tertiary: #6b6154` untouched. Brand
   identity comes from typography, SVG diagrams, specimen labels, and
-  equation/plot styling — not new colour, not stock photography. The four
-  starter raster images are deleted (not replaced with new photos); a
-  deleted starter asset passes the evidence hash check automatically.
+  equation/plot styling — not new colour. The four starter raster images
+  are deleted, not restyled; a deleted starter asset passes the evidence
+  hash check automatically.
+- **Photography is specimen material, not decoration.** A small library of
+  real, credited photographs (Pexels, free-to-use licence — credited in
+  `src/assets/images/photos/CREDITS.md` regardless, as good practice) stands
+  in for six food materials as close-up texture/structure specimens,
+  annotated with SVG diagrams on top the same way a fully-drawn specimen is
+  — not presented as plated-food styling. This is a scoped exception to "no
+  stock photography", not a licence to add imagery freely: a new photograph
+  is only ever a real, sourced, credited image of a specific material this
+  course discusses, entered in `CREDITS.md` before use — never a generic
+  decorative stock photo, and never AI-generated.
 - **Accessibility and responsiveness are load-bearing, not polish.** Both
   instruments must work with mouse, keyboard, and touch; must re-measure on
   resize (no fixed-pixel canvases); must respect

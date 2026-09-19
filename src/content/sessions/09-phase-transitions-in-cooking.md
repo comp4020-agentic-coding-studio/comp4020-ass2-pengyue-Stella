@@ -66,8 +66,8 @@ relationship the Gordon-Taylor equation approximates:
 
 As the crust loses water (w₂ falls), its T_g **rises**. Once the crust's
 falling moisture content pushes T_g above the crust's actual temperature,
-the crust crystallises out of the rubbery state into a rigid glass — this
-is the instant it becomes crisp. The soft interior, still at high moisture,
+the crust vitrifies, moving from a rubbery amorphous state into a rigid
+glassy amorphous state — this is the instant it becomes crisp. The soft interior, still at high moisture,
 has a T_g far below its temperature and stays rubbery.
 
 <figure class="sci-figure">
