@@ -1,65 +1,13 @@
 # Process
 
-I think a good university course is one idea a student can carry from week 1
-to week 12, tested against something they already know, not a pile of correct
-facts. I picked a narrow idea on purpose: Chinese cooking is applied
-soft-matter physics, and rheology, heat transport and phase transitions
-describe a dumpling or a fried crust more precisely than recipe language
-does. My first plan, written before any content existed
-([`3c75606`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/3c75606)),
-already said this, but the pull toward the easier version stayed strong: a
-food-vocabulary course, meeting new words for texture, instead of a physics
-course that uses food as its lab bench.
+I think a good university course needs one clear idea, a logical learning path, and a reason for students to choose it. I did not want to make a recipe course or a list of scientific terms. I wanted students to use familiar Chinese foods to understand difficult ideas in physics and chemistry. A dumpling, tofu gel, or crisp wrapper gives them something concrete to observe before they meet an equation. This became SLOP3358, Edible Matter: Thermodynamics, Transport and Soft-Matter Physics in the Chinese Kitchen. I would choose it because it connects everyday experience with serious third-year material.
 
-I put the decisions I did not want to argue about on every page into
-`CLAUDE.md` and `spec/`. Twelve modules across four fixed stages, measure,
-find structure, transform, predict and design, and `modules.test.ts` checks
-all twelve weeks and stages exist. `assessments.test.ts` checks the weights
-sum to 100, and the home page's mark bars read that same data live, so the
-page cannot drift from the check. The harder rule was scientific honesty: no
-invented citation or measurement, every model states its own assumptions.
-That rule only becomes real when I check the agent's claim against the
-actual model, not just the wording.
+The starter had two unrelated placeholder topics. Before writing new content, I planned the course as one four-stage argument. Students first measure edible matter, then explain its structure, study how cooking transforms it, and finally predict and design a result. The next commit turned that plan into twelve modules and four assessments, with tests for weeks, stages, course identity, and assessment weights ([`3c75606...9d39452`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/compare/3c756061439bea9cae8bf6ae36a7944caa89bb20...9d39452f0be0fad16f7db9ce4e0ac6bf2bdd3e5d)). This order prevents the food examples from becoming twelve disconnected case studies. Week 2 introduces flow models, while Week 10 asks how evidence justifies choosing between them. Week 9 introduces glass transition, while Week 11 uses it as a design space.
 
-Twice I caught the agent claiming more than a model does. The Virtual
-Rheometer fits Newtonian, power-law and Herschel-Bulkley curves to a
-steady-shear flow curve, but an early write-up, and later a References
-citation, both said it detected a gel point from an oscillatory sweep this
-instrument never runs. I corrected both once I compared the claim to the
-code
-([`5939856`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/5939856),
-[`c0c2283`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/c0c2283)).
-The same failure showed up in Module 9: a crisping crust "crystallising" into
-a glass, when a glass transition is the opposite, a disordered structure
-freezing without a crystal forming. Fixed to vitrification on a later reread
-([`587c8ee`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/587c8ee)).
-Neither error fails a build. They only show up if you know the physics.
+A complete structure on paper was not enough. The first lecture index showed only five weeks, so four stage openings were doing the job of a twelve-week schedule. I expanded it into a full stage-grouped timeline while keeping Weeks 1, 4, 7, and 10 as stronger anchors ([`73e2581`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/73e2581db702fea0afe0d190f4d387db66691542)). I also found that Home, Overview, and Modules repeated the same four-stage explanation. Modules received a compact navigator instead of a second full journey ([`64688a9`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/64688a906f3008f042db365f938322104f58d1b5)). Home now introduces the course and attracts a prospective student, while Overview explains prerequisites, workload, and assessment ([`587c8ee`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/587c8ee5ba31eac162611bb0bd40f503b3d27bab)).
 
-The clearest wrong turn was the Overview page: a second landing page, another
-hero, another stage diagram, framed around "building the vocabulary" of
-rheology terms. It repeated the home page and treated the course as being
-about words. I rewrote it into a practical guide: who it is for, what it
-assumes, how a week runs, and a map from each assessment to the outcome it
-tests
-([`587c8ee`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/587c8ee)).
-A later visual pass moved the site from the starter theme with course text
-pasted in to a lab-notebook look, built only from the existing SlopU colours
-plus real photography and hand-drawn figures, once the earlier version read
-like a template with the nouns swapped
-([`bcbc797`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/compare/bcbc797...1c98363),
-six commits).
+The visual design changed through the same review process. The working site was still text-heavy and close to the starter. I introduced credited food photographs with scientific annotation and specimen framing ([`8143055`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/81430554b1e2c7fb84a726a4166133eb6c8654b8)). However, adding images was not enough. A flat icon row for the four stages was built and then rejected because it did not explain the journey. It was removed and replaced with an alternating StageJourney using a different specimen for each stage ([`fd78533`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/fd78533dd02e3caba1135f6b5de1cd7dbbbcf4fa)). Later visual checks also found gold labels that disappeared into warm photographs, so readability was corrected rather than accepting the image because it looked finished ([`e04818b`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/e04818b8c79ee86ac135cf30a33485fa18cd156e)).
 
-Tests protect facts: weights, page counts, week numbers, old starter markers.
-They cannot tell you whether a paragraph is interesting or a diagram helps,
-so those calls came from reading the built site end to end, not from diffs.
-That is how I found a lecture deck silently clipping its last two bullets off
-a slide
-([`e03cdfb`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/e03cdfb)),
-and, this week, a nav bar whose search button wrapped onto its own empty row
-at desktop width
-([`ec1e93d`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/ec1e93d)).
-The real breakthrough was smaller than a feature: the point where I stopped
-accepting a claim because it sounded plausible and started checking it
-against what the model actually computes. Once evidence replaced vocabulary
-as the point, twelve pages turned into one argument instead of twelve
-decorated ones.
+Some decisions could be automated. CLAUDE.md records the stage order, scientific-integrity rules, and the boundary of two full instruments. The specs check dates, prerequisites, lecture and module alignment, and whether required content remains present. Other decisions stayed human. A test cannot decide whether two weeks feel repetitive, whether a picture teaches anything, or whether a student would want to enrol.
+
+This distinction became clearest during the final curriculum review. I found schedule errors, a Stage 3 name that did not match its content, and later modules using moisture dynamics that had not been taught clearly enough. I corrected the sequence and content ([`032c20b`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/032c20bb0fa1acc3d165de47fcfa87beeb2c41a4)), then added standing rules and tests for the same failure class ([`416b9c1`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-pengyue-Stella/commit/416b9c1cb149b737ab6a6d2c75987e5d78df23f4)). My main breakthrough was understanding that completeness is not coherence. The course only worked when its curriculum, architecture, visuals, and checks all supported the same learning path.
