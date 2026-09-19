@@ -51,8 +51,14 @@ common way such a problem goes wrong:
    days at 60% relative humidity" (Module 11's framing), not "stays crisp,"
    which is not by itself measurable.
 2. **A forward model** relating process/formulation variables to that
-   outcome — here, the Gordon-Taylor T_g(moisture) curve and the
-   water-activity equilibration argument from Modules 9 and 11.
+   outcome — here, two models from Module 11 used together, not either one
+   alone: the Gordon-Taylor T_g(moisture) curve sets the moisture content
+   at which the cracker leaves the glassy region, and Module 11's
+   moisture-uptake equation, w(t) = w<sub>eq</sub> + (w<sub>0</sub> −
+   w<sub>eq</sub>)e<sup>−t/τ</sup>, predicts how many days it takes to
+   reach that moisture content at the stated humidity. Gordon-Taylor alone
+   gives a boundary, not a shelf life; the uptake equation is what turns
+   the boundary into a day count.
 3. **The free variables** the model actually lets you act on — for a
    cracker, plausibly starch:water ratio at baking (shifts w₁, w₂ in
    Gordon-Taylor), bake time/temperature (shifts final moisture content
@@ -120,7 +126,8 @@ was the right one to trust.
 ## What you measure and analyse
 
 Given a stated target (critical water activity, ambient humidity, and a
-shelf-life target in days) and Gordon-Taylor parameters for a candidate
+shelf-life target in days) and Gordon-Taylor and moisture-uptake
+parameters for a candidate
 starch formulation, you solve for the maximum initial moisture content the
 baked cracker can have and still meet the target, and identify which one
 process variable (bake time, at fixed temperature) would need to change to

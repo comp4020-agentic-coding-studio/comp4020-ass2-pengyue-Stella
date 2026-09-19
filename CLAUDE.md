@@ -10,7 +10,7 @@ standing rules, not the plan.
 - **One thesis, twelve modules, four stages.** Every module is a distinct
   Chinese food system read through a real soft-matter/food-engineering model.
   Stage order is fixed: 1 Measuring Edible Matter → 2 Structures and Networks
-  → 3 Flow, Interfaces and Transformation → 4 Prediction and Material Design.
+  → 3 Transport, Kinetics and Transformation → 4 Prediction and Material Design.
   Don't reorder modules or rename stages without updating `PLAN.md` §2 first.
 - **No fabricated evidence, ever.** No invented citations, DOIs,
   measurements, or textbook titles. Only cite from the verified list in

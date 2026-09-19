@@ -77,11 +77,12 @@ const assessmentById = new Map(assessments.map((a) => [a.id, a]));
     <div class="claim__text">
       <h2>What this course is</h2>
       <p>
-        SLOP3358 treats Chinese cooking as an applied soft-matter physics problem. Across twelve weekly{" "}
+        SLOP3358 treats Chinese cooking as one connected teaching laboratory, not a set of decorative examples: the
+        same soft-matter physics runs through all twelve weekly{" "}
         <a href={withBase("/sessions/")}>{sessionLabels.plural.toLowerCase()}</a>, grouped into four three-{sessionLabels.singular.toLowerCase()}
-        stages, you build experimental, analytical and modelling tools for measuring, explaining and redesigning a
-        food's texture, structure and behaviour under heat — in the same terms a materials scientist would use for
-        any soft material. The course reuses standard, established models — Newtonian and power-law flow, Fourier
+        stages. Across them you move from describing a food's texture in words to measuring it, explaining it,
+        predicting it and redesigning it — in the same terms a materials scientist would use for any soft material.
+        The course reuses standard, established models — Newtonian and power-law flow, Fourier
         conduction, Arrhenius kinetics, Flory–Stockmayer percolation, the Gordon–Taylor equation — rather than
         inventing new theory. Depth comes from applying real models honestly to real food systems, not from piling
         on unfamiliar terms.
@@ -134,9 +135,11 @@ const assessmentById = new Map(assessments.map((a) => [a.id, a]));
   <section class="overview-section">
     <h2>How the course runs</h2>
     <p>
-      Each week pairs one written <a href={withBase("/sessions/")}>{sessionLabels.singular.toLowerCase()}</a> with a{" "}
-      <a href={withBase("/lectures/")}>lecture</a> covering the same material from a different angle — twelve of
-      each, run in the fixed four-stage order set out in the {sessionLabels.plural.toLowerCase()} index. Rather than
+      Each week pairs one written <a href={withBase("/sessions/")}>{sessionLabels.singular.toLowerCase()}</a> — the
+      material itself — with a{" "}
+      <a href={withBase("/lectures/")}>lecture</a> that applies it through a demonstration, comparison or worked
+      example rather than repeating it — twelve of each, run in the fixed four-stage order set out in the{" "}
+      {sessionLabels.plural.toLowerCase()} index. Rather than
       a simulation for every {sessionLabels.singular.toLowerCase()}, the course concentrates its interactive work
       into two instruments — the Virtual Rheometer and the Crispness Phase Diagram, both introduced mid-course and
       both run entirely in the browser — used repeatedly across the <a href={withBase("/labs/")}>Labs</a> and the
@@ -148,7 +151,7 @@ const assessmentById = new Map(assessments.map((a) => [a.id, a]));
     <h2>Expected workload</h2>
     <p>
       The reading and the lecture for a given week are sized to be worked through in that week, alongside whichever
-      staged assessment is currently open — the four pieces of graded work land in weeks 4, 8, 11 and 12, so the
+      staged assessment is currently open — the four pieces of graded work land in weeks 4, 10, 11 and 12, so the
       heavier sustained effort concentrates there rather than spreading evenly. The two instruments are meant to be
       returned to more than once before the Laboratory Portfolio is due, not used in a single sitting.
     </p>

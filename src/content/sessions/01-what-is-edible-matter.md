@@ -11,7 +11,7 @@ teachers:
 tags: [soft matter, texture]
 spec:
   - state, in one sentence, what "QQ" (Q弹) texture means as a physical property
-  - name three material states a cooked food can occupy (solid, gel, glass) and give a Chinese food example of each
+  - name the four material regimes a cooked food can occupy (fluid, viscoelastic solid, amorphous glass, crystalline/semi-crystalline solid) and give a Chinese food example of each
   - explain why "chewy" is not one property but at least two (elasticity and toughness)
 related:
   - 02-rheology-i-flow-behaviour
@@ -65,14 +65,14 @@ crosslinked tapioca-starch network holding a large fraction of water. Its
 
 "QQ" texture, in this framing, is a **high G′ with a low tan δ** — a gel
 that is both stiff and highly elastic, not merely stiff. A pearl that is
-stiff but has a high tan δ reads as "hard," not "QQ" — the two are
-mechanically distinguishable even though both would be called "firm" in
-English.
+just as stiff but has a higher tan δ reads as a more dissipative gel — a
+less elastic response, "firm" but not "QQ" — the two are mechanically
+distinguishable even though both would be called "firm" in English.
 
 <figure class="sci-figure">
   <span class="sci-figure__kicker">Figure — the complex modulus as a vector</span>
   <svg viewBox="0 0 420 260" role="img" aria-labelledby="g1-title">
-    <title id="g1-title">Vector diagram comparing a QQ tapioca pearl to a hard gel of similar magnitude but larger phase angle</title>
+    <title id="g1-title">Vector diagram comparing a QQ tapioca pearl to a more dissipative gel of similar magnitude but larger phase angle</title>
     <line class="sci-axis" x1="70" y1="220" x2="390" y2="220" />
     <line class="sci-axis" x1="70" y1="220" x2="70" y2="30" />
     <text class="sci-axis-label" x="230" y="246" text-anchor="middle">G′ — elastic component (Pa)</text>
@@ -86,8 +86,8 @@ English.
     <text class="sci-axis-label" x="223" y="198">low tan δ</text>
     <line class="sci-curve--alt" x1="70" y1="220" x2="182" y2="120" />
     <circle class="sci-point" cx="182" cy="120" r="4.5" />
-    <text class="sci-label" x="188" y="114">Hard gel</text>
-    <text class="sci-axis-label" x="188" y="130">high tan δ</text>
+    <text class="sci-label" x="188" y="114">Dissipative gel</text>
+    <text class="sci-axis-label" x="188" y="130">higher tan δ</text>
     <path class="sci-annotation" d="M 102 220 A 32 32 0 0 0 100 213" />
     <text class="sci-axis-label" x="106" y="209">δ</text>
   </svg>
@@ -95,8 +95,8 @@ English.
     Two gels can share the same |G*| — the same overall stiffness — and still
     feel unrelated. A small phase angle δ puts almost all of that stiffness
     into the elastic, energy-returning G′ component ("QQ"); a larger δ at the
-    same magnitude routes more of it into the dissipative G″ component
-    ("hard" but not springy).
+    same magnitude routes more of it into the dissipative G″ component — a
+    less elastic response that reads as firm but not springy.
   </figcaption>
 </figure>
 

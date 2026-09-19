@@ -30,7 +30,7 @@ is not?
 
 ## Where this sits
 
-Closing module of **Stage 3, Flow, Interfaces and Transformation**. Module
+Closing module of **Stage 3, Transport, Kinetics and Transformation**. Module
 7 gave the transport mechanics (heat and moisture moving through a food
 object); Module 8 gave the kinetics of thermally-driven change. This module
 combines both to explain a moving internal boundary, and introduces the

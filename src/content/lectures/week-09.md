@@ -22,9 +22,11 @@ related:
 - Defining the glass transition itself: not melting, not a chemical
   change, but an amorphous solid's mobility collapsing (or unlocking) as it
   crosses a temperature- and moisture-dependent threshold.
-- Naming the two variables a Gordon-Taylor-style model links for a food
-  glass transition, and why both, not temperature alone, decide whether a
-  crust is glassy.
+- In-class calculation: given two youtiao crusts at the same temperature but
+  different measured moisture contents, use the Gordon-Taylor equation to
+  work out which one has already crossed T_g and vitrified — the two
+  variables the model links, applied to a comparison rather than a
+  definition.
 - Closing Stage 3: transport, kinetics and phase transition are now all on
   the table as three coupled, separately-modelled processes. Stage 4 fits
   models to data using exactly these three, then designs with them.

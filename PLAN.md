@@ -30,7 +30,7 @@ real food systems, not from vocabulary.
 |---|---|---|
 | 1 | Measuring Edible Matter | 1 What Is Edible Matter?, 2 Rheology I: Flow Behaviour, 3 Thermal Characterisation |
 | 2 | Structures and Networks | 4 Polymer Networks I: Starch Gels, 5 Protein Aggregation and Gelation, 6 Colloids and Emulsions |
-| 3 | Flow, Interfaces and Transformation | 7 Heat and Mass Transport, 8 Reaction Kinetics, 9 Phase Transitions in Cooking |
+| 3 | Transport, Kinetics and Transformation | 7 Heat and Mass Transport, 8 Reaction Kinetics, 9 Phase Transitions in Cooking |
 | 4 | Prediction and Material Design | 10 Building Predictive Models, 11 The Crispness Design Space, 12 Inverse Material Design |
 
 Progression logic: Stage 1 establishes *how we measure* a food material

@@ -4,7 +4,7 @@ description:
   How Stage 4 turns Stage 3's models into predictions and then a design
   tool, with a full lecture on crispness as a metastable material state.
 week: 10
-date: 2027-04-26
+date: 2027-05-03
 teachers:
   - idris-fenn
   - marisol-quaye

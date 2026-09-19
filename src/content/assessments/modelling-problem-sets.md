@@ -3,8 +3,8 @@ title: Modelling Problem Sets
 description:
   A set of worked problems applying the transport, kinetics and phase-
   transition models from Stages 2 and 3 to new numbers.
-week: 8
-due: 2027-04-16T17:00:00+10:00
+week: 10
+due: 2027-05-07T17:00:00+10:00
 weight: 20
 marking:
   mode: weighted

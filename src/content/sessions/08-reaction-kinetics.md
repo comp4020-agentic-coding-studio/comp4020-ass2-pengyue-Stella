@@ -32,7 +32,7 @@ duck-skin Maillard browning as the case and pork-belly collagen conversion
 
 ## Where this sits
 
-Second module of **Stage 3, Flow, Interfaces and Transformation**. Module 7
+Second module of **Stage 3, Transport, Kinetics and Transformation**. Module 7
 covered how heat and moisture physically move through food; this module
 covers what happens once they arrive — how fast a chemical or structural
 change proceeds at a given temperature. Module 9 uses the same rate-law

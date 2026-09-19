@@ -30,7 +30,7 @@ effective rates, and can that be predicted rather than just observed?
 
 ## Where this sits
 
-Opening module of **Stage 3, Flow, Interfaces and Transformation**. Stage 2
+Opening module of **Stage 3, Transport, Kinetics and Transformation**. Stage 2
 was about what gives a material structure; Stage 3 is about how that
 structure changes during cooking, starting with the physical mechanism —
 transport — that makes any change happen at all. This module's Biot-number

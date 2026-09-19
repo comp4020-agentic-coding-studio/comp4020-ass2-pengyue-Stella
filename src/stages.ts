@@ -20,7 +20,7 @@ export const STAGES: StageInfo[] = [
   },
   {
     number: 3,
-    title: "Flow, Interfaces and Transformation",
+    title: "Transport, Kinetics and Transformation",
     description: "How that structure changes during cooking: transport, reaction kinetics and phase transitions.",
   },
   {

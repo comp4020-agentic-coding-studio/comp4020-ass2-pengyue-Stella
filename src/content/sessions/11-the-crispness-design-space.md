@@ -73,6 +73,30 @@ until it crosses into the rubbery region.
   <dt>RH<sub>air</sub> (relative humidity, %)</dt><dd>ambient moisture availability; a food equilibrates toward a<sub>w</sub> ≈ RH<sub>air</sub>/100 over time.</dd>
 </dl>
 
+The state diagram above says *where* the glassy/rubbery boundary sits, but
+not *when* a specimen's own moisture content reaches it. That takes a
+second, separate model: an illustrative moisture-uptake equation for how a
+material's moisture content moves toward equilibrium over time.
+
+<div class="equation">w(t) = w<sub>eq</sub> + (w<sub>0</sub> − w<sub>eq</sub>)e<sup>−t/τ</sup></div>
+
+<dl class="variable-list">
+  <dt>w(t) (moisture content at time t)</dt><dd>how much moisture the specimen holds after time t exposed to the ambient air.</dd>
+  <dt>w<sub>0</sub> (initial moisture content)</dt><dd>the specimen's moisture content at the moment it is exposed, t = 0.</dd>
+  <dt>w<sub>eq</sub> (equilibrium moisture content)</dt><dd>the moisture content the specimen settles at, set by matching a<sub>w</sub> to RH<sub>air</sub> above.</dd>
+  <dt>τ (time constant)</dt><dd>how quickly the specimen approaches w<sub>eq</sub>; a larger τ means slower uptake.</dd>
+</dl>
+
+The two models answer different questions. Gordon-Taylor (Module 9) sets
+the moisture content at which the material crosses out of the glassy
+region — the boundary. This uptake equation sets when the material's own
+moisture content actually reaches that boundary — the timing. Packaging
+mainly changes τ: a better moisture barrier slows uptake without moving
+the boundary itself. Formulation mainly changes the boundary's position,
+by shifting w<sub>eq</sub> or the Gordon-Taylor curve directly. As with the
+rest of this module, these parameters are illustrative, not measured
+specifications.
+
 Being glassy is necessary but not sufficient for "crisp" as a sensory
 category: a thick glassy solid (a hard candy) reads as hard, not crisp —
 crispness in the everyday sense also needs a thin, cellular or foam-like
